@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown to Go Home</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
+  <link rel="icon" type="image/x-icon" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      animation: background-shift 10s ease-in-out infinite alternate;
+      user-select: none;
+      cursor: none;
+    }
+
+    .countdown-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #0a0a0a;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      animation: pulse 1.5s ease-in-out infinite alternate;
+      overflow: hidden;
+    }
+
+    .corner-label {
+      position: absolute;
+      top: 75px;
+      left: -24px;
+      background-color: white; 
+      color: black;
+      font-weight: 600;
+      letter-spacing: 4px;
+      padding: 6px 30px;
+      border-radius: 5px;
+      transform: rotate(-45deg);
+      transform-origin: top left;
+      z-index: 2;
+    }
+
+    #countdown-title {
+      font-size: 2.5em;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    #countdown-digits {
+      display: flex;
+      gap: 10px;
+      font-size: 3em;
+    }
+
+    .time-unit {
+      text-align: center;
+      font-weight: bold;
+      background-color: #222;
+      color: #fff;
+      border-radius: 5px;
+      padding: 10px;
+      animation: flicker 1s ease-in-out infinite alternate;
+    }
+
+    #target-date-label {
+      font-size: 1em;
+      margin-top: 20px;
+      color: #ddd;
+    }
+
+    /* Tambahkan efek pulsasi pada elemen waktu */
+    .time-unit.pulsate {
+      animation: pulsate 1s ease-in-out infinite alternate;
+    }
+
+    /* Tambahkan efek warna merah ketika waktu hampir habis */
+    .time-unit.warning {
+      animation: blink 0.5s ease-in-out infinite alternate;
+      color: #ff5757;
+    }
+
+    @keyframes pulsate {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+
+    @keyframes background-shift {
+      0% { background-color: #000; }
+      25% { background-color: #111; }
+      50% { background-color: #222; }
+      75% { background-color: #333; }
+      100% { background-color: #000; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 0 #fff; }
+      50% { text-shadow: 0 0 5px #fff; }
+      100% { text-shadow: 0 0 0 #fff; }
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
+    #custom-cursor {
+        position: absolute;
+        width: 100px; 
+        height: 100px; 
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 80%); /* Warna latar belakang bulet */
+        border-radius: 50%; 
+        pointer-events: none;
+        z-index: 9999;
+        animation: pulseCursor 1s infinite;
+    }
+    @keyframes pulseCursor {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        25% {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        50% {
+            transform: scale(1.4);
+            opacity: 0.5;
+        }
+        75% {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+  </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <div class="countdown-container">
+        <div class="corner-label">Febryan</div>
+        <h1 id="countdown-title">Countdown to Go Home</h1>
+        <div id="countdown-digits">
+        <div class="time-unit" id="days">00</div>
+        <div class="time-unit" id="hours">00</div>
+        <div class="time-unit" id="minutes">00</div>
+        <div class="time-unit" id="seconds">00</div>
+        </div>
+        <p id="target-date-label">Flight Date: 28 Mar 2024 - 17:45</p>
+  </div>
+
+  <script>
+    // const cursor = document.getElementById("custom-cursor");
+
+    // const updateCursorPosition = (e) => {
+    // const offset = 10;
+    // const x = e.clientX - offset;
+    // const y = e.clientY - offset;
+    // cursor.style.left = `${x}px`; 
+    // cursor.style.top = `${y}px`;
+    // };
+
+    // document.addEventListener("mousemove", updateCursorPosition);
+
+    const countdownContainer = document.querySelector('.countdown-container');
+    const cursor = document.getElementById('custom-cursor');
+
+    const containerRect = countdownContainer.getBoundingClientRect();
+    const initialCursorX = containerRect.left;
+    const initialCursorY = containerRect.top;
+
+    cursor.style.right = `${initialCursorX}px`;
+    cursor.style.bottom = `${initialCursorY}px`;
+
+    const updateCursorPosition = (e) => {
+    const offset = 10; // Sesuaikan offset sesuai dengan keinginan
+    const x = e.clientX - offset;
+    const y = e.clientY - offset;
+
+    cursor.style.left = `${x}px`; // Atur posisi horizontal elemen cursor
+    cursor.style.top = `${y}px`; // Atur posisi vertikal elemen cursor
+    };
+
+    // Inisialisasi posisi awal elemen custom-cursor
+    cursor.style.right = `${initialCursorX}px`;
+    cursor.style.bottom = `${initialCursorY}px`;
+
+    document.addEventListener("mousemove", updateCursorPosition);
+
+  </script>
+
+  <script>
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+
+    const targetDate = new Date("2024-03-28T17:45:00");
+
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      daysEl.textContent = days.toString().padStart(2, "0");
+      hoursEl.textContent = hours.toString().padStart(2, "0");
+      minutesEl.textContent = minutes.toString().padStart(2, "0");
+      secondsEl.textContent = seconds.toString().padStart(2, "0");
+
+      daysEl.classList.add("pulsate");
+      hoursEl.classList.add("pulsate");
+      minutesEl.classList.add("pulsate");
+      secondsEl.classList.add("pulsate");
+
+      if (diff <= 300000) {
+        daysEl.classList.add("warning");
+        hoursEl.classList.add("warning");
+        minutesEl.classList.add("warning");
+        secondsEl.classList.add("warning");
+      }
+
+      if (diff <= 0) {
+        clearInterval(intervalId);
+        alert("Semoga Penerbanganmu Menyenangkan!");
+      }
+    };
+
+    const intervalId = setInterval(updateCountdown, 1000);
+
+    updateCountdown();
+
+    document.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>

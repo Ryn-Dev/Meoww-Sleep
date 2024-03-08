@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meoww Sleep</title>
+    <link rel="icon" type="image/x-icon" href="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3BzMTR4enFlODVsb2V4YW81OHcwdDI2ZjlvYTl3ZWNmdHF2MnFsMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/2sgNtdFiOoUcmtcnmO/giphy.gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+        * {
+            color: #ca0606;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* background-image: url("https://images.unsplash.com/photo-1487300001871-12053913095d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); */
+            background-image: url("https://images.unsplash.com/photo-1523859597145-32eff6e463ab?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+            background-size: 100%, 100%;
+            user-select: none;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 27rem;
+            height: 25rem;
+            backdrop-filter: blur(7px);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            box-shadow: 10px 12px 10px black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        i {
+            padding: 1.4rem;
+            font-size: 7.5em;
+            color: rgb(218, 12, 12);
+            border-radius: 50%;
+        }
+
+        h2 i {
+            font-size: 1.1em;
+            color: #3c0ce6;
+            margin: 15px 0;
+        }
+
+        .btn-group {
+            padding: 1.2rem;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        button {
+            position: absolute;
+            width: 130px;
+            height: inherit;
+            font-size: 1.2em;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 30px;
+            border: 2px solid #e1dce7;
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        button:hover {
+            box-shadow: 6px 4px 20px rgb(247, 248, 246);
+        }
+
+        button:nth-child(1) {
+            margin-left: -150px;
+            background: #7d2ae8;
+        }
+
+        button:nth-child(2) {
+            margin-right: -150px;
+            color: #e10707;
+        }
+
+        .no-btn {
+            color: rgb(15, 9, 2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .no-btn:hover {
+            transform: rotate(360deg);
+            box-shadow: 0 0 20px rgba(15, 9, 2, 0.7);
+        }
+
+        .fa-heart {
+            animation: heartbeat 1s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .fa-cat {
+            background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3BzMTR4enFlODVsb2V4YW81OHcwdDI2ZjlvYTl3ZWNmdHF2MnFsMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/2sgNtdFiOoUcmtcnmO/giphy.gif');
+            background-size: cover;
+            background-position: center;
+            width: 40%;
+            height: 40%;
+            border-radius: 0%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- <i class="fa-solid fa-heart"></i> -->
+        <i class="fa-solid fa-cat"></i>
+        <h2 class="question"><i>Istirahat ga yaa ?</i></h2>
+        <div class="btn-group">
+            <button class="yes-btn">Yes</button>
+            <button class="no-btn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const wrapper = document.querySelector('.wrapper');
+        const question = document.querySelector('.question');
+        const yesBtn = document.querySelector('.yes-btn');
+        const noBtn = document.querySelector('.no-btn');
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const noBtnRect = noBtn.getBoundingClientRect();
+
+        yesBtn.addEventListener('click', () => {
+            question.innerHTML = 'Gas tidur!';
+        });
+
+        noBtn.addEventListener('mouseover', () => {
+            const i = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width)) + 1;
+            const j = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height)) + 1;
+            noBtn.style.left = i + 'px';
+            noBtn.style.top = j + 'px';
+        });
+    </script>
+
+    <script>
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+
+</html>
