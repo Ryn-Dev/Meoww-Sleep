@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/alarm-clock');
+        body {
+            background-color: #1E1C27;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            position: relative;
+        }
+
+        .sun {
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 30px white;
+            position: absolute;
+            top: 150px;
+            left: 150px;
+            animation: sunlight 5s linear infinite;
+        }
+
+        .globe.earth {
+            background: aqua;
+            height: 30px;
+            right: 28px;
+            top: 28px;
+            width: 30px;
+        }
+
+        .globe.moon {
+            width: 12px;
+            height: 12px;
+            background: #d6d6d6;
+            right: 2px;
+            top: 8px;
+        }
+
+        .globe {
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .orbit.earth {
+            position: relative;
+            animation: orbit 36.5s linear infinite;
+            height: 300px;
+            left: 50px;
+            top: 50px;
+            width: 300px;
+        }
+
+        .orbit.moon {
+            animation: orbit 2.7s linear infinite;
+            height: 80px;
+            left: -25px;
+            top: -25px;
+            width: 80px;
+        }
+
+        .orbit {
+            position: relative;
+            border: solid;
+            border-color: white transparent transparent transparent;
+            border-radius: 50%;
+            border-width: 1px 1px 0 0;
+            box-sizing: border-box;
+            transform: rotate(0deg);
+            transform-origin: center;
+        }
+
+        @keyframes orbit {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes sunlight {
+            0%, 100% {
+                background-color: yellow;
+            }
+            25% {
+                background-color: #FFEA4D;
+            }
+            50% {
+                background-color: #FFD700;
+            }
+            75% {
+                background-color: #FFC100;
+            }
+        }
+
+        @keyframes geleng {
+            0%, 100% { transform: rotate(0deg); } /* Gambar kucing tidak bergeleng */
+            50% { transform: rotate(-10deg); } /* Gambar kucing bergeleng ke kiri */
+            75%, 25% { transform: rotate(10deg); } /* Gambar kucing bergeleng ke kanan */
+        }
+
+        .clock {
+            font-size: 100px;
+            text-align: center;
+            color: yellow;
+            font-family: 'alarm clock', sans-serif;                                                
+        }
+
+        /*.clock-icon:before {
+            content: '\23F0' ;  Unicode character for clock 
+            margin-right: 5px;
+            font-size: 100px;
+        }*/
+
+        .clock-img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+            animation: geleng 2s ease-in-out infinite; /* Animasi geleng */
+        }
+
+        .clock-container, .orbit-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .con-clock{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; 
+        }
+    </style>
+</head>
+<body>
+    <div class="orbit-container">
+        <div class="container">
+            <div class="sun"></div>
+            <div class="orbit earth">
+                <div class="globe earth">
+                    <div class="orbit moon">
+                        <div class="globe moon"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clock-container">
+        <div class="con-clock">
+            <!-- <div class="clock-icon"></div> -->
+            <img class="clock-img" src="images/head-cat-removebg-preview.png" alt="Kucing">
+            <div class="clock" id="clock"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to display time
+        function displayTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Call the function to display time every second
+        setInterval(displayTime, 1000);
+
+        // Call the function to display time initially
+        displayTime();
+    </script>
+</body>
+</html>

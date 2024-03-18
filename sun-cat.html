@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/alarm-clock');
+        body{
+            background-color: #1E1C27;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            height: 400px;
+            width: 400px;
+            position: relative;
+        }
+
+        .sun-cat {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 150px;
+            left: 150px;
+            filter: drop-shadow(0 0 30px white);
+            animation: sunLight 5s infinite alternate, catSwing 2s ease-in-out infinite;
+            transform-origin: center; /* Menentukan titik rotasi kucing */
+        }
+
+        .globe.earth{
+            background: aqua;
+            height: 30px;
+            right: 28px;
+            top: 28px;
+            width: 30px;
+        }
+
+        .globe.moon{
+            width: 12px;
+            height: 12px;
+            background: #d6d6d6;
+            right: 2px;
+            top: 8px;
+        }
+
+        .globe{
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .orbit.earth{
+            position: relative;
+            animation: orbit 36.5s linear infinite;
+            height: 300px;
+            left: 50px;
+            top: 50px;
+            width: 300px;
+        }
+
+        .orbit.moon{
+            animation: orbit 2.7s linear infinite;
+            height: 80px;
+            left: -25px;
+            top: -25px;
+            width: 80px;
+        }
+
+        .orbit{
+            position: relative;
+            border: solid;
+            border-color: white transparent transparent transparent;
+            border-radius: 50%;
+            border-width: 1px 1px 0 0;
+            box-sizing: border-box;
+            transform: rotate(0deg);
+            transform-origin: center;
+        }
+
+        @keyframes orbit{
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes catSwing {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-10deg);
+            }
+            75% {
+                transform: rotate(10deg);
+            }
+        }
+
+        @keyframes sunLight {
+            0% {
+                filter: drop-shadow(0 0 30px white);
+            }
+            25% {
+                filter: drop-shadow(0 0 50px white);
+            }
+            50% {
+                filter: drop-shadow(0 0 70px white);
+            }
+            75% {
+                filter: drop-shadow(0 0 100px white);
+            }
+            100% {
+                filter: drop-shadow(0 0 30px white);
+            }
+        }
+
+        .clock-container {
+            margin-top: -60px;
+            text-align: center;
+            font-family: 'alarm clock', sans-serif;             
+        }
+        .clock{
+            font-size: 100px;
+            color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img class="sun-cat" src="images/head-cat-removebg-preview.png" alt="Kucing">
+        <div class="orbit earth">
+            <div class="globe earth">
+                <div class="orbit moon">
+                    <div class="globe moon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clock-container">
+        <div class="clock" id="clock"></div>
+    </div>
+
+    <script>
+        function displayTime(timeZone) {
+            const now = new Date();
+            const options = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+                timeZone: timeZone
+            };
+            const formattedTime = now.toLocaleTimeString('en-US', options);
+            document.getElementById('clock').textContent = formattedTime;
+        }
+
+        function success(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const timestamp = Math.floor(Date.now() / 1000);
+            const apiUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${latitude},${longitude}&timestamp=${timestamp}&key=AIzaSyA961qUUYeU2tnBuk4gS1fpiXVjnCFnbcQ`;
+            console.log(latitude, longitude, timestamp, apiUrl);
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const timeZoneId = data.timeZoneId;
+                    console.log('Time zone ID:', timeZoneId);
+                    displayTime(timeZoneId);
+                })
+                .catch(error => console.error('Error fetching timezone:', error));
+        }
+
+        function error() {
+            console.error('Unable to retrieve your location');
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+        } else {
+            console.error('Geolocation is not supported by your browser');
+        }
+        // https://timezonedb.com/api
+        setInterval(displayTime, 1000);
+        displayTime();
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit</title>
+    <style>
+        body{
+            background-color: #1E1C27;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            height: 400px;
+            width: 400px;
+            position: relative;
+        }
+
+        .sun {
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 30px white;
+            position: absolute;
+            top: 150px;
+            left: 150px;
+            animation: sunLight 5s infinite alternate;
+        }
+
+        .globe.earth{
+            background: aqua;
+            height: 30px;
+            right: 28px;
+            top: 28px;
+            width: 30px;
+        }
+
+        .globe.moon{
+            width: 12px;
+            height: 12px;
+            background: #d6d6d6;
+            right: 2px;
+            top: 8px;
+        }
+
+        .globe{
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .orbit.earth{
+            position: relative;
+            animation: orbit 36.5s linear infinite;
+            height: 300px;
+            left: 50px;
+            top: 50px;
+            width: 300px;
+        }
+
+        .orbit.moon{
+            animation: orbit 2.7s linear infinite;
+            height: 80px;
+            left: -25px;
+            top: -25px;
+            width: 80px;
+        }
+
+        .orbit{
+            position: relative;
+            border: solid;
+            border-color: white transparent transparent transparent;
+            border-radius: 50%;
+            border-width: 1px 1px 0 0;
+            box-sizing: border-box;
+            transform: rotate(0deg);
+            transform-origin: center;
+        }
+
+        @keyframes orbit{
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes sunLight {
+            0% {
+                background-color: yellow;
+                box-shadow: 0 0 30px white;
+            }
+            25% {
+                background-color: #ffe666;
+                box-shadow: 0 0 50px white;
+            }
+            50% {
+                background-color: #ffd966;
+                box-shadow: 0 0 70px white;
+            }
+            75% {
+                background-color: #ffcc00;
+                box-shadow: 0 0 100px white;
+            }
+            100% {
+                background-color: yellow;
+                box-shadow: 0 0 30px white;
+            }
+        }
+
+        /* @keyframes sunLight {
+            0% {
+                box-shadow: 0 0 30px white;
+            }
+            50% {
+                box-shadow: 0 0 50px white;
+            }
+            100% {
+                box-shadow: 0 0 30px white;
+            }
+        } */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sun"></div>
+        <div class="orbit earth">
+            <div class="globe earth">
+                <div class="orbit moon">
+                    <div class="globe moon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
