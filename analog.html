@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Jam Analog</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>F-Watch</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+    <link rel="shortcut icon" href="images/head-cat-removebg-preview.png" type="image/x-icon">
     <style type="text/css">
         body{
             /* background: url('https://source.unsplash.com/random') no-repeat center center fixed; 
@@ -98,12 +99,30 @@
             line-height: 20px;
             position: absolute;
         }
+
+        .label-fwatch {
+            position: absolute;
+            bottom: 180px;
+            left: 50%; 
+            transform: translateX(-50%); 
+            color: #f39c12; 
+            font-size: 16px;
+            font-weight: bolder;    
+            text-align: center;   
+            letter-spacing: 2px; 
+        }
     </style>
 </head>
 <body>
 
+<audio id="tickSound">
+    <source src="raw/detik2.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
 <div class="jam_analog_febryan">
     <div class="xxx">
+        <div class="label-fwatch">F-Watch</div>
         <div class="jarum jarum_detik"></div>
         <div class="jarum jarum_menit"></div>
         <div class="jarum jarum_jam"></div>
@@ -115,18 +134,28 @@
     const secondHand = document.querySelector('.jarum_detik');
     const minuteHand = document.querySelector('.jarum_menit');
     const jarum_jam = document.querySelector('.jarum_jam');
+    let previousSecondsDegrees = null;
 
-    function setDate(){
+    function setDate() {
         const now = new Date();
 
         const seconds = now.getSeconds();
         const secondsDegrees = ((seconds / 60) * 360) + 90;
         secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
         if (secondsDegrees === 90) {
             secondHand.style.transition = 'none';
         } else if (secondsDegrees >= 91) {
             secondHand.style.transition = 'all 0.05s cubic-bezier(0.1, 2.7, 0.58, 1)'
         }
+
+        if (previousSecondsDegrees !== null && Math.abs(secondsDegrees - previousSecondsDegrees) > 0.1) {
+            playTickSound();
+            document.body.style.backgroundColor = getRandomSmoothColor();
+            // document.body.style.backgroundColor = getRandomColor();
+        }
+
+        previousSecondsDegrees = secondsDegrees; // Menyimpan sudut jarum detik saat ini
 
         const minutes = now.getMinutes();
         const minutesDegrees = ((minutes / 60) * 360) + 90;
@@ -137,7 +166,7 @@
         jarum_jam.style.transform = `rotate(${hoursDegrees}deg)`;
     }
 
-    setInterval(setDate, 1000)
+    setInterval(setDate, 1000);
 
     function addClockNumbers() {
         const clock = document.querySelector('.xxx');
@@ -174,7 +203,28 @@
         return color;
     }
 
+    function getRandomSmoothColor() {
+        const min = 100; // Nilai minimum untuk komponen warna
+        const max = 200; // Nilai maksimum untuk komponen warna
+
+        // Mendapatkan komponen warna acak antara min dan max
+        const red = Math.floor(Math.random() * (max - min + 1)) + min;
+        const green = Math.floor(Math.random() * (max - min + 1)) + min;
+        const blue = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // Menggabungkan komponen warna menjadi format RGB
+        return `rgb(${red}, ${green}, ${blue})`;
+    }
+
     // document.body.style.backgroundColor = getRandomColor();
+
+    function playTickSound() {
+        const tickSound = document.getElementById('tickSound');
+        // tickSound.volume = 0.9;
+        tickSound.currentTime = 1.5;
+        tickSound.play();
+    }
+
 </script>
 </body>
 </html>
