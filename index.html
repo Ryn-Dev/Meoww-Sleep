@@ -208,13 +208,13 @@
     let targetDate;
 
     const fetchData = () => {
-      fetch('https://counter.free.beeceptor.com/')
+      fetch('https://countdown-apps.000webhostapp.com/api/v1/set.php')
         .then(response => response.json())
         .then(data => {
           console.log(data);
           document.getElementById('countdown-title').textContent = data.title;
-          document.getElementById('target-date-label').textContent = data.titleDateLimit;
-          targetDate = new Date(data.dateLimit); // Ambil tanggal target dari data JSON
+          document.getElementById('target-date-label').textContent = data.title_date_limit;
+          targetDate = new Date(data.date_limit); // Ambil tanggal target dari data JSON
           updateCountdown(targetDate); // Update countdown dengan tanggal target
         })
         .catch(error => console.error('Error:', error));
