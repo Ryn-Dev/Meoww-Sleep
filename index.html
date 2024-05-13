@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown to Go Jakarta</title>
+  <title id="head-title">Countdown to Go Jakarta</title>
   <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
   <link rel="icon" type="image/x-icon" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -212,6 +213,7 @@
         .then(response => response.json())
         .then(data => {
           console.log(data);
+          document.getElementById('head-title').textContent = data.title;
           document.getElementById('countdown-title').textContent = data.title;
           document.getElementById('target-date-label').textContent = data.title_date_limit;
           targetDate = new Date(data.date_limit); // Ambil tanggal target dari data JSON
@@ -233,15 +235,15 @@
       const now = new Date();
       const diff = targetDate - now;
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+      const hours = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+      const minutes = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+      const seconds = Math.max(0, Math.floor((diff % (1000 * 60)) / 1000));
 
-      daysEl.textContent = days.toString().padStart(2, "0");
-      hoursEl.textContent = hours.toString().padStart(2, "0");
-      minutesEl.textContent = minutes.toString().padStart(2, "0");
-      secondsEl.textContent = seconds.toString().padStart(2, "0");
+      daysEl.textContent = String(days).padStart(2, "0");
+      hoursEl.textContent = String(hours).padStart(2, "0");
+      minutesEl.textContent = String(minutes).padStart(2, "0");
+      secondsEl.textContent = String(seconds).padStart(2, "0");
 
       daysEl.classList.add("pulsate");
       hoursEl.classList.add("pulsate");
@@ -257,7 +259,23 @@
 
       if (diff <= 0) {
         clearInterval(intervalId);
-        alert("Semoga Penerbanganmu Menyenangkan!");
+        // alert("Semoga Penerbanganmu Menyenangkan!");
+        Swal.fire({
+          title: "Have Fun",
+          html: "Semoga Penerbanganmu Menyenangkan <br></br> <img src='https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png' alt='Airplane' width='80px'>",
+          imageUrl: "images/cat-pilot.jpg",
+          paddingBottom: "40px",
+          showConfirmButton: false,
+          // imageWidth: 400,
+          imageHeight: "100%",
+          imageAlt: "Cat Pilot",
+          onOpen: () => {
+            const image = document.querySelector('.swal2-image');
+            if (image) {
+              image.style.borderRadius = '20px';
+            }
+          }
+        });
       }
     };
 
@@ -281,5 +299,7 @@
       }
     });
   </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </body>
 </html>
