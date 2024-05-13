@@ -175,6 +175,17 @@
   </div>
 
   <script>
+    // const cursor = document.getElementById("custom-cursor");
+
+    // const updateCursorPosition = (e) => {
+    // const offset = 10;
+    // const x = e.clientX - offset;
+    // const y = e.clientY - offset;
+    // cursor.style.left = `${x}px`; 
+    // cursor.style.top = `${y}px`;
+    // };
+
+    // document.addEventListener("mousemove", updateCursorPosition);
 
     const countdownContainer = document.querySelector('.countdown-container');
     const cursor = document.getElementById('custom-cursor');
@@ -204,30 +215,12 @@
   </script>
 
   <script>
-
-    let targetDate;
-
-    const fetchData = () => {
-      fetch('https://counter.free.beeceptor.com/')
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          document.getElementById('countdown-title').textContent = data.title;
-          document.getElementById('target-date-label').textContent = data.titleDateLimit;
-          targetDate = new Date(data.dateLimit); // Ambil tanggal target dari data JSON
-          updateCountdown(targetDate); // Update countdown dengan tanggal target
-        })
-        .catch(error => console.error('Error:', error));
-    };
-
-    fetchData();
-
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
     const minutesEl = document.getElementById("minutes");
     const secondsEl = document.getElementById("seconds");
 
-    // targetDate = new Date("2024-03-28T17:45:00");
+    const targetDate = new Date("2024-03-28T17:45:00");
 
     const updateCountdown = () => {
       const now = new Date();
@@ -271,12 +264,6 @@
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'F12' || e.keyCode === 123) {
-        e.preventDefault();
-      }
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'u' && e.ctrlKey) {
         e.preventDefault();
       }
     });
