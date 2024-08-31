@@ -162,17 +162,24 @@
   </style>
 </head>
 <body>
+
+    <div id="splash-screen" style="position: fixed; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999;">
+      <h1>Loading...</h1>
+    </div>
+
     <div id="custom-cursor"></div>
     <div class="countdown-container">
         <div class="corner-label">Febryan</div>
-        <h1 id="countdown-title">Countdown to Go Jakarta</h1>
+        <h1 id="countdown-title">Loading...</h1>
+        <!-- <h1 id="countdown-title">Countdown to Go Jakarta</h1> -->
         <div id="countdown-digits">
         <div class="time-unit" id="days">00</div>
         <div class="time-unit" id="hours">00</div>
         <div class="time-unit" id="minutes">00</div>
         <div class="time-unit" id="seconds">00</div>
         </div>
-        <p id="target-date-label">Flight Date: 28 Apr 2024 - 21:00</p>
+        <p id="target-date-label">Loading...</p>
+        <!-- <p id="target-date-label">Flight Date: 28 Apr 2024 - 21:00</p> -->
   </div>
 
   <script>
@@ -208,8 +215,12 @@
 
     let targetDate;
 
+    const splashScreen = document.getElementById('splash-screen');
     const fetchData = () => {
-      fetch('https://countdown-apps.000webhostapp.com/api/v1/set.php')
+
+      splashScreen.style.display = 'none';
+
+      fetch('https://count.feb.my.id/api/v1/set.php')
         .then(response => response.json())
         .then(data => {
           console.log(data);
@@ -219,7 +230,12 @@
           targetDate = new Date(data.date_limit); // Ambil tanggal target dari data JSON
           updateCountdown(targetDate); // Update countdown dengan tanggal target
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, 3000);
+        });
     };
 
     fetchData();
