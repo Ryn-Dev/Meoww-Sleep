@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(5, 100px);
+    gap: 10px;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Tampilan layar kalkulator */
+.display {
+    grid-column: span 4;
+    background-color: #333;
+    color: white;
+    font-size: 2em;
+    text-align: right;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.3);
+}
+
+button {
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.5em;
+    font-weight: 600;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+button.alive {
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.3);
+}
+
+button.alive:focus {
+    outline: none;
+    border: none;
+}
+
+button.alive:active {
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(5px);
+}
+
+/* Grid positions for the buttons */
+.calculator .button-1 { grid-column: 1; grid-row: 2; }
+.calculator .button-2 { grid-column: 2; grid-row: 2; }
+.calculator .button-3 { grid-column: 3; grid-row: 2; }
+.calculator .button-4 { grid-column: 1; grid-row: 3; }
+.calculator .button-5 { grid-column: 2; grid-row: 3; }
+.calculator .button-6 { grid-column: 3; grid-row: 3; }
+.calculator .button-7 { grid-column: 1; grid-row: 4; }
+.calculator .button-8 { grid-column: 2; grid-row: 4; }
+.calculator .button-9 { grid-column: 3; grid-row: 4; }
+.calculator .button-0 { grid-column: 2; grid-row: 5; }
+.calculator .button-plus { grid-column: 4; grid-row: 2; }
+.calculator .button-minus { grid-column: 4; grid-row: 3; }
+.calculator .button-multiply { grid-column: 4; grid-row: 4; }
+.calculator .button-divide { grid-column: 4; grid-row: 5; }
+.calculator .button-equal { grid-column: 3; grid-row: 5; }
+.calculator .button-clear { grid-column: 1; grid-row: 5; }

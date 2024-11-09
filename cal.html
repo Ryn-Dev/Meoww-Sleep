@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F - Calculator</title>
+    <link rel="stylesheet" href="style/cal.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <button class="alive button-1" onclick="appendNumber(1)">1</button>
+        <button class="alive button-2" onclick="appendNumber(2)">2</button>
+        <button class="alive button-3" onclick="appendNumber(3)">3</button>
+        <button class="alive button-4" onclick="appendNumber(4)">4</button>
+        <button class="alive button-5" onclick="appendNumber(5)">5</button>
+        <button class="alive button-6" onclick="appendNumber(6)">6</button>
+        <button class="alive button-7" onclick="appendNumber(7)">7</button>
+        <button class="alive button-8" onclick="appendNumber(8)">8</button>
+        <button class="alive button-9" onclick="appendNumber(9)">9</button>
+        <button class="alive button-0" onclick="appendNumber(0)">0</button>
+        <button class="alive button-plus" onclick="setOperation('+')">+</button>
+        <button class="alive button-minus" onclick="setOperation('-')">-</button>
+        <button class="alive button-multiply" onclick="setOperation('*')">*</button>
+        <button class="alive button-divide" onclick="setOperation('/')">/</button>
+        <button class="alive button-equal" onclick="calculate()">=</button>
+        <button class="alive button-clear" onclick="clearDisplay()">C</button>
+    </div>
+    <script src="js/cal.js"></script>
+</body>
+</html>

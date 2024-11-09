@@ -1,0 +1,166 @@
+@font-face {
+    font-family: 'Jelle';
+    src: url('./fonts/Jellee-Roman.otf') format('embedded-opentype'), /* Internet Explorer */
+    url('./fonts/Jellee-Roman.otf') format('woff2'), /* Super Modern Browsers */
+    url('./fonts/Jellee-Roman.otf') format('woff'), /* Pretty Modern Browsers */
+    url('./fonts/Jellee-Roman.otf') format('truetype'), /* Safari, Android, iOS */
+    url('./fonts/Jellee-Roman.otf') format('svg');
+    /* Legacy iOS */
+}
+
+body {
+    height: 100vh;
+    background: radial-gradient(ellipse at bottom, black 0%, #01162E 100%);
+    font-family: "Jellee", "M PLUS Rounded 1c", "Mulish", sans-serif !important;
+    overflow: hidden;
+}
+
+#main-text {
+    color: white;
+    position: absolute;
+    font-size: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 12rem;
+    text-align: center;
+}
+
+#start-container {
+    position: relative;
+    height: 100%;
+    z-index: 2;
+}
+
+#start-text {
+    color: white;
+    font-size: 4rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+}
+
+#start-desc-text {
+    color: white;
+    font-size: 1.5rem;
+    font-family: 'Mulish', sans-serif;
+    margin-bottom: 2rem;
+    margin-top: 0.3rem;
+    font-weight: 300;
+    line-height: 2rem;
+}
+
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.button {
+    background: #EF6C00;
+    border-radius: 30px;
+    box-shadow: #EF6C00 0 10px 20px -10px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 24px;
+    opacity: 1;
+    outline: 0 solid transparent;
+    padding: 0.8rem 3rem;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: fit-content;
+    word-break: break-word;
+    border: 0;
+}
+
+.button:hover {
+    background-color: #E65100;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    animation: move;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.type-1 {
+    width: 1px;
+    height: 1px;
+    box-shadow: 0 0 1px #fff;
+}
+
+.type-2 {
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 1px #fff;
+}
+
+.type-3 {
+    width: 4px;
+    height: 4px;
+    box-shadow: 0 0 1px #fff;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, visibility 0s 1s;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+.fade-in {
+    animation: fade-in 8s;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes move {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-1200px);
+        display: none;
+        color: red;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .absolute-center {
+        width: 80%;
+    }
+    #main-text {
+        font-size: 2rem;
+        width: 100%;
+    }
+    #start-text {
+        font-size: 2.5rem;
+    }
+    #start-desc-text {
+        font-size: 1.2rem;
+        line-height: 1.6rem;
+    }
+    .button {
+        font-size: 1rem;
+        padding: 0.5rem 1.5rem;
+    }
+}
