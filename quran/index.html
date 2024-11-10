@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemutar Audio Quran</title>
+  <link rel="shortcut icon" href="images/quran.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .bg-baru {
+      background-color: #D09B32 !important;
+    }
+    .bg-baru:hover {
+      background-color: #deaf52 !important;
+    }
+
+    input[type="range"]::-webkit-progress-value {
+      background-color: #D09B32 !important;
+    }
+
+    input[type="range"]::-webkit-progress-bar {
+      background-color: #4b5563;
+      border-radius: 0.5rem;
+    }
+
+    #playlist li {
+      transition: background-color 0.3s ease;
+    }
+
+    #playlist li:hover {
+      background-color: #333;
+      cursor: pointer;
+    }
+
+    /* Timer styling */
+    #timerWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #timerSelect {
+      margin-left: 10px;
+    }
+
+    .d3 {
+        border: none;
+        color: white;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 1em;
+        font-weight: 580;
+        font-family: inherit;
+        opacity: 1;
+        background-color: #374151;
+        cursor: pointer;
+        transition: border-color 0.26s;
+    }
+
+    /* .alive {
+        box-shadow: 0 10px 8px black;
+    } */
+
+    .alive:focus {
+        border: none;
+        outline: none;
+    }
+
+    .alive:active {
+        box-shadow: 0 5px 0 black;
+        transform: translateY(5px);
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+  <div class="max-w-4xl mx-auto p-8">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold">Pemutar Audio Quran</h2>
+    </div>
+
+    <div class="mb-4 text-left flex flex-col items-center justify-start lg:flex-row lg:justify-between">
+      <div class="flex items-center w-full sm:w-auto md:w-auto lg:w-auto">
+        <label for="qariSelect" class="text-xl">Qari : </label>
+        <select id="qariSelect" class="bg-gray-800 text-white p-2 rounded-lg ml-2">
+          <option value="01">1. Abdullah Al-Juhany</option>
+          <option value="02">2. Abdul-Muhsin Al-Qasim</option>
+          <option value="03">3. Abdurrahman as-Sudais</option>
+          <option value="04">4. Ibrahim Al-Dossari</option>
+          <option value="05">5. Misyari Rasyid Al-Afasi</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+      <div class="mb-6">
+        <img src="images/quran.png" alt="Cover Album" class="w-48 h-48 mx-auto rounded-lg shadow-xl">
+      </div>
+      <div>
+        <p class="text-xl font-semibold" id="songTitle">Nama Surat</p>
+        <p class="text-gray-400" id="qariName">Nama Qari</p>
+      </div>
+      
+      <div class="flex justify-center items-center space-x-6 mt-6">
+        <button class="bg-gray-700 p-4 w-14 rounded-full hover:bg-gray-600 alive" id="prevSurahBtn">
+          <i class="fas fa-backward"></i>
+        </button>
+        <button class="bg-baru p-4 w-14 rounded-full hover:bg-[#deaf52] text-white alive" id="playBtn">
+          <i class="fas fa-play" id="playIcon"></i>
+        </button>
+        <button class="bg-gray-700 p-4 w-14 rounded-full hover:bg-gray-600 alive" id="nextSurahBtn">
+          <i class="fas fa-forward"></i>
+        </button>
+      </div>
+
+      <div class="mt-6">
+        <input type="range" id="progressBar" class="w-full h-2 bg-gray-600 rounded-lg" value="0" max="100">
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <div class="flex justify-between items-center">
+        <h3 class="text-2xl font-semibold mb-4">Daftar Surat</h3>
+        <div class="mb-6 text-center">
+          <input type="text" id="searchInput" class="bg-gray-800 text-white p-2 rounded-lg mt-2" placeholder="Cari surah...">
+        </div>
+      </div>
+
+      <ul id="playlist" class="space-y-4">
+      </ul>
+
+      <div class="mt-4 flex justify-center" id="paginationSurah">
+        <button id="prevPage" class="alive d3">Prev</button>
+        <!-- <button id="prevPage" class="bg-gray-700 p-2 rounded-lg text-white">Prev</button> -->
+        <span id="pageNum" class="mx-4 text-lg font-semibold">1</span>
+        <!-- <button id="nextPage" class="bg-gray-700 p-2 rounded-lg text-white">Next</button> -->
+        <button id="nextPage" class="alive d3">Next</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/quran2.js"></script>
+</body>
+</html>
