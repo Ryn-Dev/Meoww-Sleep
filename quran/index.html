@@ -88,7 +88,7 @@
       <h2 class="text-3xl font-bold">Pemutar Audio Quran</h2>
     </div>
 
-    <div class="mb-4 text-left flex flex-col items-center justify-start lg:flex-row lg:justify-between">
+    <div class="mb-4 text-left flex flex-col items-center justify-center space-y-4 md:space-y-0 lg:flex-row lg:justify-between">
       <div class="flex items-center w-full sm:w-auto md:w-auto lg:w-auto">
         <label for="qariSelect" class="text-xl">Qari : </label>
         <select id="qariSelect" class="bg-gray-800 text-white p-2 rounded-lg ml-2">
@@ -101,8 +101,14 @@
       </div>
     </div>
 
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg text-center">
-      <div class="mb-6">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg text-center relative">
+
+      <!-- Timer Text in the Top-Right Corner -->
+      <div class="absolute top-3 right-4 text-sm font-semibold text-gray-400 hidden" id="timerText">
+        00:00
+      </div>
+        
+      <div class="mb-6 mt-3">
         <img src="images/quran.png" alt="Cover Album" class="w-48 h-48 mx-auto rounded-lg shadow-xl">
       </div>
       <div>
@@ -123,15 +129,18 @@
       </div>
 
       <div class="mt-6">
+        <p class="text-sm font-semibold text-right text-[#D09B32]" id="surahDuration">
+          00:00 - 00:00
+        </p>
         <input type="range" id="progressBar" class="w-full h-2 bg-gray-600 rounded-lg" value="0" max="100">
       </div>
     </div>
 
     <div class="mt-10">
-      <div class="flex justify-between items-center">
-        <h3 class="text-2xl font-semibold mb-4">Daftar Surat</h3>
-        <div class="mb-6 text-center">
-          <input type="text" id="searchInput" class="bg-gray-800 text-white p-2 rounded-lg mt-2" placeholder="Cari surah...">
+      <div class="flex flex-col justify-between items-center md:flex-row">
+        <h3 class="text-xl font-semibold mb-4 ">Daftar Surat</h3>
+        <div class="mb-6 text-center w-full md:w-auto">
+          <input type="text" id="searchInput" class="bg-gray-800 text-white p-2 rounded-lg mt-2 w-full" placeholder="Cari surah...">
         </div>
       </div>
 
@@ -147,6 +156,6 @@
       </div>
     </div>
   </div>
-  <script src="js/quran2.js"></script>
+  <script src="js/quran3.js"></script>
 </body>
 </html>
