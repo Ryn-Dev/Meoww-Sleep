@@ -176,6 +176,7 @@ playButton.addEventListener('click', () => {
 audioPlayer.addEventListener('timeupdate', () => {
   const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
   progressBar.value = progress;
+  progressBar.style.background = `linear-gradient(to right, #D09B32 ${progress}%, #ddd ${progress}%)`;
   updateSurahDurationDisplay();
 });
 
@@ -216,7 +217,7 @@ function updateSurahDurationDisplay() {
   }
 
   // Update the displayed duration (current time - total time)
-  document.getElementById('surahDuration').textContent = `${formattedCurrentTime} - ${formattedTotalTime}`;
+  document.getElementById('surahDuration').textContent = `${formattedCurrentTime} / ${formattedTotalTime}`;
 }
 
 
@@ -306,7 +307,13 @@ timerSelect.addEventListener('change', () => {
         timerSelect.value = "0"; 
         timerText.classList.remove("block"); 
         timerText.classList.add("hidden");  
-        alert("Waktu timer habis, pemutaran dihentikan.");
+        // alert("Waktu timer habis, pemutaran dihentikan.");
+        Swal.fire({
+          title: 'Waktu Timer Habis',
+          text: 'Pemutaran dihentikan.',
+          icon: 'info',
+          confirmButtonText: 'OK'
+        });
       }
     }, 1000);
   } else {

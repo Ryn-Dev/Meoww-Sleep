@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .bg-baru {
+      background-color: #D09B32 !important;
+    }
+    .bg-baru:hover {
+      background-color: #deaf52 !important;
+    }
+
+    #playlist li {
+      transition: background-color 0.3s ease;
+    }
+
+    #playlist li:hover {
+      background-color: #333;
+      cursor: pointer;
+    }
+
+    /* Timer styling */
+    #timerWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #timerSelect {
+      margin-left: 10px;
+    }
+
+    .d3 {
+        border: none;
+        color: white;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 1em;
+        font-weight: 580;
+        font-family: inherit;
+        opacity: 1;
+        background-color: #374151;
+        cursor: pointer;
+        transition: border-color 0.26s;
+    }
+
+    /* .alive {
+        box-shadow: 0 10px 8px black;
+    } */
+
+    .alive:focus {
+        border: none;
+        outline: none;
+    }
+
+    .alive:active {
+        box-shadow: 0 5px 0 black;
+        transform: translateY(5px);
+    }

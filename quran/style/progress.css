@@ -1,0 +1,52 @@
+/* Style the slider track */
+.progress-bar {
+    -webkit-appearance: none;  /* Removes default styling for webkit browsers (Chrome, Safari) */
+    appearance: none;          /* Removes default styling for other browsers */
+    width: 100%;               /* Makes the slider span full width */
+    height: 8px;               /* Height of the slider track */
+    background: #efba8c;       /* Orange color for the track */
+    border-radius: 4px;        /* Rounded corners for the track */
+    outline: none;             /* Remove outline on focus */
+  }
+
+  /* Style the slider thumb (the draggable part) */
+  .progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;  /* Removes default thumb appearance */
+    appearance: none;          /* Removes default thumb appearance */
+    background: #D09B32;       /* Lighter orange color for the thumb */
+    border-radius: 50%;        /* Circular thumb */
+    width: 16px;               /* Thumb width */
+    height: 16px;              /* Thumb height */
+    cursor: pointer;          /* Pointer cursor when hovering over thumb */
+  }
+
+  /* Style the thumb for Firefox */
+  .progress-bar::-moz-range-thumb {
+    background: #D09B32;       /* Lighter orange color for the thumb */
+    border-radius: 50%;        /* Circular thumb */
+    width: 16px;               /* Thumb width */
+    height: 16px;              /* Thumb height */
+    cursor: pointer;          /* Pointer cursor when hovering over thumb */
+  }
+
+  /* Style the thumb for Internet Explorer */
+  .progress-bar::-ms-thumb {
+    background: #D09B32;       /* Lighter orange color for the thumb */
+    border-radius: 50%;        /* Circular thumb */
+    width: 16px;               /* Thumb width */
+    height: 16px;              /* Thumb height */
+    cursor: pointer;          /* Pointer cursor when hovering over thumb */
+  }
+
+  /* Optional: Change thumb color on hover */
+  .progress-bar::-webkit-slider-thumb:hover {
+    background: #D09B32;       /* Darker orange when hovering over the thumb */
+  }
+
+  .progress-bar::-moz-range-thumb:hover {
+    background: #D09B32;       /* Darker orange when hovering over the thumb */
+  }
+
+  .progress-bar::-ms-thumb:hover {
+    background: #D09B32;       /* Darker orange when hovering over the thumb */
+  }
