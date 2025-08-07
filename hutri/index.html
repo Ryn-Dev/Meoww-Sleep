@@ -7,9 +7,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pengibaran Bendera Merah Putih</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .watermark {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 14px;
+      color: white;
+      z-index: 9999;
+      font-family: sans-serif;
+    }
+
+    .watermark a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .watermark a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="watermark">
+    <a href="https://febryann.my.id" target="_blank">© FEBRYAN</a>
+  </div>
   <div id="particles-js"></div>
   <div class="card">
     <div class="card-body">
