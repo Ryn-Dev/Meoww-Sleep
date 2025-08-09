@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Bisa lebih tinggi dari layar */
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden; /* Biar horizontal scroll hilang */
+  background-image: url("../img/bg.jpg");
+  background-repeat: repeat-x;
+  background-size: cover;
+}
+
+/* Tiang bendera */
+.tiang-bendera {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.tiang-bendera img {
+  width: 200px;
+}
+
+/* Bendera */
+.container {
+  width: 15%;
+  margin-left: 50%;
+  margin-top: -24%;
+  border: 1px solid #aaa;
+  transition: margin-top 106s linear; /* Animasi halus */
+}
+
+.red {
+  width: 100%;
+  height: 2rem;
+  background-color: #f14052;
+}
+
+.white {
+  width: 100%;
+  height: 2rem;
+  background-color: white;
+}
+
+/* Tombol */
+#check-bendera {
+  display: none;
+}
+
+#btn-raise {
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 24px;
+  text-align: center;
+  color: #fff;
+  background-color: #f14052;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+}
+
+#btn-raise:hover {
+  background-color: #ef5464;
+}
+
+#check-bendera:checked ~ .container {
+  margin-top: -83%;
+}
+
+/* Card */
+.card {
+  width: 40%;
+  height: 800px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0px 10px 5px rgb(0 0 0 / 16%);
+  position: absolute;
+  top: 10%;
+  left: 30%;
+}
+
+.card-body {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.card-body h2 {
+  color: #204850;
+}
+
+/* RESPONSIVE */
+@media only screen and (max-width: 2560px) {
+  .container { width: 14%; margin-top: -22%; }
+  .red, .white { height: 3rem; }
+  #check-bendera:checked ~ .container { margin-top: -62.5%; }
+}
+
+@media only screen and (max-width: 1980px) {
+  .container { width: 18%; margin-top: -220px; }
+  .red, .white { height: 3rem; }
+  #check-bendera:checked ~ .container { margin-top: -638px; }
+}
+
+@media only screen and (max-width: 1680px) {
+  .tiang-bendera img { width: 200px; }
+  .container { width: 18%; margin-top: -180px; }
+  .red, .white { height: 2rem; }
+  #check-bendera:checked ~ .container { margin-top: -638px; }
+}
+
+@media only screen and (max-width: 1280px) {
+  .tiang-bendera img { width: 120px; }
+  .container { width: 15%; margin-top: -140px; }
+  .red, .white { height: 1.5rem; }
+  #check-bendera:checked ~ .container { margin-top: -404px; }
+  .card { width: 50%; height: 520px; top: 20%; left: 25%; }
+  .card-body { padding: 0; }
+  .card-body h2 { font-size: 20px; }
+}
+
+@media only screen and (max-width: 900px) {
+  .container { width: 80px; margin-top: -130px; }
+  .red, .white { height: 1.2rem; }
+  #check-bendera:checked ~ .container { margin-top: -404px; }
+}
+
+@media only screen and (max-width: 680px) {
+  .tiang-bendera img { width: 100px; }
+  .container { width: 60px; margin-top: -115px; }
+  .red, .white { height: 1rem; }
+  #check-bendera:checked ~ .container { margin-top: -345px; }
+  .card { width: 80%; height: 450px; top: 25%; left: 10%; }
+  .card-body { padding: 0; }
+  .card-body h2 { font-size: 20px; }
+}
