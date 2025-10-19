@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Watermark Bergerak Tailwind</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Gabarito', sans-serif; }
+
+    .watermark-text {
+      transform: rotate(-30deg);
+      white-space: nowrap;
+      opacity: 0.40;
+      user-select: none;
+      animation: floatWatermark 25s linear infinite alternate;
+    }
+
+    @keyframes floatWatermark {
+      0% { transform: rotate(-30deg) translate(0px, 0px); }
+      100% { transform: rotate(-30deg) translate(-60px, -60px); }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen overflow-hidden bg-white font-sans">
+
+  <!-- Layer Watermark -->
+  <div id="watermark" class="pointer-events-none fixed inset-0 z-50"></div>
+
+  <!-- Konten Halaman -->
+  <div class="relative z-10 p-10">
+    <h1 class="text-3xl font-bold mb-3">Contoh Halaman</h1>
+    <p class="text-gray-700">
+      Ini halaman dengan watermark diagonal bergerak perlahan menggunakan Tailwind CSS ✨
+    </p>
+  </div>
+
+  <script>
+    const userEmail = "febryan@gmail.com";
+    const now = new Date();
+    const dateNow = now.toLocaleDateString("id-ID", {
+      day: "2-digit", month: "2-digit", year: "numeric"
+    }).replace(/\//g, "-");
+    const timeNow = now.toLocaleTimeString("id-ID", { hour12: false });
+    const text = `${userEmail} • ${dateNow} ${timeNow}`;
+
+    const watermark = document.getElementById("watermark");
+    const gapX = 260; // jarak antar kolom
+    const gapY = 120; // jarak antar baris
+    const cols = Math.ceil(window.innerWidth / gapX) + 2;
+    const rows = Math.ceil(window.innerHeight / gapY) + 2;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const span = document.createElement("div");
+        span.textContent = text;
+        span.className = "absolute text-gray-900 text-sm watermark-text";
+        span.style.left = `${c * gapX - (r % 0 === 0 ? 100 : 0)}px`;
+        span.style.top = `${r * gapY}px`;
+        watermark.appendChild(span);
+      }
+    }
+
+    // regenerasi saat resize agar tetap rapi
+    window.addEventListener("resize", () => location.reload());
+  </script>
+</body>
+</html>
