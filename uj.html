@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode Privasi / Ujian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        /* Ini adalah gaya untuk layar penutup */
+        #privacy-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999; /* Pastikan ini di atas semua elemen lain */
+            display: none; /* Sembunyikan secara default */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        /* Class helper untuk menyembunyikan/menampilkan */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Halaman Ujian / Privasi</h1>
+    <p>Cobalah untuk:</p>
+    <ul>
+        <li>Klik tab baru di browser.</li>
+        <li>Buka aplikasi lain (Alt+Tab).</li>
+        <li>Klik desktop Anda.</li>
+    </ul>
+    <p>Layar ini akan menjadi hitam secara otomatis.</p>
+
+
+    <div id="privacy-overlay" class="hidden">
+        <div>
+            <h2>Layar Terkunci</h2>
+            <p>Anda meninggalkan halaman ini. Kembali fokus untuk melihat konten.</p>
+        </div>
+    </div>
+
+    <script>
+        // Mengambil elemen overlay
+        const overlay = document.getElementById('privacy-overlay');
+
+        // Event saat pengguna meninggalkan window/tab (Kehilangan Fokus)
+        window.addEventListener('blur', () => {
+            overlay.classList.remove('hidden');
+            document.title = "⚠️ KEMBALI KE SINI!"; // Opsional: Mengubah judul tab
+        });
+
+        // Event saat pengguna kembali ke window/tab (Mendapatkan Fokus)
+        window.addEventListener('focus', () => {
+            overlay.classList.add('hidden');
+            document.title = "Mode Privasi / Ujian"; // Mengembalikan judul tab
+        });
+        
+        // Opsional: Deteksi Visibility API (Khusus ganti tab/minimize)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>
