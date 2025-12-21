@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Text to Speech</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+    }
+    .box {
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h3>Text to Speech</h3>
+  <textarea id="text" placeholder="Masukkan teks..."></textarea>
+  <button onclick="speak()">🔊 Putar Suara</button>
+</div>
+
+<script>
+  function speak() {
+    const msg = new SpeechSynthesisUtterance(
+      document.getElementById("text").value
+    );
+    msg.lang = "id-ID";
+    speechSynthesis.speak(msg);
+  }
+</script>
+
+</body>
+</html>
