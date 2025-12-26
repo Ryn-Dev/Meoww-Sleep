@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode Privasi / Ujian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #privacy-overlay {
+            position: fixed;
+            inset: 0;
+            background: black;
+            z-index: 9999;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Halaman Ujian</h1>
+<p>Jika Anda meninggalkan tab, suara peringatan akan berbunyi terus sampai anda kembali ke halaman ujian.</p>
+
+<div id="privacy-overlay" class="hidden">
+    <div>
+        <h2>Layar Terkunci</h2>
+        <p>Anda meninggalkan ujian</p>
+    </div>
+</div>
+
+<script>
+    const overlay = document.getElementById('privacy-overlay');
+
+    let isAway = false;
+    let utterance = null;
+
+    function startSpeechLoop() {
+        if (!isAway) return;
+
+        utterance = new SpeechSynthesisUtterance(
+            "Anda meninggalkan ujian. Harap segera kembali ke halaman ujian."
+        );
+        utterance.lang = "id-ID";
+        utterance.rate = 1;
+        utterance.pitch = 1;
+
+        utterance.onend = () => {
+            // Jika masih meninggalkan tab → ulangi
+            if (isAway) {
+                setTimeout(startSpeechLoop, 800); // jeda 0.8 detik
+            }
+        };
+
+        speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeechLoop() {
+        isAway = false;
+        speechSynthesis.cancel();
+    }
+
+    function handleLeave() {
+        if (isAway) return; // cegah trigger ganda
+        isAway = true;
+        overlay.classList.remove('hidden');
+        document.title = "⚠️ KEMBALI KE UJIAN!";
+        startSpeechLoop();
+    }
+
+    function handleReturn() {
+        stopSpeechLoop();
+        overlay.classList.add('hidden');
+        document.title = "Mode Privasi / Ujian";
+    }
+
+    window.addEventListener('blur', handleLeave);
+    window.addEventListener('focus', handleReturn);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            handleLeave();
+        } else {
+            handleReturn();
+        }
+    });
+</script>
+
+</body>
+</html>
