@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tips Belajar Website</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 */
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            padding: 40px 60px 80px 60px;
+            box-sizing: border-box;
+            background-color: #0f172a;
+        }
+
+        /* Background Decorations */
+        .bg-blob-1 {
+            position: absolute;
+            top: -150px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background-color: #1e3a8a; /* Blue 900 */
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .bg-blob-2 {
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 500px;
+            height: 500px;
+            background-color: #581c87; /* Purple 900 */
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            gap: 60px;
+        }
+
+        .left-column {
+            flex: 0 0 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: calc(100vh - 140px);
+        }
+
+        .right-column {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* List Items Styling */
+        .term-item {
+            display: flex;
+            align-items: flex-start;
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 12px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .term-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .term-item:hover {
+            transform: translateX(8px);
+            background-color: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 2px;
+        }
+
+        /* Specific Colors for Tips */
+        .icon-concept { background-color: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .icon-practice { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .icon-error { background-color: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }
+        .icon-community { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .icon-consistent { background-color: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1px solid rgba(139, 92, 246, 0.3); }
+
+        .text-content h3 {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin: 0;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .text-content p {
+            color: #cbd5e1; /* Slate 300 */
+            font-size: 0.85rem;
+            margin: 4px 0 0 0;
+            line-height: 1.4;
+        }
+
+        /* Visual Right Column Styling */
+        .visual-container {
+            width: 100%;
+            height: 520px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .bulb-glow {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, rgba(251, 191, 36, 0) 70%);
+            position: absolute;
+            border-radius: 50%;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        .main-icon {
+            font-size: 140px;
+            color: #fbbf24;
+            filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.3));
+            z-index: 10;
+            position: relative;
+        }
+
+        .orbit-item {
+            position: absolute;
+            background-color: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+            backdrop-filter: blur(4px);
+            z-index: 20;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .orbit-1 { top: 15%; left: 15%; animation: float 6s infinite ease-in-out; }
+        .orbit-2 { top: 20%; right: 10%; animation: float 7s infinite ease-in-out 1s; }
+        .orbit-3 { bottom: 25%; left: 10%; animation: float 5s infinite ease-in-out 2s; }
+        .orbit-4 { bottom: 15%; right: 20%; animation: float 6s infinite ease-in-out 0.5s; }
+        .orbit-5 { top: 50%; left: 5%; transform: translateY(-50%); animation: float 8s infinite ease-in-out 1.5s; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #fbbf24;
+            font-size: 20px;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Backgrounds -->
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+<div class="content-wrapper">
+<!-- Left Column: Tips Content -->
+<div class="left-column">
+<div class="mb-6">
+<div class="inline-flex items-center space-x-2 bg-yellow-500 bg-opacity-20 rounded-full px-4 py-1.5 mb-2 border border-yellow-400 border-opacity-30">
+<i class="fa-solid fa-graduation-cap text-yellow-300 text-sm"></i>
+<p class="text-yellow-100 text-sm font-semibold tracking-wide uppercase">Best Practices</p>
+</div>
+<h1 class="text-4xl font-extrabold font-poppins text-white mb-2 tracking-tight">
+                    Tips <span class="text-yellow-400">Belajar</span> Efektif
+                </h1>
+<p class="text-slate-400 text-sm">
+                    Strategi untuk pemula agar proses belajar coding lebih lancar dan menyenangkan.
+                </p>
+</div>
+<!-- List Items -->
+<div class="term-item">
+<div class="icon-box icon-concept">
+<i class="fa-solid fa-brain"></i>
+</div>
+<div class="text-content">
+<h3>Pahami Konsep, Bukan Hafalan</h3>
+<p>Jangan sekadar menghafal sintaks kode. Fokus pahami logika dan cara kerjanya agar bisa memecahkan masalah.</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-practice">
+<i class="fa-solid fa-keyboard"></i>
+</div>
+<div class="text-content">
+<h3>Praktik &gt; Teori</h3>
+<p>Menonton tutorial saja tidak cukup. Tulis kode sendiri, modifikasi, dan "kotoran" tangan Anda dengan proyek nyata.</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-error">
+<i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+<div class="text-content">
+<h3>Belajar dari Error</h3>
+<p>Jangan takut pesan merah! Error adalah guru terbaik yang mengajarkan cara debugging dan berpikir kritis.</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-community">
+<i class="fa-solid fa-users"></i>
+</div>
+<div class="text-content">
+<h3>Gabung Komunitas</h3>
+<p>Belajar sendirian itu berat. Cari teman diskusi, tanya di forum, dan lihat kode orang lain (GitHub/StackOverflow).</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-consistent">
+<i class="fa-solid fa-calendar-check"></i>
+</div>
+<div class="text-content">
+<h3>Konsisten &gt; Intensif</h3>
+<p>Coding 30 menit setiap hari jauh lebih efektif daripada belajar 10 jam sekaligus tapi hanya sekali sebulan.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual -->
+<div class="right-column">
+<div class="visual-container">
+<!-- Background Glow -->
+<div class="bulb-glow"></div>
+<!-- Central Icon -->
+<i class="fa-regular fa-lightbulb main-icon"></i>
+<!-- Floating Elements -->
+<div class="orbit-item orbit-1">
+<i class="fa-solid fa-magnifying-glass text-blue-400"></i>
+<span>Google It!</span>
+</div>
+<div class="orbit-item orbit-2">
+<i class="fa-solid fa-code text-green-400"></i>
+<span>Write Code</span>
+</div>
+<div class="orbit-item orbit-3">
+<i class="fa-brands fa-stack-overflow text-orange-400"></i>
+<span>Ask Why</span>
+</div>
+<div class="orbit-item orbit-4">
+<i class="fa-solid fa-hammer text-purple-400"></i>
+<span>Build Projects</span>
+</div>
+<div class="orbit-item orbit-5">
+<i class="fa-solid fa-book-open text-pink-400"></i>
+<span>Read Docs</span>
+</div>
+<!-- Decorative Sparkles -->
+<i class="fa-solid fa-star sparkle" style="top: 30%; left: 30%; animation-delay: 0s; font-size: 14px;"></i>
+<i class="fa-solid fa-star sparkle" style="bottom: 40%; right: 25%; animation-delay: 1s; font-size: 10px;"></i>
+<i class="fa-solid fa-bolt sparkle" style="top: 20%; right: 40%; animation-delay: 0.5s; font-size: 18px; color: #facc15;"></i>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide14.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide16.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

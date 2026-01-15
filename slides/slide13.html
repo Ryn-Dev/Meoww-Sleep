@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tutorial Dasar (Roadmap)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 1280px;
+            height: 720px;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            padding: 50px 60px 80px 60px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        
+        /* Ambient Background */
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.25;
+        }
+        .blob-1 { top: -100px; right: -100px; width: 500px; height: 500px; background: #3b82f6; }
+        .blob-2 { bottom: -100px; left: -100px; width: 600px; height: 600px; background: #8b5cf6; }
+
+        /* Header */
+        .header {
+            z-index: 10;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        /* Roadmap Visual */
+        .roadmap-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-height: calc(100vh - 220px);
+        }
+
+        /* Central Lines */
+        .timeline-track {
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            right: 50px;
+            height: 6px;
+            background: #1e293b;
+            transform: translateY(-50%);
+            border-radius: 4px;
+            z-index: 0;
+        }
+        
+        .timeline-fill {
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            width: 92%;
+            height: 6px;
+            background: linear-gradient(90deg, #f97316 10%, #3b82f6 30%, #eab308 50%, #10b981 70%, #a855f7 90%);
+            transform: translateY(-50%);
+            border-radius: 4px;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        /* Steps Layout */
+        .steps-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+            padding: 0 40px;
+        }
+
+        .step-item {
+            position: relative;
+            width: 200px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Circle Node on the line */
+        .step-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #0f172a;
+            border: 4px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            z-index: 5;
+            box-shadow: 0 0 0 8px rgba(15, 23, 42, 1);
+        }
+
+        /* Step Number Badge */
+        .step-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            color: #0f172a;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 6;
+        }
+
+        /* Cards */
+        .step-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            width: 100%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .step-card:hover {
+            transform: scale(1.05);
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Variant Positioning */
+        /* TOP: Card above, Node center */
+        .top .step-card {
+            margin-bottom: 70px; /* Push up */
+        }
+        .top .connector-line {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            width: 2px;
+            height: 35px;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* BOTTOM: Card below, Node center */
+        .bottom .step-card {
+            margin-top: 70px; /* Push down */
+        }
+        .bottom .connector-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 35px;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* Styling per type */
+        .color-html { border-color: #f97316; color: #f97316; }
+        .bg-html { background: rgba(249, 115, 22, 0.5); }
+        .text-html { color: #fed7aa; }
+
+        .color-css { border-color: #3b82f6; color: #3b82f6; }
+        .bg-css { background: rgba(59, 130, 246, 0.5); }
+        .text-css { color: #bfdbfe; }
+
+        .color-js { border-color: #eab308; color: #eab308; }
+        .bg-js { background: rgba(234, 179, 8, 0.5); }
+        .text-js { color: #fef08a; }
+
+        .color-practice { border-color: #10b981; color: #10b981; }
+        .bg-practice { background: rgba(16, 185, 129, 0.5); }
+        .text-practice { color: #bbf7d0; }
+
+        .color-consistent { border-color: #a855f7; color: #a855f7; }
+        .bg-consistent { background: rgba(168, 85, 247, 0.5); }
+        .text-consistent { color: #e9d5ff; }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Backgrounds -->
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<!-- Header -->
+<div class="header">
+<div class="tag-pill">
+<i class="fa-solid fa-map-signs mr-2"></i> Roadmap Belajar
+            </div>
+<h1 class="text-3xl font-extrabold font-poppins mb-2 leading-tight">
+                Tutorial Dasar <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Website</span>
+</h1>
+<p class="text-slate-400 text-sm max-w-3xl">
+                Ikuti 5 langkah strategis ini untuk menguasai pengembangan web dari nol hingga bisa membuat proyek sendiri.
+            </p>
+</div>
+<!-- Roadmap Visual -->
+<div class="roadmap-wrapper">
+<!-- Timeline Line -->
+<div class="timeline-track"></div>
+<div class="timeline-fill"></div>
+<div class="steps-container">
+<!-- Step 1: HTML (Top) -->
+<div class="step-item top">
+<div class="step-card border-orange-500/30">
+<h3 class="font-bold text-white text-lg mb-1 font-poppins">Pahami HTML</h3>
+<p class="text-html text-xs font-bold uppercase tracking-wider mb-2">Struktur</p>
+<p class="text-slate-300 text-xs leading-relaxed">Buat kerangka dasar halaman web (Skeleton).</p>
+</div>
+<div class="connector-line bg-html"></div>
+<div class="step-node color-html bg-slate-900">
+<i class="fa-brands fa-html5"></i>
+<div class="step-badge">1</div>
+</div>
+</div>
+<!-- Step 2: CSS (Bottom) -->
+<div class="step-item bottom">
+<div class="step-node color-css bg-slate-900">
+<i class="fa-brands fa-css3-alt"></i>
+<div class="step-badge">2</div>
+</div>
+<div class="connector-line bg-css"></div>
+<div class="step-card border-blue-500/30">
+<h3 class="font-bold text-white text-lg mb-1 font-poppins">Hias dgn CSS</h3>
+<p class="text-css text-xs font-bold uppercase tracking-wider mb-2">Tampilan</p>
+<p class="text-slate-300 text-xs leading-relaxed">Percantik dengan warna, font, dan layout.</p>
+</div>
+</div>
+<!-- Step 3: JS (Top) -->
+<div class="step-item top">
+<div class="step-card border-yellow-500/30">
+<h3 class="font-bold text-white text-lg mb-1 font-poppins">Logic JS</h3>
+<p class="text-js text-xs font-bold uppercase tracking-wider mb-2">Interaksi</p>
+<p class="text-slate-300 text-xs leading-relaxed">Hidupkan website dengan fitur interaktif.</p>
+</div>
+<div class="connector-line bg-js"></div>
+<div class="step-node color-js bg-slate-900">
+<i class="fa-brands fa-js"></i>
+<div class="step-badge">3</div>
+</div>
+</div>
+<!-- Step 4: Practice (Bottom) -->
+<div class="step-item bottom">
+<div class="step-node color-practice bg-slate-900">
+<i class="fa-solid fa-code"></i>
+<div class="step-badge">4</div>
+</div>
+<div class="connector-line bg-practice"></div>
+<div class="step-card border-emerald-500/30">
+<h3 class="font-bold text-white text-lg mb-1 font-poppins">Praktik</h3>
+<p class="text-practice text-xs font-bold uppercase tracking-wider mb-2">Experience</p>
+<p class="text-slate-300 text-xs leading-relaxed">Buat proyek kecil seperti portofolio diri.</p>
+</div>
+</div>
+<!-- Step 5: Consistent (Top) -->
+<div class="step-item top">
+<div class="step-card border-purple-500/30">
+<h3 class="font-bold text-white text-lg mb-1 font-poppins">Konsisten</h3>
+<p class="text-consistent text-xs font-bold uppercase tracking-wider mb-2">Kunci Utama</p>
+<p class="text-slate-300 text-xs leading-relaxed">Belajar sedikit tapi rutin setiap hari.</p>
+</div>
+<div class="connector-line bg-consistent"></div>
+<div class="step-node color-consistent bg-slate-900">
+<i class="fa-solid fa-infinity"></i>
+<div class="step-badge">5</div>
+</div>
+  <i class="fa-solid fa-circle-notch fa-spin"></i>
+    <span>Semakin ke kanan, semakin mahir!</span>
+</div>
+</div>
+</div>
+<!-- Legend/Footer -->
+<div class="absolute bottom-6 right-10 flex items-center space-x-2 text-slate-500 text-xs font-medium bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
+  
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide12.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide14.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

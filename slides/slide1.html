@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mengenal Dunia Website dari Nol</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 500px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 base */
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        /* Simulated Gradient Background using absolute positioned divs with opacity */
+        .bg-layer-1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1e1b4b; /* Deep Indigo */
+            z-index: 0;
+        }
+        .bg-layer-2 {
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background-color: #4c1d95; /* Violet 900 */
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: 1;
+        }
+        .bg-layer-3 {
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 900px;
+            height: 600px;
+            border-radius: 50%;
+            background-color: #1d4ed8; /* Blue 700 */
+            filter: blur(100px);
+            opacity: 0.5;
+            z-index: 1;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: calc(100% - 60px);
+            padding-bottom: 20px;
+        }
+
+        .title-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 900px;
+            width: 90%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-bottom: 40px;
+        }
+
+        .hero-image-container {
+            width: 380px;
+            height: 330px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .decoration-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            z-index: 2;
+        }
+
+        .floating-badge {
+            top: 10px;
+            left: 10px;
+        }
+
+        /* Animasi Transisi */
+        @keyframes slide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Layers -->
+<div class="bg-layer-1"></div>
+<div class="bg-layer-2"></div>
+<div class="bg-layer-3"></div>
+<div class="decoration-grid"></div>
+<div class="content-wrapper">
+<div class="glass-card">
+<div class="text-left w-1/2 pr-8">
+<div class="inline-flex items-center space-x-2 bg-indigo-500 bg-opacity-30 rounded-full px-4 py-1.5 mb-6 border border-indigo-400 border-opacity-30">
+<span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+<p class="text-cyan-100 text-sm font-semibold tracking-wide uppercase">Web Development Series</p>
+</div>
+<h1 class="title-text text-4xl text-white mb-3">
+                        Mengenal Dunia Website <span class="text-transparent bg-clip-text" style="color: #67e8f9;">dari Nol</span>
+</h1>
+<p class="text-lg text-indigo-100 font-light mb-6 leading-relaxed">
+                        Step by Step untuk Pemula Total.<br/>
+<span class="text-indigo-300 text-base mt-2 block">Bongkar rahasia di balik layar browser Anda.</span>
+</p>
+<div class="flex items-center space-x-6">
+<div class="flex flex-col">
+<p class="text-indigo-200 text-xs uppercase tracking-wider mb-1">Presented by</p>
+<div class="flex items-center space-x-2">
+<i class="fa-solid fa-laptop-code text-cyan-400 text-xl"></i>
+<p class="text-white font-bold text-lg">Dimas Al Ghofiqi Binsig</p>
+</div>
+</div>
+</div>
+</div>
+<div class="w-1/2 flex justify-center relative">
+<!-- Decor elements behind image -->
+<div class="absolute -top-6 -right-6 w-24 h-24 border-t-4 border-r-4 border-cyan-400 rounded-tr-3xl opacity-60"></div>
+<div class="absolute -bottom-6 -left-6 w-24 h-24 border-b-4 border-l-4 border-purple-500 rounded-bl-3xl opacity-60"></div>
+<div class="hero-image-container">
+<img alt="Global Network Tech Illustration" class="hero-image" src="https://page.gensparksite.com/slides_images/2ea7ef6fe446489bc2cc3c00021cc6bc.jpg"/>
+<!-- Overlay gradient on image for better integration -->
+<div class="absolute inset-0 bg-[#1e1b4b] opacity-20 mix-blend-overlay"></div>
+<div class="floating-badge">
+<i class="fa-solid fa-globe text-cyan-500"></i>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide2.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</div>
+</body>
+</html>

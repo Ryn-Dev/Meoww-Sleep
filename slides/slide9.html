@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istilah Teknis Lanjutan</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            color: white;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            display: flex;
+            position: relative;
+            padding: 40px 60px 80px 60px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        /* Background Elements - No Gradients */
+        .bg-blob-1 {
+            position: absolute;
+            top: -10%;
+            right: -5%;
+            width: 600px;
+            height: 600px;
+            background-color: rgba(6, 182, 212, 0.15); /* Cyan */
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+        }
+
+        .bg-blob-2 {
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background-color: rgba(168, 85, 247, 0.15); /* Purple */
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .content-left {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 40px;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50px;
+            padding: 6px 16px;
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .term-card {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .term-card:hover {
+            transform: translateX(10px);
+            background-color: rgba(30, 41, 59, 0.9);
+            border-color: rgba(34, 211, 238, 0.5);
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        /* DNS Visual Flow Styles */
+        .flow-container {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .flow-title {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+
+        .flow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background-color: #334155;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            margin-right: 15px;
+            border: 2px solid #475569;
+            color: #cbd5e1;
+            z-index: 2;
+        }
+
+        .step-content {
+            flex: 1;
+            background-color: #1e293b;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-line {
+            position: absolute;
+            left: 15px; /* Center of step-number (32px width / 2) - 1px for line width */
+            top: 30px;
+            bottom: -35px;
+            width: 2px;
+            background-color: #334155;
+            z-index: 1;
+        }
+        
+        .flow-step:last-child .step-line {
+            display: none;
+        }
+
+        .highlight-ip {
+            font-family: 'Courier New', monospace;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #4ade80;
+            font-size: 0.9em;
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Backgrounds -->
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+<div class="grid-pattern"></div>
+<!-- Left Column: Terminology -->
+<div class="content-left">
+<div class="header-tag">
+<i class="fa-solid fa-shield-halved text-emerald-400 mr-2 text-sm"></i>
+<p class="text-emerald-100 text-sm font-semibold tracking-wide uppercase m-0">Infrastruktur &amp; Keamanan</p>
+</div>
+<h1 class="text-4xl font-extrabold text-white mb-2 leading-tight font-poppins">
+                Istilah <span class="text-transparent bg-clip-text" style="background-color: #22d3ee;">Teknis Lanjutan</span>
+</h1>
+<p class="text-slate-400 text-base mb-8 leading-relaxed">
+                Empat komponen vital yang membuat internet bekerja dengan aman dan terarah.
+            </p>
+<!-- Card 1: IP Address -->
+<div class="term-card">
+<div class="icon-box bg-blue-500 bg-opacity-20 text-blue-400">
+<i class="fa-solid fa-id-card-clip"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg m-0 font-poppins">IP Address</h3>
+<p class="text-slate-400 text-sm m-0 mt-1">Alamat unik setiap komputer (KTP Digital). Contoh: 192.168.1.1</p>
+</div>
+</div>
+<!-- Card 2: DNS -->
+<div class="term-card">
+<div class="icon-box bg-purple-500 bg-opacity-20 text-purple-400">
+<i class="fa-solid fa-book-atlas"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg m-0 font-poppins">DNS</h3>
+<p class="text-slate-400 text-sm m-0 mt-1">Buku telepon internet. Menerjemahkan nama domain ke IP Address.</p>
+</div>
+</div>
+<!-- Card 3: SSL/TLS -->
+<div class="term-card">
+<div class="icon-box bg-green-500 bg-opacity-20 text-green-400">
+<i class="fa-solid fa-lock"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg m-0 font-poppins">SSL / TLS</h3>
+<p class="text-slate-400 text-sm m-0 mt-1">Sertifikat keamanan yang mengenkripsi data (Gembok hijau di browser).</p>
+</div>
+</div>
+<!-- Card 4: Cookie -->
+<div class="term-card">
+<div class="icon-box bg-yellow-500 bg-opacity-20 text-yellow-400">
+<i class="fa-solid fa-cookie-bite"></i>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg m-0 font-poppins">Cookie</h3>
+<p class="text-slate-400 text-sm m-0 mt-1">Data kecil yang disimpan browser untuk mengingat user (Login, Keranjang).</p>
+</div>
+</div>
+</div>
+<!-- Right Column: DNS Flow Diagram -->
+<div class="content-right">
+<div class="flow-container">
+<h2 class="flow-title">Bagaimana DNS Bekerja?</h2>
+<!-- Step 1 -->
+<div class="flow-step">
+<div class="step-line"></div>
+<div class="step-number bg-blue-600 border-blue-400 text-white">1</div>
+<div class="step-content" style="border-left-color: #3b82f6;">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-blue-300 text-sm m-0">User Request</p>
+<i class="fa-solid fa-laptop text-blue-500"></i>
+</div>
+<p class="text-sm text-slate-300 m-0">Kamu mengetik <span class="text-white font-semibold">google.com</span> di browser.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flow-step">
+<div class="step-line"></div>
+<div class="step-number bg-purple-600 border-purple-400 text-white">2</div>
+<div class="step-content" style="border-left-color: #a855f7;">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-purple-300 text-sm m-0">DNS Lookup</p>
+<i class="fa-solid fa-magnifying-glass text-purple-500"></i>
+</div>
+<p class="text-sm text-slate-300 m-0">Browser bertanya ke DNS Server: <br/>"Di mana rumah google.com?"</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flow-step">
+<div class="step-line"></div>
+<div class="step-number bg-emerald-600 border-emerald-400 text-white">3</div>
+<div class="step-content" style="border-left-color: #10b981;">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-emerald-300 text-sm m-0">IP Found</p>
+<i class="fa-solid fa-server text-emerald-500"></i>
+</div>
+<p class="text-sm text-slate-300 m-0">DNS menjawab: "Alamatnya di <span class="highlight-ip">142.250.1.1</span>"</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flow-step">
+<div class="step-number bg-cyan-600 border-cyan-400 text-white">4</div>
+<div class="step-content" style="border-left-color: #22d3ee;">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-cyan-300 text-sm m-0">Connection</p>
+<i class="fa-solid fa-globe text-cyan-500"></i>
+</div>
+<p class="text-sm text-slate-300 m-0">Browser terhubung ke server Google dan menampilkan website.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide8.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide10.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

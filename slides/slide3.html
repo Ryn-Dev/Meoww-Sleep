@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website = Rumah Digital</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* ================= BASE ================= */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    background-color: #0f172a;
+    animation: fadeIn 0.6s ease-out;
+    display: flex;
+}
+
+/* ================= SLIDE ================= */
+.slide-container {
+    width: 1280px;
+    height: 700px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 40px 80px 40px;
+    overflow: hidden;
+}
+
+/* ================= BACKGROUND ================= */
+.bg-orb-1 {
+    position: absolute;
+    top: -10%;
+    left: 20%;
+    width: 600px;
+    height: 600px;
+    background: rgba(76, 29, 149, 0.4);
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 0;
+}
+
+.bg-orb-2 {
+    position: absolute;
+    bottom: -10%;
+    right: 10%;
+    width: 700px;
+    height: 700px;
+    background: rgba(30, 58, 138, 0.3);
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+}
+
+/* ================= HEADER ================= */
+.header-content {
+    z-index: 10;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* ================= CARDS ================= */
+.cards-container {
+    display: flex;
+    gap: 1.5rem;
+    max-width: 1000px;
+    width: 100%;
+    z-index: 10;
+}
+
+.tech-card {
+    flex: 1;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s ease, box-shadow .3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+.tech-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,.4);
+}
+
+/* Accent bar */
+.card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 6px;
+    width: 100%;
+}
+
+/* Icon */
+.icon-circle {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Text */
+.card-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.card-subtitle {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.card-subtitle2 {
+    font-size: .8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #cbd5f5;
+    margin-bottom: .5rem;
+}
+
+/* Analogy */
+.analogy-box {
+    margin-top: auto;
+    padding: 0.75rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.15);
+}
+
+.house-part-icon {
+    font-size: 2rem;
+    margin-bottom: .5rem;
+}
+
+/* ================= COLOR PER CARD ================= */
+.card-html .card-accent { background:#E34F26; }
+.card-html .icon-circle,
+.card-html .card-subtitle { color:#E34F26; }
+
+.card-css .card-accent { background:#1572B6; }
+.card-css .icon-circle,
+.card-css .card-subtitle { color:#1572B6; }
+
+.card-js .card-accent { background:#F7DF1E; }
+.card-js .icon-circle,
+.card-js .card-subtitle { color:#F7DF1E; }
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="slide-container">
+
+    <!-- Background -->
+    <div class="bg-orb-1"></div>
+    <div class="bg-orb-2"></div>
+
+    <!-- Header -->
+    <div class="header-content">
+        <div class="inline-flex items-center gap-2 bg-slate-700/50 px-4 py-1.5 rounded-full border border-slate-600 mb-4">
+            <i class="fa-solid fa-home text-cyan-400"></i>
+            <span class="text-cyan-100 text-sm font-semibold uppercase tracking-wide">Analogi The Big 3</span>
+        </div>
+
+        <h1 class="text-3xl font-extrabold text-white mb-2 font-[Poppins]">
+            Website = <span class="text-cyan-400">Rumah Digital</span>
+        </h1>
+
+        <p class="text-slate-300 text-sm max-w-2xl mx-auto">
+            Bayangkan membangun website seperti membangun sebuah rumah.
+            Ada tiga komponen utama yang tidak bisa dipisahkan.
+        </p>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-container">
+
+        <!-- HTML -->
+        <div class="tech-card card-html">
+            <div class="card-accent"></div>
+            <div class="icon-circle"><i class="fa-brands fa-html5"></i></div>
+            <h2 class="card-title">HTML</h2>
+            <h3 class="card-subtitle2">HyperText Markup Language</h3>
+            <p class="card-subtitle">Struktur</p>
+            <p class="text-slate-300 text-sm mb-6">
+                Menyusun kerangka dasar konten agar berdiri kokoh.
+            </p>
+            <div class="analogy-box">
+                <i class="fa-solid fa-dungeon house-part-icon text-orange-500"></i>
+                <p class="text-white font-bold">Tulang / Bata</p>
+                <p class="text-xs text-slate-400">Pondasi & dinding</p>
+            </div>
+        </div>
+
+        <!-- CSS -->
+        <div class="tech-card card-css">
+            <div class="card-accent"></div>
+            <div class="icon-circle"><i class="fa-brands fa-css3-alt"></i></div>
+            <h2 class="card-title">CSS</h2>
+            <h3 class="card-subtitle2">Cascading Style Sheets</h3>
+            <p class="card-subtitle">Tampilan</p>
+            <p class="text-slate-300 text-sm mb-6">
+                Memberikan warna, layout, dan estetika visual.
+            </p>
+            <div class="analogy-box">
+                <i class="fa-solid fa-paint-roller house-part-icon text-blue-500"></i>
+                <p class="text-white font-bold">Cat / Dekorasi</p>
+                <p class="text-xs text-slate-400">Warna & furnitur</p>
+            </div>
+        </div>
+
+        <!-- JS -->
+        <div class="tech-card card-js">
+            <div class="card-accent"></div>
+            <div class="icon-circle"><i class="fa-brands fa-js"></i></div>
+            <h2 class="card-title">JavaScript</h2>
+            <h3 class="card-subtitle2">Bahasa Pemrograman</h3>
+            <p class="card-subtitle">Interaksi</p>
+            <p class="text-slate-300 text-sm mb-6">
+                Membuat website hidup dan responsif.
+            </p>
+            <div class="analogy-box">
+                <i class="fa-solid fa-lightbulb house-part-icon text-yellow-400"></i>
+                <p class="text-white font-bold">Listrik / Otak</p>
+                <p class="text-xs text-slate-400">Logika & aksi</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="absolute bottom-0 left-0 w-full h-16 flex  justify-between px-12 border-t border-white/5">
+    <a href="slide2.html" class="bg-slate-600 hover:bg-slate-500 text-white px-5 py-2 rounded-lg flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+
+    <p class="text-white/50 text-sm">© 2026 Seminar Web Development</p>
+
+    <a href="slide4.html" class="bg-cyan-500 hover:bg-cyan-400 text-white px-5 py-2 rounded-lg flex items-center gap-2">
+        Next <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</div>
+
+</body>
+</html>

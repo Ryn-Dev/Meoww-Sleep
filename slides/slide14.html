@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mengapa Belajar Web?</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 */
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            padding: 40px 60px 80px 60px;
+            box-sizing: border-box;
+            background-color: #0f172a;
+        }
+
+        /* Background Decorations */
+        .bg-blob-1 {
+            position: absolute;
+            top: -100px;
+            right: -50px;
+            width: 650px;
+            height: 650px;
+            background-color: #0c4a6e; /* Sky 900 */
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .bg-blob-2 {
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 500px;
+            height: 500px;
+            background-color: #115e59; /* Teal 900 */
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            gap: 60px;
+        }
+
+        .left-column {
+            flex: 0 0 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .right-column {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* List Items Styling */
+        .term-item {
+            display: flex;
+            align-items: center;
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .term-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .term-item:hover {
+            transform: translateX(8px);
+            background-color: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Specific Colors for Benefits */
+        .icon-logic { background-color: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+        .icon-job { background-color: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); }
+        .icon-remote { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .icon-growth { background-color: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+        .text-content h3 {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .text-content p {
+            color: #cbd5e1; /* Slate 300 */
+            font-size: 0.85rem;
+            margin: 4px 0 0 0;
+            line-height: 1.3;
+        }
+
+        /* Career Path Visual Styling */
+        .path-container {
+            width: 100%;
+            height: 520px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.04) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #334155;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 0.9rem;
+        }
+
+        .step-info h4 {
+            color: #e2e8f0;
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .step-info span {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        /* Connecting Line */
+        .path-line {
+            position: absolute;
+            left: 75px; /* Aligned with circle centers */
+            top: 60px;
+            bottom: 60px;
+            width: 2px;
+            background: linear-gradient(to bottom, #6366f1, #0ea5e9, #10b981, #f43f5e);
+            z-index: 0;
+        }
+
+        .floating-icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 80px;
+            color: rgba(255,255,255,0.03);
+            z-index: 0;
+            transform: rotate(-15deg);
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Backgrounds -->
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+<div class="content-wrapper">
+<!-- Left Column: Content -->
+<div class="left-column">
+<div class="mb-8">
+<div class="inline-flex items-center space-x-2 bg-sky-500 bg-opacity-20 rounded-full px-4 py-1.5 mb-3 border border-sky-400 border-opacity-30">
+<i class="fa-solid fa-rocket text-sky-300 text-sm"></i>
+<p class="text-sky-100 text-sm font-semibold tracking-wide uppercase">Karir &amp; Masa Depan</p>
+</div>
+<h1 class="text-4xl font-extrabold font-poppins text-white mb-3 tracking-tight">
+                    Mengapa <span class="text-sky-400">Belajar Web?</span>
+</h1>
+<p class="text-slate-400 text-base leading-relaxed">
+                    Lebih dari sekadar koding, ini adalah investasi skill jangka panjang yang membuka ribuan pintu peluang di era digital.
+                </p>
+</div>
+<!-- Benefits List -->
+<div class="term-item">
+<div class="icon-box icon-logic">
+<i class="fa-solid fa-brain"></i>
+</div>
+<div class="text-content">
+<h3>Melatih Logika Berpikir</h3>
+<p>Belajar memecahkan masalah kompleks menjadi langkah-langkah kecil yang sistematis dan terstruktur.</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-job">
+<i class="fa-solid fa-briefcase"></i>
+</div>
+<div class="text-content">
+<h3>Peluang Kerja Luas</h3>
+<p>Setiap perusahaan butuh website. Permintaan developer tinggi di startup, korporat, hingga agensi.</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-remote">
+<i class="fa-solid fa-laptop-house"></i>
+</div>
+<div class="text-content">
+<h3>Bisa Freelance &amp; Remote</h3>
+<p>Kebebasan bekerja dari mana saja. Bisa ambil proyek sampingan atau menjadi digital nomad.</p>
+</div>
+</div>
+<div class="term-item">
+<div class="icon-box icon-growth">
+<i class="fa-solid fa-chart-line"></i>
+</div>
+<div class="text-content">
+<h3>Skill Terus Berkembang</h3>
+<p>Dunia teknologi tidak pernah mati. Selalu ada hal baru untuk dipelajari, membuatmu terus relevan.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Path -->
+<div class="right-column">
+<i class="fa-solid fa-trophy floating-icon"></i>
+<div class="path-container">
+<p class="absolute top-5 right-6 text-xs text-slate-500 font-mono tracking-widest uppercase">Growth Path</p>
+<!-- Vertical Line -->
+<div class="path-line"></div>
+<!-- Step 1 -->
+<div class="step-card">
+<div class="step-number" style="background-color: #4f46e5; box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);">
+<i class="fa-solid fa-lightbulb"></i>
+</div>
+<div class="step-info">
+<h4>Problem Solving</h4>
+<span>Pola Pikir Kritis</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card" style="transform: translateX(20px);">
+<div class="step-number" style="background-color: #0ea5e9; box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);">
+<i class="fa-solid fa-code"></i>
+</div>
+<div class="step-info">
+<h4>Technical Skills</h4>
+<span>HTML, CSS, JS, dll</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-card" style="transform: translateX(40px);">
+<div class="step-number" style="background-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">
+<i class="fa-solid fa-money-bill-wave"></i>
+</div>
+<div class="step-info">
+<h4>High Income</h4>
+<span>Gaji Kompetitif</span>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-card" style="transform: translateX(60px); background-color: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.3);">
+<div class="step-number" style="background-color: #f43f5e; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);">
+<i class="fa-solid fa-earth-americas"></i>
+</div>
+<div class="step-info">
+<h4 class="text-rose-300">Global Career</h4>
+<span>Kerja Tanpa Batas</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide13.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide15.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

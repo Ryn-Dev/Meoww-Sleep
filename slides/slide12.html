@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Statis vs Dinamis</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 800px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px 80px 60px;
+            box-sizing: border-box;
+            background-color: #0f172a;
+        }
+
+        /* Background Blobs */
+        .blob-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background-color: #1e3a8a; /* Blue 900 */
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .blob-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background-color: #7e22ce; /* Purple 700 */
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+            z-index: 10;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 50px;
+            padding: 6px 20px;
+            margin-bottom: 16px;
+        }
+
+        /* Comparison Container */
+        .comparison-wrapper {
+            display: flex;
+            flex: 1;
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+            align-items: stretch;
+            max-height: calc(100vh - 240px);
+        }
+
+        .col-card {
+            flex: 1;
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .col-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(30, 41, 59, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .col-statis {
+            border-top: 6px solid #38bdf8; /* Sky Blue */
+        }
+        
+        .col-dinamis {
+            border-top: 6px solid #a855f7; /* Purple */
+        }
+
+        .icon-header {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 16px;
+            align-self: center;
+        }
+
+        .statis-icon {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+
+        .dinamis-icon {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding: 10px;
+            background-color: rgba(15, 23, 42, 0.4);
+            border-radius: 12px;
+        }
+
+        .check-icon {
+            margin-right: 10px;
+            margin-top: 2px;
+            font-size: 14px;
+        }
+
+        .vs-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: #0f172a;
+            border: 4px solid #334155;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            color: white;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .example-box {
+            margin-top: auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .example-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Backgrounds -->
+<div class="blob-1"></div>
+<div class="blob-2"></div>
+<!-- Header -->
+<div class="header-section">
+<div class="header-badge">
+<i class="fa-solid fa-scale-balanced text-sky-400 mr-2"></i>
+<span class="text-sky-100 text-sm font-semibold tracking-wide uppercase">Jenis Website</span>
+</div>
+<h1 class="text-4xl font-extrabold font-poppins text-white mb-2">
+            Statis <span class="text-slate-500 mx-2">VS</span> Dinamis
+        </h1>
+<p class="text-slate-400 text-lg">
+            Apa bedanya brosur digital dengan sosial media yang kamu pakai setiap hari?
+        </p>
+</div>
+<!-- Main Comparison -->
+<div class="comparison-wrapper">
+<!-- VS Badge Center -->
+<div class="vs-badge">VS</div>
+<!-- Left Column: Statis -->
+<div class="col-card col-statis">
+<div class="icon-header statis-icon">
+<i class="fa-regular fa-file-code"></i>
+</div>
+<h2 class="text-2xl font-bold font-poppins text-white text-center mb-1">Website Statis</h2>
+<p class="text-slate-400 text-center text-sm mb-6">Seperti Brosur Digital</p>
+<div class="feature-list">
+<div class="feature-item">
+<i class="fa-solid fa-lock text-sky-400 check-icon"></i>
+<div>
+<p class="text-white font-semibold text-sm">Konten Tetap (Fixed)</p>
+<p class="text-slate-400 text-xs mt-1">Apa yang ditulis di kode, itu yang tampil selamanya.</p>
+</div>
+</div>
+<div class="feature-item">
+<i class="fa-solid fa-bolt text-sky-400 check-icon"></i>
+<div>
+<p class="text-white font-semibold text-sm">Sangat Cepat</p>
+<p class="text-slate-400 text-xs mt-1">Tidak perlu mengolah data dari database.</p>
+</div>
+</div>
+<div class="feature-item">
+<i class="fa-solid fa-code text-sky-400 check-icon"></i>
+<div>
+<p class="text-white font-semibold text-sm">Hanya HTML &amp; CSS</p>
+<p class="text-slate-400 text-xs mt-1">Tidak butuh bahasa pemrograman server rumit.</p>
+</div>
+</div>
+</div>
+<div class="example-box">
+<p class="text-slate-400 text-xs uppercase tracking-wider mb-2 font-bold">Contoh Penggunaan</p>
+<div class="flex flex-wrap justify-center">
+<span class="example-badge bg-sky-900 text-sky-200">Portfolio</span>
+<span class="example-badge bg-sky-900 text-sky-200">Landing Page</span>
+<span class="example-badge bg-sky-900 text-sky-200">Company Profile</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Dinamis -->
+<div class="col-card col-dinamis">
+<div class="icon-header dinamis-icon">
+<i class="fa-solid fa-users-gear"></i>
+</div>
+<h2 class="text-2xl font-bold font-poppins text-white text-center mb-1">Website Dinamis</h2>
+<p class="text-slate-400 text-center text-sm mb-6">Seperti Aplikasi Pintar</p>
+<div class="feature-list">
+<div class="feature-item">
+<i class="fa-solid fa-arrows-rotate text-purple-400 check-icon"></i>
+<div>
+<p class="text-white font-semibold text-sm">Konten Berubah-ubah</p>
+<p class="text-slate-400 text-xs mt-1">Tampilan bisa beda untuk setiap user (Personalized).</p>
+</div>
+</div>
+<div class="feature-item">
+<i class="fa-solid fa-database text-purple-400 check-icon"></i>
+<div>
+<p class="text-white font-semibold text-sm">Terhubung Database</p>
+<p class="text-slate-400 text-xs mt-1">Bisa menyimpan data user, komentar, dan transaksi.</p>
+</div>
+</div>
+<div class="feature-item">
+<i class="fa-solid fa-wand-magic-sparkles text-purple-400 check-icon"></i>
+<div>
+<p class="text-white font-semibold text-sm">Interaktif Tinggi</p>
+<p class="text-slate-400 text-xs mt-1">User bisa login, upload foto, dan chat.</p>
+</div>
+</div>
+</div>
+<div class="example-box">
+<p class="text-slate-400 text-xs uppercase tracking-wider mb-2 font-bold">Contoh Penggunaan</p>
+<div class="flex flex-wrap justify-center">
+<span class="example-badge bg-purple-900 text-purple-200">Facebook</span>
+<span class="example-badge bg-purple-900 text-purple-200">Tokopedia</span>
+<span class="example-badge bg-purple-900 text-purple-200">Gmail</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide11.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide13.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

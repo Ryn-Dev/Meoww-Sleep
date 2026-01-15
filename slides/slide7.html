@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istilah Logika &amp; Fungsi</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            padding: 40px 60px 80px 60px;
+            box-sizing: border-box;
+            background-color: #0f172a;
+        }
+        
+        /* Background Blobs (Solid color with blur, avoiding gradients) */
+        .blob-1 {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background-color: #4c1d95; /* Violet */
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+        .blob-2 {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background-color: #1e3a8a; /* Blue */
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            gap: 50px;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Definition Cards */
+        .def-card {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+        .def-card:last-child {
+            margin-bottom: 0;
+        }
+        .def-card:hover {
+            background-color: rgba(30, 41, 59, 0.9);
+            border-color: #22d3ee;
+            transform: translateX(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 18px;
+            flex-shrink: 0;
+            background-color: rgba(51, 65, 85, 0.8);
+        }
+
+        /* Diagram Styles */
+        .diagram-container {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .diagram-node {
+            background-color: #1e293b;
+            border-left: 4px solid #3b82f6;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            width: 85%;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        .diagram-node.api-node {
+            border-left-color: #f59e0b; /* Amber */
+            width: 60%;
+            justify-content: center;
+        }
+
+        .node-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .connector-line {
+            height: 30px;
+            width: 2px;
+            background-color: #475569;
+            margin: 5px 0;
+            position: relative;
+        }
+        
+        .arrow-down {
+            color: #94a3b8;
+            font-size: 16px;
+            animation: bounce 2s infinite;
+            margin: 5px 0;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-5px);}
+            60% {transform: translateY(-3px);}
+        }
+
+        .badge-tag {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Backgrounds -->
+<div class="blob-1"></div>
+<div class="blob-2"></div>
+<div class="content-wrapper">
+<!-- Left Panel: Text Content -->
+<div class="left-panel">
+<div class="mb-8">
+<div class="inline-flex items-center space-x-2 bg-blue-500 bg-opacity-20 rounded-full px-4 py-1.5 mb-4 border border-blue-400 border-opacity-30">
+<i class="fa-solid fa-cogs text-blue-300 text-sm"></i>
+<p class="text-blue-100 text-sm font-semibold tracking-wide uppercase">Logika &amp; Fungsi</p>
+</div>
+<h1 class="text-4xl font-extrabold font-poppins text-white mb-2 leading-tight">
+                        Apa yang terjadi di <br/><span class="text-cyan-400">Balik Layar?</span>
+</h1>
+<p class="text-slate-400 text-base">
+                        Jika Frontend adalah wajah website, maka ini adalah otak dan organ dalamnya yang bekerja keras.
+                    </p>
+</div>
+<!-- Cards -->
+<div class="def-card">
+<div class="card-icon text-cyan-400">
+<i class="fa-solid fa-server"></i>
+</div>
+<div>
+<h3 class="text-lg font-bold font-poppins text-white">Backend</h3>
+<p class="text-sm text-slate-300 mt-1 leading-snug">Sisi server yang mengolah data, logika bisnis, dan keamanan. Tidak terlihat oleh user.</p>
+</div>
+</div>
+<div class="def-card">
+<div class="card-icon text-amber-400">
+<i class="fa-solid fa-handshake"></i>
+</div>
+<div>
+<h3 class="text-lg font-bold font-poppins text-white">API (Bridge)</h3>
+<p class="text-sm text-slate-300 mt-1 leading-snug">Jembatan atau kurir yang mengantar pesanan data dari Frontend ke Backend.</p>
+</div>
+</div>
+<div class="def-card">
+<div class="card-icon text-purple-400">
+<i class="fa-solid fa-cubes"></i>
+</div>
+<div>
+<h3 class="text-lg font-bold font-poppins text-white">Framework &amp; Library</h3>
+<p class="text-sm text-slate-300 mt-1 leading-snug">
+<span class="text-purple-300 font-semibold">Framework:</span> Kerangka kerja utuh.<br/>
+<span class="text-purple-300 font-semibold">Library:</span> Alat bantu spesifik.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Right Panel: Visual Diagram -->
+<div class="right-panel">
+<div class="diagram-container">
+<p class="absolute top-4 left-6 text-xs text-slate-500 font-mono tracking-widest uppercase">System Architecture Flow</p>
+<!-- Frontend -->
+<div class="diagram-node" style="border-left-color: #22d3ee;">
+<div class="node-icon text-cyan-400"><i class="fa-solid fa-laptop-code"></i></div>
+<div class="flex-1">
+<p class="font-bold text-white text-sm">Frontend</p>
+<p class="text-xs text-slate-400">Browser / User Interface</p>
+</div>
+<div class="badge-tag bg-cyan-900 text-cyan-200">
+                             Request
+                        </div>
+</div>
+<!-- Connector Arrow -->
+<i class="fa-solid fa-arrow-down arrow-down"></i>
+<!-- API -->
+<div class="diagram-node api-node">
+<div class="node-icon text-amber-400"><i class="fa-solid fa-network-wired"></i></div>
+<div>
+<p class="font-bold text-white text-sm">API</p>
+<p class="text-xs text-slate-400 text-center">Penghubung</p>
+</div>
+</div>
+<!-- Connector Arrow -->
+<i class="fa-solid fa-arrow-down arrow-down"></i>
+<!-- Backend -->
+<div class="diagram-node" style="border-left-color: #a855f7;">
+<div class="node-icon text-purple-400"><i class="fa-solid fa-microchip"></i></div>
+<div class="flex-1">
+<p class="font-bold text-white text-sm">Backend</p>
+<p class="text-xs text-slate-400">Server Logic &amp; Processing</p>
+</div>
+<div class="badge-tag bg-purple-900 text-purple-200">
+                             Process
+                        </div>
+</div>
+<!-- Connector Arrow -->
+<div class="flex flex-col items-center">
+<div style="height: 15px; width: 2px; background-color: #475569;"></div>
+<i class="fa-solid fa-database text-slate-500 text-sm my-1"></i>
+<div style="height: 15px; width: 2px; background-color: #475569;"></div>
+</div>
+<!-- Database -->
+<div class="diagram-node" style="border-left-color: #10b981;">
+<div class="node-icon text-green-400"><i class="fa-solid fa-server"></i></div>
+<div class="flex-1">
+<p class="font-bold text-white text-sm">Database</p>
+<p class="text-xs text-slate-400">Gudang Penyimpanan Data</p>
+</div>
+<div class="badge-tag bg-green-900 text-green-200">
+                             Storage
+                        </div>
+</div>
+</div>
+<!-- Floating labels context -->
+<div class="absolute right-0 top-32 bg-slate-800 border border-slate-600 px-3 py-2 rounded-lg text-xs text-slate-300 shadow-xl transform rotate-3 flex items-center">
+<i class="fa-brands fa-react text-cyan-400 mr-2 text-base"></i> Library
+                </div>
+<div class="absolute left-0 bottom-40 bg-slate-800 border border-slate-600 px-3 py-2 rounded-lg text-xs text-slate-300 shadow-xl transform -rotate-3 flex items-center">
+<i class="fa-brands fa-laravel text-red-500 mr-2 text-base"></i> Framework
+                </div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide6.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide8.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

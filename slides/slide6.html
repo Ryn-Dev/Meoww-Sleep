@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istilah Desain &amp; Tampilan</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 base */
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px 80px 60px;
+            overflow: hidden;
+        }
+
+        /* Background Accents - Using solid colors with blur instead of gradients */
+        .bg-accent-1 {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background-color: #4c1d95; /* Violet 900 */
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+        }
+        
+        .bg-accent-2 {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 400px;
+            background-color: #1e3a8a; /* Blue 900 */
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .header-section {
+            z-index: 10;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 40px;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .grid-container {
+            flex: 3;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .visual-container {
+            flex: 2;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .info-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(34, 211, 238, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Card Color Accents (Stripe at top) */
+        .card-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .card-ui .card-stripe { background-color: #ec4899; } /* Pink */
+        .card-ux .card-stripe { background-color: #8b5cf6; } /* Violet */
+        .card-fe .card-stripe { background-color: #06b6d4; } /* Cyan */
+        .card-resp .card-stripe { background-color: #22c55e; } /* Green */
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-ui .card-icon { color: #ec4899; background: rgba(236, 72, 153, 0.1); }
+        .card-ux .card-icon { color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
+        .card-fe .card-icon { color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
+        .card-resp .card-icon { color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+
+        .mockup-image {
+            width: 90%;
+            height: auto;
+            max-height: 350px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            transition: transform 0.5s ease;
+        }
+        
+        .visual-container:hover .mockup-image {
+            transform: scale(1.05);
+        }
+
+        .visual-label {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-accent-1"></div>
+<div class="bg-accent-2"></div>
+<!-- Header -->
+<div class="header-section">
+<div>
+<div class="inline-flex items-center space-x-2 bg-indigo-500 bg-opacity-20 rounded-full px-4 py-1.5 mb-2 border border-indigo-400 border-opacity-30">
+<i class="fa-solid fa-layer-group text-indigo-300 text-sm"></i>
+<span class="text-indigo-100 text-sm font-semibold tracking-wide uppercase">Web Essentials</span>
+</div>
+<h1 class="text-4xl font-extrabold text-white tracking-tight" style="font-family: 'Poppins', sans-serif;">
+                Istilah <span class="text-cyan-400">Desain &amp; Tampilan</span>
+</h1>
+</div>
+<div class="text-right max-w-md">
+<p class="text-slate-400 text-sm leading-relaxed">
+                Sebelum menulis kode, penting memahami komponen visual yang akan membangun interaksi pengguna.
+            </p>
+</div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Grid of 4 Cards -->
+<div class="grid-container">
+<!-- Card 1: UI -->
+<div class="info-card card-ui">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-palette"></i>
+</div>
+<span class="text-xs font-bold text-pink-400 bg-pink-400 bg-opacity-10 px-2 py-1 rounded">Look</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">UI (User Interface)</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Tampilan visual yang dilihat user. Warna, tombol, tipografi, dan layout yang cantik.
+                </p>
+</div>
+<!-- Card 2: UX -->
+<div class="info-card card-ux">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-hand-pointer"></i>
+</div>
+<span class="text-xs font-bold text-violet-400 bg-violet-400 bg-opacity-10 px-2 py-1 rounded">Feel</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">UX (User Experience)</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Pengalaman saat menggunakan. Apakah mudah, intuitif, atau malah membingungkan?
+                </p>
+</div>
+<!-- Card 3: Frontend -->
+<div class="info-card card-fe">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-brands fa-chrome"></i>
+</div>
+<span class="text-xs font-bold text-cyan-400 bg-cyan-400 bg-opacity-10 px-2 py-1 rounded">Client Side</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">Frontend</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Bagian "depan" website yang berjalan di browser user. Hasil gabungan HTML, CSS, JS.
+                </p>
+</div>
+<!-- Card 4: Responsive -->
+<div class="info-card card-resp">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-mobile-screen"></i>
+</div>
+<span class="text-xs font-bold text-green-400 bg-green-400 bg-opacity-10 px-2 py-1 rounded">Adaptable</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">Responsive</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Kemampuan website menyesuaikan tampilan di berbagai ukuran layar (HP, Tablet, Desktop).
+                </p>
+</div>
+</div>
+<!-- Visual / Mockup Area -->
+<div class="visual-container">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+<!-- Using the "Multi Devices Responsive Website Mockup" image -->
+<img alt="Responsive Website Mockup on Multiple Devices" class="mockup-image" src="https://page.gensparksite.com/slides_images/b426a14a1638927304101ecd365c3d82.webp"/>
+<div class="visual-label">
+<i class="fa-solid fa-laptop-mobile mr-2 text-cyan-400"></i> Multi-Device Experience
+            </div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide5.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide7.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kenapa Banyak Singkatan?</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 base */
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Background Decorations */
+        .bg-layer-1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a;
+            z-index: 0;
+        }
+
+        .bg-glow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 600px;
+            background-color: rgba(30, 58, 138, 0.2); /* Blue 900 */
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 1;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: calc(100% - 60px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .cloud-container {
+            position: relative;
+            width: 1000px;
+            height: 450px;
+            margin: 0 auto;
+        }
+
+        .cloud-word {
+            position: absolute;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            line-height: 1;
+            cursor: default;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .cloud-word:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px currentColor;
+            z-index: 20 !important;
+        }
+
+        /* Footer */
+        .footer-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 20;
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="bg-layer-1"></div>
+<div class="bg-glow-center"></div>
+<div class="grid-overlay"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header-section">
+<div class="inline-flex items-center space-x-2 bg-slate-800 bg-opacity-60 rounded-full px-4 py-1.5 mb-4 border border-slate-700 backdrop-blur-sm">
+<i class="fa-solid fa-language text-pink-400"></i>
+<p class="text-pink-100 text-sm font-semibold tracking-wide uppercase">Kamus IT</p>
+</div>
+<h1 class="text-5xl font-extrabold text-white mb-3 tracking-tight drop-shadow-lg" style="font-family: 'Poppins', sans-serif;">
+                    Kenapa Banyak <span class="text-transparent bg-clip-text" style="background-color: #f472b6;">Singkatan?</span>
+</h1>
+<p class="text-slate-300 text-lg max-w-2xl mx-auto font-light">
+                    Mari kita terjemahkan bahasa <span class="text-cyan-400 font-semibold">"alien"</span> ini ke bahasa manusia!
+                </p>
+</div>
+<!-- Word Cloud Visualization -->
+<div class="cloud-container">
+<!-- Center Piece -->
+<div class="cloud-word text-white" style="font-size: 7rem; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 10; opacity: 0.9;">
+<p>WWW</p>
+</div>
+<!-- Primary Terms -->
+<div class="cloud-word text-cyan-400" style="font-size: 5rem; top: 15%; left: 25%; transform: rotate(-5deg); z-index: 8;">
+<p>HTTP</p>
+</div>
+<div class="cloud-word text-purple-400" style="font-size: 4.5rem; top: 60%; left: 65%; transform: rotate(5deg); z-index: 8;">
+<p>DNS</p>
+</div>
+<div class="cloud-word text-green-400" style="font-size: 4rem; top: 20%; right: 20%; transform: rotate(8deg); z-index: 7;">
+<p>API</p>
+</div>
+<div class="cloud-word text-yellow-400" style="font-size: 4.5rem; bottom: 15%; left: 30%; transform: rotate(-3deg); z-index: 7;">
+<p>URL</p>
+</div>
+<!-- Secondary Terms -->
+<div class="cloud-word text-pink-500" style="font-size: 3rem; top: 35%; left: 10%; z-index: 5; opacity: 0.8;">
+<p>SSL</p>
+</div>
+<div class="cloud-word text-orange-400" style="font-size: 2.8rem; bottom: 30%; right: 15%; z-index: 5; opacity: 0.8;">
+<p>HTML</p>
+</div>
+<div class="cloud-word text-blue-400" style="font-size: 2.5rem; top: 10%; right: 40%; z-index: 5; opacity: 0.7;">
+<p>CSS</p>
+</div>
+<div class="cloud-word text-indigo-400" style="font-size: 2.5rem; bottom: 10%; left: 60%; z-index: 5; opacity: 0.7;">
+<p>TLS</p>
+</div>
+<!-- Background Terms (Smaller/Fainter) -->
+<div class="cloud-word text-slate-500" style="font-size: 1.8rem; top: 55%; left: 15%; opacity: 0.4;">
+<p>Framework</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 1.5rem; top: 25%; right: 10%; opacity: 0.4;">
+<p>Database</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 2rem; bottom: 40%; left: 5%; opacity: 0.3;">
+<p>Server</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 1.8rem; top: 5%; left: 40%; opacity: 0.3;">
+<p>Cloud</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 1.6rem; bottom: 20%; right: 45%; opacity: 0.3;">
+<p>Backend</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 1.5rem; top: 45%; right: 5%; opacity: 0.3;">
+<p>Frontend</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 1.4rem; top: 75%; left: 80%; opacity: 0.3;">
+<p>IP Address</p>
+</div>
+<div class="cloud-word text-slate-500" style="font-size: 1.4rem; top: 65%; left: 40%; opacity: 0.3;">
+<p>Deploy</p>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer-bar">
+<a href="slide3.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm font-light">© 2026 Seminar Web Development</p>
+<a href="slide5.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</div>
+</body>
+</html>

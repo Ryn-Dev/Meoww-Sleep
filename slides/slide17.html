@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Penutup &amp; Q&amp;A</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 60px 80px 60px;
+            box-sizing: border-box;
+            background-color: #0f172a;
+            z-index: 1;
+        }
+
+        /* Background Decorations */
+        .bg-blob-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            background-color: #1e3a8a; /* Blue 900 */
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* Content Styling */
+        .content-box {
+            text-align: center;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .thank-you-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 6rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            /* Gradient text effect fallback using clip */
+            background-color: #60a5fa; /* Blue 400 */
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
+        }
+
+        .quote-box {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 50px;
+            margin: 30px auto;
+            backdrop-filter: blur(10px);
+            position: relative;
+            display: inline-block;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: -20px;
+            left: 30px;
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-size: 32px;
+            padding: 0 10px;
+        }
+
+        .qa-section {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qa-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: rgba(56, 189, 248, 0.1); /* Sky 400 */
+            border: 2px solid #38bdf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #38bdf8;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .social-links {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .social-item i {
+            margin-right: 8px;
+            font-size: 18px;
+            color: #cbd5e1;
+        }
+
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            z-index: -1;
+        }
+        
+        .circle-1 { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: rotate 60s linear infinite; }
+        .circle-2 { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; animation: rotate-reverse 80s linear infinite; }
+
+        @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes rotate-reverse { from { transform: translate(-50%, -50%) rotate(360deg); } to { transform: translate(-50%, -50%) rotate(0deg); } }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-blob-center"></div>
+<div class="bg-grid"></div>
+<div class="decorative-circle circle-1"></div>
+<div class="decorative-circle circle-2"></div>
+<!-- Main Content -->
+<div class="content-box">
+<!-- Thank You Title -->
+<h1 class="thank-you-text">Terima Kasih!</h1>
+<!-- Quote Section -->
+<div class="quote-box">
+<i class="fa-solid fa-quote-left quote-icon"></i>
+<p class="text-xl text-slate-200 font-light italic font-poppins leading-relaxed">
+                    "Perjalanan seribu mil dimulai dengan satu baris kode."
+                </p>
+</div>
+<!-- Q&A Section -->
+<div class="qa-section">
+<div class="qa-circle">
+<i class="fa-solid fa-question"></i>
+</div>
+<h2 class="text-3xl font-bold text-white mb-2 font-poppins">Ada Pertanyaan?</h2>
+<p class="text-slate-400">Silakan tanyakan apa saja seputar materi hari ini.</p>
+</div>
+<!-- Footer / Social Placeholder -->
+<div class="social-links">
+<div class="social-item">
+<i class="fa-brands fa-instagram"></i>
+<span>@belajarweb.id</span>
+</div>
+<div class="social-item">
+<i class="fa-brands fa-github"></i>
+<span>github.com/pemula</span>
+</div>
+<div class="social-item">
+<i class="fa-solid fa-envelope"></i>
+<span>tanya@website.com</span>
+</div>
+</div>
+</div>
+<!-- Decorative Code Elements (Floating) -->
+<div class="absolute top-20 left-20 text-slate-700 font-mono text-sm opacity-30 transform -rotate-12">
+            &lt;/body&gt;
+        </div>
+<div class="absolute bottom-20 right-20 text-slate-700 font-mono text-sm opacity-30 transform rotate-12">
+            console.log("Selesai!");
+        </div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide16.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide1.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Home</span>
+    <i class="fa-solid fa-home"></i>
+</a>
+</div>
+</body>
+</html>

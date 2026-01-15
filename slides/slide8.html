@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istilah Data &amp; Server</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: #0f172a; /* Slate 900 base */
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px 80px 60px;
+            overflow: hidden;
+        }
+
+        /* Background Accents */
+        .bg-accent-1 {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background-color: #1e40af; /* Blue 800 */
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .bg-accent-2 {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 400px;
+            background-color: #0ea5e9; /* Sky 500 */
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .header-section {
+            z-index: 10;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 40px;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .grid-container {
+            flex: 3;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .visual-container {
+            flex: 2;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .info-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Card Color Accents (Stripe at top) */
+        .card-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .card-db .card-stripe { background-color: #fbbf24; } /* Amber */
+        .card-server .card-stripe { background-color: #3b82f6; } /* Blue */
+        .card-cloud .card-stripe { background-color: #0ea5e9; } /* Sky */
+        .card-host .card-stripe { background-color: #6366f1; } /* Indigo */
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-db .card-icon { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+        .card-server .card-icon { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .card-cloud .card-icon { color: #0ea5e9; background: rgba(14, 165, 233, 0.1); }
+        .card-host .card-icon { color: #6366f1; background: rgba(99, 102, 241, 0.1); }
+
+        .mockup-image {
+            width: 85%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(14, 165, 233, 0.3));
+            transition: transform 0.5s ease;
+        }
+        
+        .visual-container:hover .mockup-image {
+            transform: scale(1.05);
+        }
+
+        .visual-label {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animasi Transisi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-accent-1"></div>
+<div class="bg-accent-2"></div>
+<!-- Header -->
+<div class="header-section">
+<div>
+<div class="inline-flex items-center space-x-2 bg-blue-500 bg-opacity-20 rounded-full px-4 py-1.5 mb-2 border border-blue-400 border-opacity-30">
+<i class="fa-solid fa-server text-blue-300 text-sm"></i>
+<span class="text-blue-100 text-sm font-semibold tracking-wide uppercase">Infrastructure</span>
+</div>
+<h1 class="text-4xl font-extrabold text-white tracking-tight" style="font-family: 'Poppins', sans-serif;">
+                Istilah <span class="text-blue-400">Data &amp; Server</span>
+</h1>
+</div>
+<div class="text-right max-w-md">
+<p class="text-slate-400 text-sm leading-relaxed">
+                Di mana website sebenarnya "hidup" dan bagaimana data disimpan agar bisa diakses oleh semua orang.
+            </p>
+</div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Grid of 4 Cards -->
+<div class="grid-container">
+<!-- Card 1: Database -->
+<div class="info-card card-db">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-database"></i>
+</div>
+<span class="text-xs font-bold text-amber-400 bg-amber-400 bg-opacity-10 px-2 py-1 rounded">Storage</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">Database</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Gudang penyimpanan data terstruktur. Ibarat lemari arsip raksasa yang menyimpan info user, produk, dll.
+                </p>
+</div>
+<!-- Card 2: Server -->
+<div class="info-card card-server">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-server"></i>
+</div>
+<span class="text-xs font-bold text-blue-400 bg-blue-400 bg-opacity-10 px-2 py-1 rounded">Computer</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">Server</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Komputer super kuat yang hidup 24 jam untuk melayani permintaan (request) data dari browser kamu.
+                </p>
+</div>
+<!-- Card 3: Cloud -->
+<div class="info-card card-cloud">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-cloud"></i>
+</div>
+<span class="text-xs font-bold text-sky-400 bg-sky-400 bg-opacity-10 px-2 py-1 rounded">Network</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">Cloud</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Jaringan server global di internet. Data tidak di satu tempat fisik, bisa diakses dari mana saja &amp; kapan saja.
+                </p>
+</div>
+<!-- Card 4: Hosting -->
+<div class="info-card card-host">
+<div class="card-stripe"></div>
+<div class="flex justify-between items-start">
+<div class="card-icon">
+<i class="fa-solid fa-hard-drive"></i>
+</div>
+<span class="text-xs font-bold text-indigo-400 bg-indigo-400 bg-opacity-10 px-2 py-1 rounded">Space</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 font-poppins">Hosting</h3>
+<p class="text-slate-300 text-sm leading-relaxed">
+                    Tempat menyewa "lahan" di server agar file website kamu bisa online dan dikunjungi orang lain.
+                </p>
+</div>
+</div>
+<!-- Visual / Mockup Area -->
+<div class="visual-container">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+<!-- Using Data Integration Symbol image -->
+<img alt="Data Center and Cloud Infrastructure Illustration" class="mockup-image" src="https://page.gensparksite.com/slides_images/45774047649176d805c20625bba01c39.webp"/>
+<div class="visual-label">
+<i class="fa-solid fa-network-wired mr-2 text-sky-400"></i> Global Data Network
+            </div>
+</div>
+</div>
+</div>
+
+<!-- Footer Bar -->
+<div class="absolute bottom-0 w-full h-12 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-between px-12 z-20 border-t border-white border-opacity-5">
+<a href="slide7.html" 
+   class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+</a>
+<p class="text-white text-opacity-50 text-sm">© 2026 Seminar Web Development</p>
+<a href="slide9.html" 
+   class="bg-cyan-500 hover:bg-cyan-400 text-white font-semibold py-2 px-5 rounded-lg shadow-lg transition-all duration-300 flex items-center space-x-2">
+    <span>Next</span>
+    <i class="fa-solid fa-arrow-right"></i>
+</a>
+</div>
+</body>
+</html>
