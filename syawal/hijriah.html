@@ -234,7 +234,7 @@ async function loadData() {
     HIJRI_MONTHS[data.date.hijri.month.en] || data.date.hijri.month.en;
 
   document.getElementById("hijri").textContent =
-    `${data.date.hijri.day} ${hijriMonth} ${data.date.hijri.year} H`;
+    `${data.date.hijri.day} ${hijriMonth} ${data.date.hijri.year}`;
 
   const container = document.getElementById("times");
   container.innerHTML = "";
