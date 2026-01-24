@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Jadwal Sholat & Kalender Hijriah</title>
+  <link rel="shortcut icon" type="image/x-icon" href="img/Card-Logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #065f46;
+      --accent: #facc15;
+      --bg: #ecfdf5;
+      --card: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: #064e3b;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      opacity: .7;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+
+    #clock {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .dates {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .dates h3 {
+      margin: 0;
+      font-size: 15px;
+      opacity: .7;
+    }
+
+    .dates p {
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .times {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 800px) {
+      .times { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .times { grid-template-columns: 1fr; }
+    }
+
+    .time-card {
+      background: #d1fae5;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      transition: .2s;
+    }
+
+    .time-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    }
+
+    .time-card.maghrib {
+      background: var(--accent);
+      color: #78350f;
+      font-weight: bold;
+    }
+
+    .label {
+      font-size: 14px;
+      opacity: .8;
+    }
+
+    .time {
+      font-size: 24px;
+      margin-top: 6px;
+    }
+
+    /* PERISTIWA */
+    .events {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .event-item {
+      background: #f0fdf4;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      opacity: .6;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🕌 Jadwal Sholat Hari Ini</h1>
+  <div class="subtitle">Waktu Sholat & Kalender Hijriah (Jakarta)</div>
+
+  <!-- JAM -->
+  <div class="card">
+    <div id="clock">--:--:-- WIB</div>
+  </div>
+
+  <!-- TANGGAL -->
+  <div class="card dates">
+    <div>
+      <h3>Tanggal Masehi</h3>
+      <p id="gregorian">-</p>
+    </div>
+    <div>
+      <h3>Tanggal Hijriah</h3>
+      <p id="hijri">-</p>
+    </div>
+  </div>
+
+  <!-- JADWAL SHOLAT -->
+  <div class="card">
+    <div class="times" id="times"></div>
+  </div>
+
+  <!-- PERISTIWA -->
+  <div class="card" id="eventsCard" style="display:none">
+    <h3>📌 Peristiwa Penting Hari Ini</h3>
+    <div class="events" id="events"></div>
+  </div>
+
+  <footer>
+    Data resmi dari Aladhan API • Zona waktu Asia/Jakarta
+  </footer>
+</div>
+
+<script>
+const LABELS = {
+  Imsak: "Imsak",
+  Fajr: "Subuh",
+  Sunrise: "Terbit",
+  Dhuhr: "Dzuhur",
+  Asr: "Ashar",
+  Maghrib: "Maghrib",
+  Sunset: "Terbenam",
+  Isha: "Isya"
+};
+
+const HIJRI_MONTHS = {
+  Muharram: "Muharram",
+  Safar: "Safar",
+  "Rabi' al-Awwal": "Rabiul Awal",
+  "Rabi' al-Thani": "Rabiul Akhir",
+  "Jumada al-Ula": "Jumadil Awal",
+  "Jumada al-Thania": "Jumadil Akhir",
+  Rajab: "Rajab",
+  "Shaʿbān": "Sya'ban",
+  Ramadan: "Ramadhan",
+  Shawwal: "Syawal",
+  "Dhul-Qadah": "Dzulqa'dah",
+  "Dhul-Hijjah": "Dzulhijjah"
+};
+
+function updateClock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+  document.getElementById("clock").textContent = time;
+}
+
+async function loadData() {
+  const today = new Date().toISOString().split("T")[0];
+  const res = await fetch(
+    `https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=8&date=${today}`
+  );
+
+  const json = await res.json();
+  const data = json.data;
+
+  document.getElementById("gregorian").textContent =
+    data.date.readable;
+
+  const hijriMonth =
+    HIJRI_MONTHS[data.date.hijri.month.en] || data.date.hijri.month.en;
+
+  document.getElementById("hijri").textContent =
+    `${data.date.hijri.day} ${hijriMonth} ${data.date.hijri.year} H`;
+
+  const container = document.getElementById("times");
+  container.innerHTML = "";
+
+  for (const key in LABELS) {
+    if (data.timings[key]) {
+      const div = document.createElement("div");
+      div.className =
+        "time-card" + (key === "Maghrib" ? " maghrib" : "");
+      div.innerHTML = `
+        <div class="label">${LABELS[key]}</div>
+        <div class="time">${data.timings[key]}</div>
+      `;
+      container.appendChild(div);
+    }
+  }
+
+  /* PERISTIWA HIJRIAH */
+  const holidays = data.date.hijri.holidays;
+  const eventsCard = document.getElementById("eventsCard");
+  const events = document.getElementById("events");
+
+  if (holidays && holidays.length > 0) {
+    events.innerHTML = holidays
+      .map(h => `<div class="event-item">• ${h}</div>`)
+      .join("");
+    eventsCard.style.display = "block";
+  } else {
+    eventsCard.style.display = "none";
+  }
+}
+
+loadData();
+updateClock();
+setInterval(updateClock, 1000);
+setInterval(loadData, 60 * 60 * 1000);
+</script>
+
+</body>
+</html>

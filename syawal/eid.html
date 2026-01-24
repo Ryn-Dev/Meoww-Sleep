@@ -11,7 +11,7 @@
 <meta property="og:title" content="Happy Eid Mubarak 1447 H 🌙✨">
 <meta property="og:description" content="Saya atas nama Febryan mengucapkan Selamat Hari Raya Idul Fitri 1447 H. Taqabbalallahu minna wa minkum, mohon maaf lahir dan batin.">
 <meta property="og:url" content="https://ryn-dev.github.io/Meoww-Sleep/syawal/">
-<meta property="og:image" content="http://ryn-dev.github.io/Meoww-Sleep/syawal/img/febryan.png">
+<meta property="og:image" content="http://ryn-dev.github.io/Meoww-Sleep/syawal/img/febryan2.webp">
 
 <link rel="shortcut icon" type="image/x-icon" href="img/Card-Logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500&family=Amiri&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@ h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2
 /* SLEEVE */
 .sleeve {
   position: absolute;
-  bottom: -20px;
+  bottom: -40px;
   width: 100%;
   height: 320px;
   background: linear-gradient(to bottom, var(--primary), #0aa);
@@ -112,7 +112,7 @@ h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2
   border: 4px solid var(--secondary); display: flex; align-items: center; justify-content: center;
 }
 .circle img { width: 75%; }
-.year { margin-top: 14px; font-family: 'Playfair Display', serif; font-size: 32px; }
+.year { margin-top: 14px; font-family: 'Playfair Display', serif; font-size: 30px; }
 
 /* MODAL */
 .modal {
@@ -163,10 +163,63 @@ h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2
 @keyframes popIn { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes popOut { to { transform: scale(.85); opacity: 0; } }
 @keyframes fadeOut { to { opacity: 0; } }
+
+.nav-btn {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 2000;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 50px;
+
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+
+  border: 1px solid var(--secondary);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  backdrop-filter: blur(6px);
+
+  transition: .3s;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: var(--secondary);
+  color: #000;
+}
+.nav-btn {
+  opacity: 0;
+  animation: navIn .6s ease forwards;
+}
+
+@keyframes navIn {
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 480px) {
+  .nav-btn {
+    font-size: 11px;
+    padding: 7px 14px;
+    top: 12px;
+    left: 12px;
+  }
+}
+
 </style>
 </head>
 
 <body>
+
+<a href="hijriah.html"
+  class="nav-btn"
+  target="_blank">
+Jadwal Sholat
+</a>
 
 <audio id="takbiranAudio" src="raw/takbiran.mp3" loop></audio>
 
@@ -187,7 +240,7 @@ h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2
 
     <div class="message">
       Kami atas nama pribadi<br>
-      <span class="name" onclick="openModal('photoModal')">Febryan, S.Kom., M.Kom.</span><br>
+      <span class="name" onclick="openModal('photoModal')">F e b r y a n</span><br>
       mohon maaf lahir dan batin 🙏🏻<br>
 
       <button class="thr-btn" onclick="openModal('danaModal')">Kirim THR via DANA 😋</button>
@@ -199,14 +252,14 @@ h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2
     <div class="circle">
       <img src="img/Card-Logo.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2274/2274532.png'">
     </div>
-    <div class="year">1447 H</div>
+    <div class="year" id="hijriYear"></div>
   </div>
 </div>
 
 <div class="modal" id="photoModal" onclick="backdropClose(event,'photoModal')">
   <div class="modal-box">
     <h3>Febryan</h3>
-    <img src="img/febryan.png" style="width:100%; border-radius:14px; margin-top:12px; cursor: pointer;" onclick="goToWeb()">
+    <img src="img/febryan2.webp" style="width:100%; border-radius:14px; margin-top:12px; cursor: pointer;" onclick="goToWeb()">
     <button class="close-btn" onclick="closeModal('photoModal')">Tutup</button>
   </div>
 </div>
@@ -220,14 +273,70 @@ h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2
 </div>
 
 <script>
-function updateTime() {
-  document.getElementById("jam").textContent =
-    new Date().toLocaleTimeString("id-ID", {
-      timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit", second: "2-digit"
-    }) + " WIB";
+  const hijriMonthsCustom = [
+  "Muharram",
+  "Safar",
+  "Rabiul Awal",
+  "Rabiul Akhir",
+  "Jumadil Awal",
+  "Jumadil Akhir",
+  "Rajab",
+  "Sya'ban",
+  "Ramadhan",
+  "Syawal",
+  "Dzulqa'dah",
+  "Dzulhijjah"
+];
+
+let hijriDateCached = "Menunggu data Aladhan...";
+let hijriYearCached = "Menunggu...";
+
+/* AMBIL TANGGAL HIJRIAH DARI ALADHAN */
+async function loadHijriFromAladhan() {
+  const today = new Date().toISOString().split("T")[0];
+
+  const res = await fetch(
+    `https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=8&date=${today}`
+  );
+
+  const json = await res.json();
+  const hijri = json.data.date.hijri;
+
+  const day = hijri.day;
+  const monthIndex = hijri.month.number - 1;
+  const year = hijri.year;
+
+  hijriDateCached =
+    `${day} ${hijriMonthsCustom[monthIndex]} ${year} H`;
+
+  hijriYearCached = `${year} H`;
+
 }
-setInterval(updateTime, 1000);
+
+/* UPDATE JAM + TANGGAL */
+function updateTime() {
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+
+  document.getElementById("jam").innerHTML =
+    `${time}<br><span style="line-height:1.8">${hijriDateCached}</span>`;
+
+  document.getElementById("hijriYear").innerHTML = `${hijriYearCached}`;
+}
+
+/* INIT */
+loadHijriFromAladhan();
 updateTime();
+
+/* JAM UPDATE TIAP DETIK */
+setInterval(updateTime, 1000);
+
 
 function openModal(id) {
   const modal = document.getElementById(id);

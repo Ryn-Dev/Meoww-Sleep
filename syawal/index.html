@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- BASIC SEO -->
-<title>Happy Eid Mubarak 1447 H – Febryan</title>
+<title></title>
 <meta name="description" content="Saya atas nama Febryan mengucapkan Selamat Hari Raya Idul Fitri 1447 H. Taqabbalallahu minna wa minkum, mohon maaf lahir dan batin.">
 
 <!-- OPEN GRAPH : WHATSAPP / FACEBOOK -->
@@ -13,7 +13,7 @@
 <meta property="og:title" content="Happy Eid Mubarak 1447 H 🌙✨">
 <meta property="og:description" content="Saya atas nama Febryan mengucapkan Selamat Hari Raya Idul Fitri 1447 H. Taqabbalallahu minna wa minkum, mohon maaf lahir dan batin.">
 <meta property="og:url" content="https://ryn-dev.github.io/Meoww-Sleep/syawal/">
-<meta property="og:image" content="http://ryn-dev.github.io/Meoww-Sleep/syawal/img/febryan.png">
+<meta property="og:image" content="http://ryn-dev.github.io/Meoww-Sleep/syawal/img/febryan2.webp">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
@@ -124,7 +124,7 @@ h1 {
 /* SLEEVE */
 .sleeve {
   position: absolute;
-  bottom: -20px;
+  bottom: -40px;
   width: 100%;
   height: 320px;
   background: linear-gradient(to bottom, var(--primary), #0aa);
@@ -174,7 +174,7 @@ h1 {
 .year {
   margin-top: 14px;
   font-family: 'Playfair Display', serif;
-  font-size: 32px;
+  font-size: 30px;
 }
 
 /* MODAL */
@@ -237,10 +237,62 @@ h1 {
 @keyframes fadeOut {
   to { opacity: 0; }
 }
+
+.nav-btn {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 2000;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 50px;
+
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+
+  border: 1px solid var(--secondary);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  backdrop-filter: blur(6px);
+
+  transition: .3s;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: var(--secondary);
+  color: #000;
+}
+.nav-btn {
+  opacity: 0;
+  animation: navIn .6s ease forwards;
+}
+
+@keyframes navIn {
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 480px) {
+  .nav-btn {
+    font-size: 11px;
+    padding: 7px 14px;
+    top: 12px;
+    left: 12px;
+  }
+}
 </style>
 </head>
 
 <body>
+
+  <a href="hijriah.html"
+  class="nav-btn"
+  target="_blank">
+Jadwal Sholat
+</a>
 
 <div class="wrapper">
   <div class="content">
@@ -254,7 +306,7 @@ h1 {
     <div class="message">
       Kami atas nama pribadi<br>
       <span class="name" onclick="openModal('photoModal')">
-        Febryan, S.Kom., M.Kom.
+        F e b r y a n
       </span><br>
       mohon maaf lahir dan batin 🙏🏻<br>
 
@@ -269,7 +321,7 @@ h1 {
     <div class="circle">
       <img src="img/Card-Logo.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2274/2274532.png'">
     </div>
-    <div class="year">1447 H</div>
+    <div class="year" id="hijriYear"></div>
   </div>
 </div>
 
@@ -277,7 +329,7 @@ h1 {
 <div class="modal" id="photoModal" onclick="backdropClose(event,'photoModal')">
   <div class="modal-box">
     <h3>Febryan</h3>
-    <img src="img/febryan.png" style="cursor: pointer;" onclick="goToWeb()">
+    <img src="img/febryan2.webp" style="cursor: pointer;" onclick="goToWeb()">
     <button class="close-btn" onclick="closeModal('photoModal')">Tutup</button>
   </div>
 </div>
@@ -293,17 +345,74 @@ h1 {
 </div>
 
 <script>
-function updateTime() {
-  document.getElementById("jam").textContent =
-    new Date().toLocaleTimeString("id-ID", {
-      timeZone: "Asia/Jakarta",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    }) + " WIB";
+const hijriMonthsCustom = [
+  "Muharram",
+  "Safar",
+  "Rabiul Awal",
+  "Rabiul Akhir",
+  "Jumadil Awal",
+  "Jumadil Akhir",
+  "Rajab",
+  "Sya'ban",
+  "Ramadhan",
+  "Syawal",
+  "Dzulqa'dah",
+  "Dzulhijjah"
+];
+
+let hijriDateCached = "Menunggu data Aladhan...";
+let titleCached = "Menunggu data Aladhan...";
+let hijriYearCached = "Menunggu...";
+
+/* AMBIL TANGGAL HIJRIAH DARI ALADHAN */
+async function loadHijriFromAladhan() {
+  const today = new Date().toISOString().split("T")[0];
+
+  const res = await fetch(
+    `https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=8&date=${today}`
+  );
+
+  const json = await res.json();
+  const hijri = json.data.date.hijri;
+
+  const day = hijri.day;
+  const monthIndex = hijri.month.number - 1;
+  const year = hijri.year;
+
+  hijriDateCached =
+    `${day} ${hijriMonthsCustom[monthIndex]} ${year} H`;
+
+  hijriYearCached = `${year} H`;
+
+  titleCached = `Happy Eid Mubarak ${year} H – Febryan`;
+
 }
-setInterval(updateTime, 1000);
+
+/* UPDATE JAM + TANGGAL */
+function updateTime() {
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+
+  document.getElementById("jam").innerHTML =
+    `${time}<br><span style="line-height:1.8">${hijriDateCached}</span>`;
+
+  document.getElementById("hijriYear").innerHTML = `${hijriYearCached}`;
+
+  document.title = titleCached;
+}
+
+/* INIT */
+loadHijriFromAladhan();
 updateTime();
+
+/* JAM UPDATE TIAP DETIK */
+setInterval(updateTime, 1000);
 
 function openModal(id) {
   const modal = document.getElementById(id);
