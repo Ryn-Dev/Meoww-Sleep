@@ -21,11 +21,30 @@
         h1,
         h2,
         h3,
-        .navbar-brand {
+        .navbar-brand img {
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: rotate(5deg) scale(1.1);
+            /* Memberikan efek interaksi halus saat di-hover */
+        }
+
+        .brand-text span {
+            font-size: 1.2rem;
+            color: #ffffff;
+        }
+
+        .brand-text small {
+            display: block;
+            margin-top: -2px;
+        }
+
+        /* .navbar-brand {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             color: #FFD700;
-        }
+        } */
 
         .text-gold {
             color: #FFD700;
@@ -157,7 +176,16 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">CV. ARSI INDONESIA</a>
+            <!-- <a class="navbar-brand" href="#">CV. ARSI INDONESIA</a> -->
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="images/arsi.png" alt="Logo Arsi Indonesia" width="50" height="50"
+                    class="d-inline-block align-text-top me-3">
+                <div class="brand-text">
+                    <span class="d-block lh-1 fw-bold">CV. ARSI INDONESIA</span>
+                    <small class="text-gold fw-normal" style="font-size: 0.65rem; letter-spacing: 1px;">AL MUKHTAR
+                        DEVELOPMENT</small>
+                </div>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
