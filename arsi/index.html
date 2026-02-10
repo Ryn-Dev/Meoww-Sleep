@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV. Arsi Indonesia - Al Mukhtar Development</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        h1,
+        h2,
+        h3,
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        .text-gold {
+            color: #FFD700;
+        }
+
+        .bg-dark-custom {
+            background-color: #1a1a1a;
+        }
+
+        /* Hero Section Modernized */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Modern Floating Buttons - IMPROVED */
+        .btn-modern-gold {
+            background: linear-gradient(45deg, #FFD700, #FFC107);
+            color: #000;
+            font-weight: 700;
+            padding: 15px 35px;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hover tidak lagi putih semua, tapi lebih cerah dan bercahaya */
+        .btn-modern-gold:hover {
+            transform: translateY(-5px);
+            background: #FFEC3D;
+            /* Kuning emas yang lebih terang, bukan putih */
+            color: #000;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-modern-outline {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-weight: 600;
+            padding: 15px 35px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            /* Border emas tipis */
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-modern-outline:hover {
+            background: rgba(255, 215, 0, 0.1);
+            /* Efek gold transparan */
+            border-color: #FFD700;
+            color: #FFD700;
+            transform: translateY(-5px);
+        }
+
+        /* Mission Cards */
+        .mission-step {
+            border-left: 3px solid #FFD700;
+            padding-left: 20px;
+            margin-bottom: 30px;
+            transition: 0.3s;
+        }
+
+        .mission-step:hover {
+            border-left: 3px solid #ffffff;
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            background: #FFD700;
+            color: #000;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            height: 350px;
+            transition: 0.5s;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.02);
+            border-color: #FFD700;
+        }
+
+        /* Maps Styling */
+        .map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #1a1a1a;
+            filter: grayscale(100%) invert(90%) contrast(90%);
+            /* Dark mode map effect */
+            height: 450px;
+        }
+
+        .contact-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 25px;
+            border-radius: 15px;
+            height: 100%;
+            transition: 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: #FFD700;
+            background: #222;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">CV. ARSI INDONESIA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">Tentang Kami</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#visi">Visi Misi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">Portofolio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Kontak</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section text-center text-md-start">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="display-2 mb-3">Solusi Bangunan <br><span class="text-white">Modern & Terpercaya</span>
+                    </h1>
+                    <p class="lead mb-5 text-secondary w-75 d-none d-md-block">Jasa Bangun dan Renovasi Bangunan Serta
+                        Perencanaan Arsitektur Eksterior dan Interior Profesional dengan hasil kualitas kelas satu.</p>
+                    <div class="d-flex flex-wrap gap-4 justify-content-center justify-content-md-start mt-4">
+                        <a href="#contact" class="btn btn-modern-gold">Hubungi Kami</a>
+                        <a href="#portfolio" class="btn btn-modern-outline">Lihat Proyek</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="py-5">
+        <div class="container py-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <h6 class="text-gold text-uppercase fw-bold ls-2">Tentang Kami</h6>
+                    <h2 class="display-5 mb-4">Al Mukhtar Development</h2>
+                    <p class="text-secondary lead">Kami adalah perusahaan jasa bangun dan renovasi yang mengedepankan
+                        kualitas, kecepatan, dan ketepatan waktu.</p>
+                    <p class="text-secondary">Didukung oleh tenaga profesional berpengalaman di bidang arsitektur dan
+                        konstruksi, kami siap membantu mewujudkan hunian impian Anda dari awal hingga serah terima
+                        kunci.</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-5 border border-warning rounded-4 text-center bg-dark-custom shadow-lg">
+                        <i class="bi bi-buildings-fill display-1 text-gold"></i>
+                        <h4 class="mt-4 fw-bold">QUALITY FIRST</h4>
+                        <p class="text-secondary mb-0">Commitment to Excellence since Day One</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="visi" class="py-5 bg-dark-custom">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5">Visi & <span class="text-gold">Misi</span></h2>
+                <div class="mx-auto bg-gold mt-2" style="width: 80px; height: 3px;"></div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-6 mb-4">
+                    <div class="mission-step">
+                        <div class="step-number">1</div>
+                        <h5>Kualitas Produk & Layanan</h5>
+                        <p class="small text-secondary">Memenuhi kebutuhan pelanggan dengan produk dan pelayanan yang
+                            berkualitas dan inovatif.</p>
+                    </div>
+                    <div class="mission-step">
+                        <div class="step-number">2</div>
+                        <h5>Kesejahteraan Karyawan</h5>
+                        <p class="small text-secondary">Menciptakan lingkungan kerja yang aman dan nyaman, meningkatkan
+                            kesejahteraan karyawan.</p>
+                    </div>
+                    <div class="mission-step">
+                        <div class="step-number">3</div>
+                        <h5>Kapabilitas & Daya Saing</h5>
+                        <p class="small text-secondary">Meningkatkan daya saing di bidang jasa bangun dan renovasi
+                            bangunan.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="mission-step">
+                        <div class="step-number">4</div>
+                        <h5>Manajemen Terintegrasi</h5>
+                        <p class="small text-secondary">Penerapan manajemen proyek yang terintegrasi di seluruh wilayah
+                            operasi.</p>
+                    </div>
+                    <div class="mission-step">
+                        <div class="step-number">5</div>
+                        <h5>Hubungan Kerja Kuat</h5>
+                        <p class="small text-secondary">Membangun hubungan kerja sama yang kuat dengan pelanggan dan
+                            mitra kerja.</p>
+                    </div>
+                    <div class="mission-step">
+                        <div class="step-number">6</div>
+                        <h5>Keseimbangan Lingkungan</h5>
+                        <p class="small text-secondary">Menjaga keseimbangan lingkungan dengan memperhatikan dampak
+                            sosial.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-5">
+        <div class="container text-center py-5">
+            <h2 class="display-5 mb-5">Eksplorasi <span class="text-gold">Portofolio</span></h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-5">
+                    <div class="portfolio-item d-flex align-items-center justify-content-center flex-column"
+                        style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=500') center/cover;">
+                        <h3 class="text-white fw-bold">PORTOFOLIO FOTO</h3>
+                        <a href="foto.html" class="btn btn-modern-gold mt-3">Lihat Galeri</a>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="portfolio-item d-flex align-items-center justify-content-center flex-column"
+                        style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=500') center/cover;">
+                        <h3 class="text-white fw-bold">PORTOFOLIO VIDEO</h3>
+                        <a href="video.html" class="btn btn-modern-gold mt-3">Putar Video</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-dark-custom">
+        <div class="container">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-4">
+                    <h2 class="display-6 fw-bold mb-4">Lokasi <span class="text-gold">Kami</span></h2>
+                    <p class="text-secondary mb-4">Kunjungi kantor pusat kami di Semarang untuk berkonsultasi langsung
+                        mengenai desain arsitektur dan anggaran biaya pembangunan Anda.</p>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="bi bi-geo-alt-fill text-gold fs-4 me-3"></i>
+                        <p class="mb-0">Wisma Jati, Raya Kaligarang No. 19, Petompon, Kec. Gajahmungkur, Semarang, Jawa
+                            Tengah</p>
+                    </div>
+                    <a href="https://maps.google.com" target="_blank"
+                        class="btn btn-outline-warning rounded-pill px-4">Buka di Google Maps</a>
+                </div>
+                <div class="col-lg-8">
+                    <div class="map-container shadow-lg">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.194721111626!2d110.4037596!3d-7.0016447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708b5da74e3049%3A0x67399049e0c19df3!2sWisma%20Jati!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-5">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="contact-card text-center">
+                        <i class="bi bi-telephone-fill text-gold fs-2 mb-3"></i>
+                        <h6 class="fw-bold">Telepon</h6>
+                        <p class="small text-secondary mb-0">081-222-555-757</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="contact-card text-center">
+                        <i class="bi bi-envelope-fill text-gold fs-2 mb-3"></i>
+                        <h6 class="fw-bold">Email</h6>
+                        <p class="small text-secondary mb-0">almukhtar.dev@gmail.com</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="contact-card text-center">
+                        <i class="bi bi-geo-alt-fill text-gold fs-2 mb-3"></i>
+                        <h6 class="fw-bold">Alamat</h6>
+                        <p class="small text-secondary mb-0">Wisma Jati, Semarang</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="contact-card text-center">
+                        <i class="bi bi-clock-fill text-gold fs-2 mb-3"></i>
+                        <h6 class="fw-bold">Jam Kerja</h6>
+                        <p class="small text-secondary mb-0">08:00 - 17:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5 text-center border-top border-dark bg-black">
+        <div class="container">
+            <div class="mb-4">
+                <a href="#" class="text-white mx-3 fs-4"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-gold mx-3 fs-4"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="text-white mx-3 fs-4"><i class="bi bi-youtube"></i></a>
+            </div>
+            <p class="small text-secondary mb-0">&copy; 2026 CV. ARSI INDONESIA - Al Mukhtar Development. All Rights
+                Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

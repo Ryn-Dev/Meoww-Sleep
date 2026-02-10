@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Foto - CV. Arsi Indonesia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #121212; color: #ffffff; font-family: 'Poppins', sans-serif; }
+        h1 { font-family: 'Montserrat', sans-serif; color: #FFD700; }
+        .navbar { border-bottom: 1px solid #333; }
+        .text-gold { color: #FFD700; }
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #FFD700;
+        }
+        .photo-card { border-radius: 15px; overflow: hidden; position: relative; border: 1px solid #333; transition: 0.3s; }
+        .photo-card:hover { transform: scale(1.02); border-color: #FFD700; }
+        .photo-card img { width: 100%; height: 300px; object-fit: cover; }
+        .btn-gold { background-color: #FFD700; color: #000; font-weight: 600; border: none; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <!-- <a class="navbar-brand text-gold" href="index.html">ARSI INDONESIA</a> -->
+            <a class="navbar-brand" href="index.html">CV. ARSI INDONESIA</a>
+            <a href="index.html" class="btn btn-outline-warning btn-sm">Kembali Ke Beranda</a>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4">GALERI <span class="text-white">FOTO</span></h1>
+            <p class="text-secondary">Koleksi Proyek Arsitektur & Interior Terbaik Kami</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="photo-card">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000" alt="Project 1">
+                    <div class="p-3 bg-dark">
+                        <h6 class="mb-0">Modern House - Type 45</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="photo-card">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000" alt="Project 2">
+                    <div class="p-3 bg-dark">
+                        <h6 class="mb-0">Minimalist Office Design</h6>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-4">
+                <div class="photo-card">
+                    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1000" alt="Project 3">
+                    <div class="p-3 bg-dark">
+                        <h6 class="mb-0">Luxury Bedroom Interior</h6>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+
+    <footer class="py-4 text-center border-top border-dark mt-5">
+        <p class="small text-secondary">&copy; 2026 CV. ARSI INDONESIA</p>
+    </footer>
+</body>
+</html>
