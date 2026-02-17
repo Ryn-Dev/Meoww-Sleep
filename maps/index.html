@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Southeast Asia Backpacker's Map</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --secondary-color: #6366f1;
+            --bg-glass: rgba(15, 23, 42, 0.85);
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a;
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 320px;
+            max-height: calc(100vh - 40px);
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h1 {
+            font-size: 24px;
+            margin: 0 0 8px 0;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .sidebar p {
+            color: var(--text-dim);
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .itinerary {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .itinerary-item {
+            position: relative;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .itinerary-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(4px);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .itinerary-item.active {
+            background: linear-gradient(90deg, rgba(14, 165, 233, 0.15), transparent);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .stop-number {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .stop-details h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .stop-details span {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        /* Custom Marker */
+        .custom-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .marker-pulse {
+            width: 12px;
+            height: 12px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        .marker-pulse::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(14, 165, 233, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                width: 12px;
+                height: 12px;
+                opacity: 1;
+                border-width: 3px;
+            }
+
+            100% {
+                width: 40px;
+                height: 40px;
+                opacity: 0;
+                border-width: 0px;
+            }
+        }
+
+        /* Route Animation */
+        .leaflet-overlay-pane path {
+            stroke-dasharray: 10, 20;
+            stroke-linecap: round;
+            animation: dash 30s linear infinite;
+            filter: drop-shadow(0 0 8px var(--primary-color));
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        /* Popup Styling */
+        .leaflet-popup-content-wrapper {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            color: var(--text-light);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .popup-content h3 {
+            margin: 0 0 4px 0;
+            color: var(--primary-color);
+        }
+
+        /* Plane Icon */
+        .plane-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+            transition: transform 0.1s linear;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: calc(100% - 40px);
+                max-height: 200px;
+                bottom: 20px;
+                top: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h1>🌏 Backpacker's Map</h1>
+        <p>A journey through the vibrant cities of Southeast Asia. 5 cities, 3 countries, unlimited memories.</p>
+        <ul class="itinerary" id="itinerary-list">
+            <!-- List items will be generated by JS -->
+        </ul>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // =========================
+        // DATA
+        // =========================
+        const cities = [
+            { name: "Jakarta", lat: -6.2088, lng: 106.8456, country: "Indonesia", desc: "Starting point. The vibrant capital." },
+            { name: "Kuching", lat: 1.5533, lng: 110.3592, country: "Malaysia", desc: "Cat City, Sarawak." },
+            { name: "Singapura", lat: 1.3521, lng: 103.8198, country: "Singapore", desc: "Modern metropolis and garden city." },
+            { name: "Kuala Lumpur", lat: 3.1390, lng: 101.6869, country: "Malaysia", desc: "Home of the Petronas Towers." },
+            { name: "Bangkok", lat: 13.7563, lng: 100.5018, country: "Thailand", desc: "The city of angels and street food." },
+            { name: "Jakarta", lat: -6.2088, lng: 106.8456, country: "Indonesia", desc: "Back home. The journey ends." }
+        ];
+
+        // =========================
+        // MAP INITIALIZATION
+        // =========================
+        // Initialize map centered between locations
+        const map = L.map('map', {
+            zoomControl: false,
+            attributionControl: false
+        }).setView([4.5, 103], 5);
+
+        // Add Zoom Control to bottom right
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // DARK MODE TILES (CartoDB DarkMatter)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // =========================
+        // MARKERS & INTERACTIVITY
+        // =========================
+        const latlngs = [];
+        const markerLayer = L.layerGroup().addTo(map);
+
+        // Custom divIcon for pulsing effect
+        const createCustomIcon = () => L.divIcon({
+            className: 'custom-marker',
+            html: '<div class="marker-pulse"></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+
+        const itineraryList = document.getElementById('itinerary-list');
+
+        cities.forEach((city, index) => {
+            // 1. Add Marker
+            const marker = L.marker([city.lat, city.lng], { icon: createCustomIcon() })
+                .bindPopup(`
+                    <div class="popup-content">
+                        <h3>${city.name}</h3>
+                        <div>${city.country}</div>
+                        <small>${city.desc}</small>
+                    </div>
+                `, { closeButton: false })
+                .addTo(markerLayer);
+
+            latlngs.push([city.lat, city.lng]);
+
+            // 2. Add to Sidebar List
+            const li = document.createElement('li');
+            li.className = 'itinerary-item';
+            li.innerHTML = `
+                <div class="stop-number">${index + 1}</div>
+                <div class="stop-details">
+                    <h3>${city.name}</h3>
+                    <span>${city.country}</span>
+                </div>
+            `;
+
+            // Interaction: Click list item to fly to location
+            li.addEventListener('click', () => {
+                // Update active state
+                document.querySelectorAll('.itinerary-item').forEach(item => item.classList.remove('active'));
+                li.classList.add('active');
+
+                // Fly to map location
+                map.flyTo([city.lat, city.lng], 10, {
+                    duration: 2,
+                    easeLinearity: 0.25
+                });
+
+                // Open popup after animation
+                setTimeout(() => marker.openPopup(), 2000);
+            });
+
+            itineraryList.appendChild(li);
+        });
+
+        // =========================
+        // ANIMATED ROUTE (POLYLINE)
+        // =========================
+        const routeLine = L.polyline(latlngs, {
+            color: '#0ea5e9',
+            weight: 3,
+            opacity: 0.8,
+            smoothFactor: 1
+        }).addTo(map);
+
+        // Fit bounds initially
+        map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+
+        // =========================
+        // MOVING PLANE ANIMATION
+        // =========================
+        // Simple interpolation to move a marker along the line
+        const planeIcon = L.divIcon({
+            html: '✈️',
+            className: 'plane-icon',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+
+        const planeMarker = L.marker(cities[0], { icon: planeIcon, zIndexOffset: 1000 }).addTo(map);
+
+        let currentSegment = 0;
+        let progress = 0;
+        const speed = 0.005; // Adjust speed of the plane
+
+        function animatePlane() {
+            if (currentSegment >= cities.length - 1) {
+                // Reset to start loop
+                currentSegment = 0;
+                progress = 0;
+            }
+
+            const start = cities[currentSegment];
+            const end = cities[currentSegment + 1];
+
+            const lat = start.lat + (end.lat - start.lat) * progress;
+            const lng = start.lng + (end.lng - start.lng) * progress;
+
+            planeMarker.setLatLng([lat, lng]);
+
+            // Calculate rotation angle
+            const angle = Math.atan2(end.lng - start.lng, end.lat - start.lat) * 180 / Math.PI;
+            // Apply rotation to the icon via CSS transform
+            const iconElement = planeMarker.getElement();
+            if (iconElement) {
+                iconElement.style.transform += ` rotate(${angle}deg)`;
+            }
+
+            progress += speed;
+            if (progress >= 1) {
+                progress = 0;
+                currentSegment++;
+            }
+
+            requestAnimationFrame(animatePlane);
+        }
+
+        // Start animation after map loads
+        setTimeout(animatePlane, 1000);
+
+    </script>
+</body>
+
+</html>
