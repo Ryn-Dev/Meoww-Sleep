@@ -82,28 +82,6 @@
             letter-spacing: 2px;
         }
 
-        /* Total Counter Style */
-        .total-counter {
-            margin-top: 50px;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            padding-top: 30px;
-            animation: fadeIn 1.5s ease;
-        }
-        .total-counter .number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--dark);
-            display: block;
-        }
-        .total-counter .label {
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 0.65rem;
-            color: var(--gold);
-            font-weight: 600;
-        }
-
         /* Form Styling */
         .input-group-custom { margin-bottom: 30px; }
         .input-group-custom label {
@@ -171,7 +149,6 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .kode-display {
             font-family: 'Playfair Display', serif;
@@ -183,7 +160,7 @@
 </head>
 <body>
 
-    <header class="luxury-header" onclick="location.reload()">
+    <header class="luxury-header" onclick="showSection('main-menu')">
         <p>Admission Office 2026</p>
         <h1>THE REGISTRY</h1>
     </header>
@@ -207,12 +184,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="total-counter">
-                <span class="label">Total Registered Members</span>
-                <span class="number" id="totalCount">—</span>
-                <p class="text-muted" style="font-size: 0.6rem; letter-spacing: 1px;">Update real-time dari database pusat</p>
-            </div>
         </div>
 
         <div id="form-section" class="section-view">
@@ -226,12 +197,28 @@
                             <div class="col-12">
                                 <div class="input-group-custom">
                                     <label>Kode Pendaftaran (Maks 10 Karakter)</label>
-                                    <input type="text" name="kode" class="form-luxury fw-bold" maxlength="10" placeholder="Ketik Kode PMB..." style="text-transform: uppercase; color: var(--gold);" required>
+                                    <input type="text" name="kode" class="form-luxury fw-bold" maxlength="10" placeholder="Contoh: PMB001" style="text-transform: uppercase; color: var(--gold);" required>
                                 </div>
                             </div>
-                            <div class="col-md-6"><div class="input-group-custom"><label>Nama Lengkap</label><input type="text" name="nama" class="form-luxury" required></div></div>
-                            <div class="col-md-6"><div class="input-group-custom"><label>Alamat Email</label><input type="email" name="email" class="form-luxury" required></div></div>
-                            <div class="col-md-6"><div class="input-group-custom"><label>Nomor WhatsApp</label><input type="text" name="hp" class="form-luxury" required></div></div>
+
+                            <div class="col-md-6">
+                                <div class="input-group-custom">
+                                    <label>Nama Lengkap</label>
+                                    <input type="text" name="nama" class="form-luxury" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-custom">
+                                    <label>Alamat Email</label>
+                                    <input type="email" name="email" class="form-luxury" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-custom">
+                                    <label>Nomor WhatsApp</label>
+                                    <input type="text" name="hp" class="form-luxury" required>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="input-group-custom">
                                     <label>Gender</label>
@@ -245,7 +232,7 @@
                             <div class="col-md-6">
                                 <div class="input-group-custom">
                                     <label>Program Studi (Jurusan)</label>
-                                    <select name="jurusan" id="jurusanSelect" class="form-luxury" onchange="updateOptions()" required>
+                                    <select name="jurusan" id="jurusanSelect" class="form-luxury" required>
                                         <option value="">PILIH JURUSAN</option>
                                     </select>
                                 </div>
@@ -258,9 +245,16 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12"><div class="input-group-custom"><label>Domisili / Alamat</label><input type="text" name="alamat" class="form-luxury" required></div></div>
+                            <div class="col-12">
+                                <div class="input-group-custom">
+                                    <label>Domisili / Alamat</label>
+                                    <input type="text" name="alamat" class="form-luxury" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-center mt-5"><button type="submit" class="btn btn-luxury">Submit Application</button></div>
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-luxury">Submit Application</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -271,6 +265,7 @@
                 <div class="col-lg-6">
                     <button class="btn-back" onclick="showSection('main-menu')"><i class="fa-solid fa-arrow-left me-2"></i> Kembali</button>
                     <h2 class="text-center mb-5" style="font-family: 'Playfair Display', serif;">Guest Inquiry</h2>
+                    
                     <div class="input-group-custom text-center">
                         <label>Masukkan Kode Pendaftaran atau No. HP</label>
                         <input type="text" id="searchInput" class="form-luxury text-center" placeholder="Ketik di sini...">
@@ -283,12 +278,19 @@
                         <hr style="border-color: var(--gold); width: 60px; margin: 30px auto; opacity: 0.3;">
                         <h3 id="resNama" style="font-family: 'Playfair Display', serif; text-transform: uppercase;"></h3>
                         <p id="resContact" class="mb-4 text-muted small"></p>
+                        
                         <div class="row text-start mt-4 border-top pt-4 g-3">
-                            <div class="col-6"><label class="text-muted small fw-bold">JURUSAN</label><p id="resJurusan" class="mb-0"></p></div>
-                            <div class="col-6"><label class="text-muted small fw-bold">JALUR MASUK</label><p id="resJalur" class="mb-0"></p></div>
+                            <div class="col-6">
+                                <label class="text-muted small fw-bold">JURUSAN</label>
+                                <p id="resJurusan" class="mb-0"></p>
+                            </div>
+                            <div class="col-6">
+                                <label class="text-muted small fw-bold">JALUR MASUK</label>
+                                <p id="resJalur" class="mb-0"></p>
+                            </div>
                         </div>
                     </div>
-                    <div id="errorMsg" class="text-center mt-4 text-danger d-none italic">Data tidak ditemukan.</div>
+                    <div id="errorMsg" class="text-center mt-4 text-danger d-none italic">Data tidak ditemukan dalam arsip kami.</div>
                 </div>
             </div>
         </div>
@@ -296,115 +298,99 @@
     </div>
 
     <script>
+        // GANTI DENGAN URL WEB APP KAMU
         const API_URL = "https://script.google.com/macros/s/AKfycbwNnODWnM_nFj8CW5gAsnfinkCn7lbR-3y5-tlcor1V6JrIB5RKYCwgOxXys-5Q9yPxng/exec";
-
-        async function fetchTotalCount() {
-            try {
-                const res = await fetch(API_URL);
-                const data = await res.json();
-                document.getElementById('totalCount').innerText = data.length;
-            } catch (e) { document.getElementById('totalCount').innerText = "0"; }
-        }
 
         function showSection(id) {
             document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id === 'main-menu') fetchTotalCount();
             window.scrollTo(0,0);
         }
 
-        // LOGIKA KONDISIONAL TERBARU
+        // Logic Jurusan & Jalur Berdasarkan Gender
         function updateOptions() {
             const gender = document.getElementById('genderSelect').value;
-            const jurusan = document.getElementById('jurusanSelect').value;
-            
-            const jurusanEl = document.getElementById('jurusanSelect');
-            const jalurEl = document.getElementById('jalurSelect');
+            const jurusan = document.getElementById('jurusanSelect');
+            const jalur = document.getElementById('jalurSelect');
 
-            // Simpan nilai jurusan saat ini agar tidak reset saat ganti gender kecuali tidak valid
-            const currentJurusan = jurusan;
+            jurusan.innerHTML = '<option value="">PILIH JURUSAN</option>';
+            jalur.innerHTML = '<option value="">PILIH JALUR</option>';
 
-            // 1. UPDATE JURUSAN BERDASARKAN GENDER
             if (gender === 'L') {
-                if(jurusanEl.options.length <= 3) { // Hanya update jika list berubah
-                    jurusanEl.innerHTML = '<option value="">PILIH JURUSAN</option>';
-                    ['TRPL', 'TRKJ', 'TRMG'].forEach(v => {
-                        const opt = new Option(v, v);
-                        if(v === currentJurusan) opt.selected = true;
-                        jurusanEl.add(opt);
-                    });
-                }
+                ['TRPL', 'TRKJ', 'TRMG'].forEach(v => jurusan.innerHTML += `<option value="${v}">${v}</option>`);
+                ['Beasiswa 100%', 'Beasiswa 50%', 'Reguler', 'Backpacker'].forEach(v => jalur.innerHTML += `<option value="${v}">${v}</option>`);
             } else if (gender === 'P') {
-                jurusanEl.innerHTML = '<option value="">PILIH JURUSAN</option>';
-                ['TRPL', 'TRMG'].forEach(v => {
-                    const opt = new Option(v, v);
-                    if(v === currentJurusan) opt.selected = true;
-                    jurusanEl.add(opt);
-                });
-            } else {
-                jurusanEl.innerHTML = '<option value="">PILIH JURUSAN</option>';
+                ['TRPL', 'TRMG'].forEach(v => jurusan.innerHTML += `<option value="${v}">${v}</option>`);
+                ['Beasiswa 100%', 'Beasiswa 50%', 'Reguler'].forEach(v => jalur.innerHTML += `<option value="${v}">${v}</option>`);
             }
-
-            // 2. UPDATE JALUR BERDASARKAN GENDER DAN JURUSAN
-            const selectedJurusan = jurusanEl.value;
-            jalurEl.innerHTML = '<option value="">PILIH JALUR</option>';
-
-            let listJalur = ['Beasiswa 100%', 'Beasiswa 50%', 'Reguler', 'Backpacker'];
-
-            if (gender === 'P') {
-                // Perempuan: No Backpacker
-                listJalur = ['Beasiswa 100%', 'Beasiswa 50%', 'Reguler'];
-            } else if (gender === 'L' && selectedJurusan === 'TRMG') {
-                // Laki-laki + TRMG: No Backpacker
-                listJalur = ['Beasiswa 100%', 'Beasiswa 50%', 'Reguler'];
-            } else if (!gender) {
-                listJalur = [];
-            }
-
-            listJalur.forEach(v => jalurEl.add(new Option(v, v)));
         }
 
+        // Submit Form
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const data = Object.fromEntries(new FormData(this));
-            Swal.fire({ title: 'AUTHENTICATING', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            Swal.fire({
+                title: 'AUTHENTICATING',
+                text: 'Memproses data aplikasi Anda...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
 
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify(data) });
                 const result = await response.json();
+
                 if (result.status === 'success') {
-                    Swal.fire({ icon: 'success', title: 'SUCCESS', text: 'Data Terdaftar.', confirmButtonColor: '#121212' })
-                    .then(() => showSection('main-menu'));
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'SUCCESSFULLY ENROLLED',
+                        text: 'Aplikasi pendaftaran Anda telah diterima.',
+                        confirmButtonColor: '#121212'
+                    }).then(() => showSection('main-menu'));
                     this.reset();
-                } else { Swal.fire('DENIED', result.message, 'error'); }
-            } catch (err) { Swal.fire('ERROR', 'Gagal menghubungi server.', 'error'); }
+                } else {
+                    Swal.fire('DENIED', result.message, 'error');
+                }
+            } catch (err) {
+                Swal.fire('CONNECTION ERROR', 'Gagal menghubungi server.', 'error');
+            }
         });
 
+        // Search Data
         async function searchData() {
             const val = document.getElementById('searchInput').value.trim().toLowerCase();
             if (!val) return;
+
             Swal.fire({ title: 'VERIFYING...', didOpen: () => Swal.showLoading() });
 
             try {
                 const res = await fetch(API_URL);
                 const allData = await res.json();
+                
+                // Cari di Kolom Kode (index 0) atau No HP (index 3)
                 const user = allData.find(r => r[0].toString().toLowerCase() === val || r[3].toString() === val);
+
                 Swal.close();
                 const box = document.getElementById('resultDisplay');
                 const error = document.getElementById('errorMsg');
 
                 if (user) {
-                    box.style.display = 'block'; error.classList.add('d-none');
+                    box.style.display = 'block';
+                    error.classList.add('d-none');
                     document.getElementById('resKode').innerText = user[0];
                     document.getElementById('resNama').innerText = user[1];
                     document.getElementById('resContact').innerText = `${user[2]} | ${user[3]}`;
                     document.getElementById('resJurusan').innerText = user[4];
                     document.getElementById('resJalur').innerText = user[5];
-                } else { box.style.display = 'none'; error.classList.remove('d-none'); }
-            } catch (e) { Swal.fire('ERROR', 'Gagal memuat arsip data.', 'error'); }
+                } else {
+                    box.style.display = 'none';
+                    error.classList.remove('d-none');
+                }
+            } catch (e) {
+                Swal.fire('ERROR', 'Gagal memuat arsip data.', 'error');
+            }
         }
-
-        fetchTotalCount();
     </script>
 </body>
 </html>
