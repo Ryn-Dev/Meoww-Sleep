@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Waktu Indonesia - Real Time</title>
+    <style>
+        /* CSS: Desain Tampilan */
+        body {
+            background-color: #0096d6; /* Warna biru sesuai gambar */
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+        }
+
+        h1 {
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .clock-wrapper {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .clock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 220px;
+        }
+
+        /* Lingkaran Jam Analog */
+        .clock {
+            width: 180px;
+            height: 180px;
+            background-color: #f8f9fa;
+            border: 10px solid #a8c2c6;
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* Angka Jam */
+        .clock .number {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        /* Posisi Angka */
+        .n1 { transform: rotate(30deg); } .n1 span { display: inline-block; transform: rotate(-30deg); }
+        .n2 { transform: rotate(60deg); } .n2 span { display: inline-block; transform: rotate(-60deg); }
+        .n3 { transform: rotate(90deg); } .n3 span { display: inline-block; transform: rotate(-90deg); }
+        .n4 { transform: rotate(120deg); } .n4 span { display: inline-block; transform: rotate(-120deg); }
+        .n5 { transform: rotate(150deg); } .n5 span { display: inline-block; transform: rotate(-150deg); }
+        .n6 { transform: rotate(180deg); } .n6 span { display: inline-block; transform: rotate(-180deg); }
+        .n7 { transform: rotate(210deg); } .n7 span { display: inline-block; transform: rotate(-210deg); }
+        .n8 { transform: rotate(240deg); } .n8 span { display: inline-block; transform: rotate(-240deg); }
+        .n9 { transform: rotate(270deg); } .n9 span { display: inline-block; transform: rotate(-270deg); }
+        .n10 { transform: rotate(300deg); } .n10 span { display: inline-block; transform: rotate(-300deg); }
+        .n11 { transform: rotate(330deg); } .n11 span { display: inline-block; transform: rotate(-330deg); }
+        .n12 { transform: rotate(0deg); } .n12 span { display: inline-block; transform: rotate(0deg); }
+
+        /* Jarum Jam */
+        .center-dot {
+            width: 10px;
+            height: 10px;
+            background: #222;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background: #333;
+            border-radius: 10px;
+            transform: translateX(-50%);
+        }
+
+        .hour { width: 6px; height: 45px; z-index: 3; }
+        .minute { width: 4px; height: 65px; z-index: 2; }
+        .second { width: 2px; height: 75px; background: #e74c3c; z-index: 1; }
+
+        /* Label Teks */
+        h3 { font-size: 28px; margin: 10px 0 5px 0; }
+        .desc { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+        .digital {
+            font-family: 'Courier New', Courier, monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ZONA WAKTU INDONESIA</h1>
+        
+        <div class="clock-wrapper">
+            <div class="clock-item">
+                <div class="clock" id="wib-clock">
+                    <div class="numbers-container" id="nums-wib"></div>
+                    <div class="hand hour" id="hour-wib"></div>
+                    <div class="hand minute" id="min-wib"></div>
+                    <div class="hand second" id="sec-wib"></div>
+                    <div class="center-dot"></div>
+                </div>
+                <h3>WIB</h3>
+                <div class="desc">Waktu Indonesia Barat</div>
+                <div class="digital" id="digital-wib">00:00:00</div>
+            </div>
+
+            <div class="clock-item">
+                <div class="clock" id="wita-clock">
+                    <div class="numbers-container" id="nums-wita"></div>
+                    <div class="hand hour" id="hour-wita"></div>
+                    <div class="hand minute" id="min-wita"></div>
+                    <div class="hand second" id="sec-wita"></div>
+                    <div class="center-dot"></div>
+                </div>
+                <h3>WITA</h3>
+                <div class="desc">Waktu Indonesia Tengah</div>
+                <div class="digital" id="digital-wita">00:00:00</div>
+            </div>
+
+            <div class="clock-item">
+                <div class="clock" id="wit-clock">
+                    <div class="numbers-container" id="nums-wit"></div>
+                    <div class="hand hour" id="hour-wit"></div>
+                    <div class="hand minute" id="min-wit"></div>
+                    <div class="hand second" id="sec-wit"></div>
+                    <div class="center-dot"></div>
+                </div>
+                <h3>WIT</h3>
+                <div class="desc">Waktu Indonesia Timur</div>
+                <div class="digital" id="digital-wit">00:00:00</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JS: Logika Waktu dan Angka Jam
+        
+        // 1. Generate Angka 1-12 untuk setiap jam
+        function createNumbers() {
+            const containers = ['nums-wib', 'nums-wita', 'nums-wit'];
+            containers.forEach(id => {
+                const el = document.getElementById(id);
+                for (let i = 1; i <= 12; i++) {
+                    el.innerHTML += `<div class="number n${i}"><span>${i}</span></div>`;
+                }
+            });
+        }
+
+        // 2. Update Waktu Real-time
+        function updateTime() {
+            const now = new Date();
+            // Ambil waktu UTC agar akurat di mana pun user berada
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+
+            const zones = [
+                { id: 'wib', offset: 7 },
+                { id: 'wita', offset: 8 },
+                { id: 'wit', offset: 9 }
+            ];
+
+            zones.forEach(zone => {
+                const localTime = new Date(utc + (3600000 * zone.offset));
+                
+                const s = localTime.getSeconds();
+                const m = localTime.getMinutes();
+                const h = localTime.getHours();
+
+                // Hitung Derajat
+                const sDeg = (s / 60) * 360;
+                const mDeg = (m * 6) + (s * 0.1);
+                const hDeg = (h * 30) + (m * 0.5);
+
+                // Gerakkan Jarum
+                document.getElementById(`sec-${zone.id}`).style.transform = `translateX(-50%) rotate(${sDeg}deg)`;
+                document.getElementById(`min-${zone.id}`).style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
+                document.getElementById(`hour-${zone.id}`).style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
+
+                // Update Jam Digital
+                const timeString = 
+                    String(h).padStart(2, '0') + ":" + 
+                    String(m).padStart(2, '0') + ":" + 
+                    String(s).padStart(2, '0');
+                document.getElementById(`digital-${zone.id}`).innerText = timeString;
+            });
+        }
+
+        // Inisialisasi
+        createNumbers();
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
