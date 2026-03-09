@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Drawing - Febryan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0096d6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            color: white; padding: 20px; box-sizing: border-box;
+            overflow: hidden; /* Mencegah scroll saat menggambar */
+        }
+
+        .nav-header {
+            width: 100%; max-width: 800px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px; border-radius: 50px;
+            text-decoration: none; color: white; font-weight: bold;
+            border: 2px solid white; background: rgba(255,255,255,0.1);
+            cursor: pointer; transition: 0.3s; font-size: 0.9rem;
+        }
+
+        .btn:hover { background: white; color: var(--primary-bg); }
+
+        .toolbar {
+            background: white; padding: 15px 25px; border-radius: 20px;
+            display: flex; gap: 20px; align-items: center; margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); color: #333;
+        }
+
+        .canvas-container {
+            background: white; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            cursor: crosshair; line-height: 0;
+        }
+
+        canvas { border-radius: 20px; }
+
+        input[type="color"] { border: none; width: 40px; height: 40px; cursor: pointer; background: none; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="btn">🏠 MENU UTAMA</a>
+        <button class="btn" onclick="clearCanvas()">🗑️ BERSIHKAN</button>
+    </div>
+
+    <h1>CANVAS DRAWING</h1>
+
+    <div class="toolbar">
+        <div>
+            <label>Warna: </label>
+            <input type="color" id="colorPicker" value="#0096d6">
+        </div>
+        <div>
+            <label>Ukuran: </label>
+            <input type="range" id="lineWidth" min="1" max="20" value="5">
+        </div>
+        <button class="btn" style="color: #333; border-color: #333;" onclick="saveCanvas()">💾 SIMPAN</button>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="mainCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const lineWidth = document.getElementById('lineWidth');
+
+        let drawing = false;
+
+        // Atur ukuran canvas sesuai layar
+        function resizeCanvas() {
+            canvas.width = Math.min(window.innerWidth * 0.9, 800);
+            canvas.height = 500;
+            // Background putih agar saat disimpan tidak transparan
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function startPosition(e) {
+            drawing = true;
+            draw(e);
+        }
+
+        function finishedPosition() {
+            drawing = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+
+            // Penyesuaian koordinat mouse/touch
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            ctx.lineWidth = lineWidth.value;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = colorPicker.value;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        // Mouse Events
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', finishedPosition);
+        canvas.addEventListener('mousemove', draw);
+
+        // Touch Events (Mobile)
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPosition(e); });
+        canvas.addEventListener('touchend', finishedPosition);
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+
+        function clearCanvas() {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveCanvas() {
+            const link = document.createElement('a');
+            link.download = 'gambar-febryan.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>

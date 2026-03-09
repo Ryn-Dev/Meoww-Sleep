@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - Febryan Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0096d6;
+            --card-bg: #ffffff;
+            --snake-head: #ffd166;
+            --snake-body: #ffffff;
+            --food-color: #ff6b6b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            color: white; padding: 20px; box-sizing: border-box;
+        }
+
+        .nav-header {
+            width: 100%; max-width: 500px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Group Tombol Level */
+        .level-selector {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px; border-radius: 50px;
+            text-decoration: none; color: white; font-weight: bold;
+            border: 2px solid white; background: rgba(255,255,255,0.1);
+            cursor: pointer; transition: 0.3s; font-size: 0.8rem;
+        }
+
+        .btn:hover, .btn.active { background: white; color: var(--primary-bg); }
+
+        .game-container {
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border-radius: 15px; overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            border: 4px solid white;
+        }
+
+        canvas { display: block; background-color: #007bb1; }
+
+        .stats {
+            margin-top: 20px; font-size: 1.2rem; font-weight: bold;
+            background: white; color: var(--primary-bg);
+            padding: 10px 30px; border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #game-over {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: #333; padding: 30px; border-radius: 20px;
+            text-align: center; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 220px; z-index: 100;
+        }
+
+        .controls-hint {
+            margin-top: 20px; font-size: 0.9rem; opacity: 0.9; text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="btn">🏠 MENU</a>
+        <button class="btn" onclick="resetGame()">🔄 RESET</button>
+    </div>
+
+    <h1>SNAKE GAME</h1>
+
+    <div class="level-selector">
+        <button class="btn" id="btn-easy" onclick="setLevel(200, 'btn-easy')">MUDAH</button>
+        <button class="btn active" id="btn-normal" onclick="setLevel(120, 'btn-normal')">NORMAL</button>
+        <button class="btn" id="btn-hard" onclick="setLevel(70, 'btn-hard')">SULIT</button>
+    </div>
+
+    <div class="game-container">
+        <canvas id="snakeCanvas" width="400" height="400"></canvas>
+        <div id="game-over">
+            <h2 style="color: #ff6b6b; margin-top: 0;">GAME OVER!</h2>
+            <p>Skor Kamu: <b id="final-score" style="font-size: 1.5rem; color: var(--primary-bg);">0</b></p>
+            <button class="btn" style="background: var(--primary-bg); color: white; border: none; width: 100%;" onclick="resetGame()">MAIN LAGI</button>
+        </div>
+    </div>
+
+    <div class="stats">SKOR: <span id="score">0</span> | SPEED: <span id="current-speed">Normal</span></div>
+
+    <div class="controls-hint">
+        Pilih level, lalu tekan <b>Panah</b> untuk bergerak!
+    </div>
+
+    <script>
+        const canvas = document.getElementById("snakeCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreElement = document.getElementById("score");
+        const speedText = document.getElementById("current-speed");
+        const finalScoreElement = document.getElementById("final-score");
+        const gameOverScreen = document.getElementById("game-over");
+
+        const box = 20;
+        let snake, food, d, score, game;
+        let currentSpeedInterval = 120; // Default Normal
+        let isGameOver = false;
+
+        function setLevel(speed, btnId) {
+            currentSpeedInterval = speed;
+            
+            // Update Tampilan Tombol
+            document.querySelectorAll('.level-selector .btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(btnId).classList.add('active');
+            
+            // Update Teks Stats
+            if(speed === 200) speedText.innerText = "Mudah";
+            if(speed === 120) speedText.innerText = "Normal";
+            if(speed === 70) speedText.innerText = "Sulit";
+
+            resetGame(); // Restart game dengan kecepatan baru
+        }
+
+        function init() {
+            snake = [{ x: 10 * box, y: 10 * box }];
+            generateFood();
+            score = 0;
+            d = null;
+            isGameOver = false;
+            scoreElement.innerText = score;
+            gameOverScreen.style.display = "none";
+            
+            if(game) clearInterval(game);
+            game = setInterval(draw, currentSpeedInterval);
+        }
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * 18 + 1) * box,
+                y: Math.floor(Math.random() * 18 + 1) * box
+            };
+        }
+
+        document.addEventListener("keydown", direction);
+        function direction(event) {
+            let key = event.keyCode;
+            if (key == 37 && d != "RIGHT") d = "LEFT";
+            else if (key == 38 && d != "DOWN") d = "UP";
+            else if (key == 39 && d != "LEFT") d = "RIGHT";
+            else if (key == 40 && d != "UP") d = "DOWN";
+        }
+
+        function collision(head, array) {
+            for (let i = 0; i < array.length; i++) {
+                if (head.x == array[i].x && head.y == array[i].y) return true;
+            }
+            return false;
+        }
+
+        function draw() {
+            if (isGameOver) return;
+
+            ctx.fillStyle = "#007bb1";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Makanan
+            ctx.fillStyle = "#ff6b6b";
+            ctx.beginPath();
+            ctx.arc(food.x + box/2, food.y + box/2, box/2 - 2, 0, Math.PI*2);
+            ctx.fill();
+
+            // Ular
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i == 0) ? "#ffd166" : "white";
+                ctx.strokeStyle = "#0096d6";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            if (!d) return;
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (d == "LEFT") snakeX -= box;
+            if (d == "UP") snakeY -= box;
+            if (d == "RIGHT") snakeX += box;
+            if (d == "DOWN") snakeY += box;
+
+            if (snakeX == food.x && snakeY == food.y) {
+                score++;
+                scoreElement.innerText = score;
+                generateFood();
+            } else {
+                snake.pop();
+            }
+
+            let newHead = { x: snakeX, y: snakeY };
+
+            if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
+                isGameOver = true;
+                clearInterval(game);
+                finalScoreElement.innerText = score;
+                gameOverScreen.style.display = "block";
+                return;
+            }
+
+            snake.unshift(newHead);
+        }
+
+        function resetGame() {
+            init();
+        }
+
+        init();
+    </script>
+</body>
+</html>

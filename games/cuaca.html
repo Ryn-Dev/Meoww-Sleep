@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Cuaca - Febryan Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0096d6;
+            --card-bg: #ffffff;
+            --accent: #ffd166;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            color: white; padding: 20px; box-sizing: border-box;
+        }
+
+        .nav-header {
+            width: 100%; max-width: 500px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px; border-radius: 50px;
+            text-decoration: none; color: white; font-weight: bold;
+            border: 2px solid white; background: rgba(255,255,255,0.1);
+            cursor: pointer; transition: 0.3s; font-size: 0.85rem;
+        }
+
+        .btn:hover { background: white; color: var(--primary-bg); }
+
+        .btn-location {
+            background: var(--accent); color: #333; border: none;
+            width: 100%; margin-bottom: 15px; padding: 12px;
+        }
+        .btn-location:hover { background: white; color: var(--primary-bg); }
+
+        .weather-card {
+            background: white; color: #333;
+            width: 100%; max-width: 400px;
+            padding: 30px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .search-box {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1; padding: 12px 20px; border-radius: 25px;
+            border: 2px solid #eee; outline: none; font-family: inherit;
+        }
+
+        .weather-icon { font-size: 80px; margin: 15px 0; }
+        .temp { font-size: 3.5rem; font-weight: 800; margin: 0; color: var(--primary-bg); }
+        .city { font-size: 1.5rem; font-weight: 600; margin: 5px 0; }
+        .desc { text-transform: capitalize; color: #666; margin-bottom: 20px; font-style: italic; }
+
+        .details {
+            display: flex; justify-content: space-around;
+            border-top: 1px solid #eee; padding-top: 20px;
+        }
+
+        .detail-item b { display: block; font-size: 1.1rem; color: var(--primary-bg); }
+        .detail-item span { font-size: 0.75rem; color: #999; }
+
+        #status-msg { font-size: 0.8rem; margin-top: 10px; color: #ddd; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="btn">🏠 MENU UTAMA</a>
+        <div style="font-weight: bold;">LIVE WEATHER</div>
+    </div>
+
+    <div class="weather-card">
+        <button class="btn btn-location" onclick="getLocation()">
+            📍 Gunakan Lokasi Saya
+        </button>
+
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Ketik nama kota..." onkeypress="handleKeyPress(event)">
+            <button class="btn" style="background: var(--primary-bg); border: none;" onclick="getWeatherBySearch()">Cari</button>
+        </div>
+
+        <div id="weather-info">
+            <div class="weather-icon" id="icon">☁️</div>
+            <h1 class="temp" id="temp">--°C</h1>
+            <h2 class="city" id="cityName">Menunggu...</h2>
+            <p class="desc" id="description">Klik tombol lokasi atau cari kota</p>
+
+            <div class="details">
+                <div class="detail-item">
+                    <b id="humidity">--%</b>
+                    <span>Kelembapan</span>
+                </div>
+                <div class="detail-item">
+                    <b id="wind">-- km/h</b>
+                    <span>Angin</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p id="status-msg">Menggunakan API OpenWeatherMap</p>
+
+    <script>
+        // API Key (Public demo key)
+        const apiKey = "bd5e378503939ddaee76f12ad7a97608"; 
+
+        // 1. Fungsi mendapatkan izin lokasi
+        function getLocation() {
+            if (navigator.geolocation) {
+                document.getElementById('cityName').innerText = "Mencari koordinat...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=id`;
+                        fetchData(url);
+                    },
+                    (error) => {
+                        alert("Gagal mengakses lokasi. Silakan masukkan nama kota secara manual.");
+                        document.getElementById('cityName').innerText = "Jakarta";
+                        getWeatherBySearch(); // Fallback ke Jakarta atau manual
+                    }
+                );
+            } else {
+                alert("Geolocation tidak didukung oleh browser ini.");
+            }
+        }
+
+        // 2. Fungsi cari berdasarkan input teks
+        function getWeatherBySearch() {
+            const city = document.getElementById('cityInput').value || "Jakarta";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=id`;
+            fetchData(url);
+        }
+
+        // 3. Fungsi ambil data (Fetch)
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.cod === "404") {
+                    alert("Kota tidak ditemukan!");
+                    return;
+                }
+
+                // Update UI
+                document.getElementById('cityName').innerText = data.name;
+                document.getElementById('temp').innerText = Math.round(data.main.temp) + "°C";
+                document.getElementById('description').innerText = data.weather[0].description;
+                document.getElementById('humidity').innerText = data.main.humidity + "%";
+                document.getElementById('wind').innerText = data.wind.speed + " km/h";
+
+                // Logika ganti ikon
+                const main = data.weather[0].main.toLowerCase();
+                let icon = "☁️";
+                if(main.includes("cloud")) icon = "☁️";
+                else if(main.includes("clear")) icon = "☀️";
+                else if(main.includes("rain") || main.includes("drizzle")) icon = "🌧️";
+                else if(main.includes("thunder")) icon = "⛈️";
+                else if(main.includes("snow")) icon = "❄️";
+                else if(main.includes("mist") || main.includes("haze")) icon = "🌫️";
+                
+                document.getElementById('icon').innerText = icon;
+
+            } catch (err) {
+                console.error("Fetch error:", err);
+                alert("Terjadi kesalahan jaringan.");
+            }
+        }
+
+        // Fungsi Enter Key
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') getWeatherBySearch();
+        }
+
+        // Jalankan lokasi otomatis saat pertama kali buka
+        window.onload = getLocation;
+    </script>
+</body>
+</html>

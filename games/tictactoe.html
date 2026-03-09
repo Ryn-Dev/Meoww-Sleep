@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Febryan Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0096d6;
+            --card-bg: #ffffff;
+            --x-color: #ff6b6b;
+            --o-color: #ffd166;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            color: white; padding: 20px; box-sizing: border-box;
+        }
+
+        .nav-header {
+            width: 100%; max-width: 400px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px; border-radius: 50px;
+            text-decoration: none; color: white; font-weight: bold;
+            border: 2px solid white; background: rgba(255,255,255,0.1);
+            cursor: pointer; transition: 0.3s; font-size: 0.9rem;
+        }
+
+        .btn:hover { background: white; color: var(--primary-bg); }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .cell {
+            width: 100px; height: 100px;
+            background: white;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #333;
+        }
+
+        .cell:hover { background: #f0f9ff; }
+        .cell.x { color: var(--x-color); }
+        .cell.o { color: var(--o-color); }
+
+        .status {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: white; color: var(--primary-bg);
+            padding: 10px 30px; border-radius: 50px;
+        }
+
+        #win-msg {
+            margin-top: 20px; text-align: center; display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="btn">🏠 MENU</a>
+        <button class="btn" onclick="resetGame()">🔄 RESET</button>
+    </div>
+
+    <h1>TIC TAC TOE</h1>
+
+    <div class="game-board" id="board">
+        <div class="cell" onclick="makeMove(this, 0)"></div>
+        <div class="cell" onclick="makeMove(this, 1)"></div>
+        <div class="cell" onclick="makeMove(this, 2)"></div>
+        <div class="cell" onclick="makeMove(this, 3)"></div>
+        <div class="cell" onclick="makeMove(this, 4)"></div>
+        <div class="cell" onclick="makeMove(this, 5)"></div>
+        <div class="cell" onclick="makeMove(this, 6)"></div>
+        <div class="cell" onclick="makeMove(this, 7)"></div>
+        <div class="cell" onclick="makeMove(this, 8)"></div>
+    </div>
+
+    <div class="status" id="status">Giliran: X</div>
+
+    <script>
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let gameActive = true;
+
+        const statusDisplay = document.getElementById("status");
+        const cells = document.querySelectorAll(".cell");
+
+        const winConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Baris
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Kolom
+            [0, 4, 8], [2, 4, 6]             // Diagonal
+        ];
+
+        function makeMove(cell, index) {
+            if (board[index] !== "" || !gameActive || currentPlayer === "O") return;
+
+            board[index] = currentPlayer;
+            cell.innerText = currentPlayer;
+            cell.classList.add(currentPlayer.toLowerCase());
+
+            checkResult();
+
+            if (gameActive) {
+                currentPlayer = "O";
+                statusDisplay.innerText = "Giliran: Komputer (O)";
+                setTimeout(aiMove, 600);
+            }
+        }
+
+        function aiMove() {
+            let emptyCells = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+            if (emptyCells.length > 0 && gameActive) {
+                let randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                board[randomIndex] = "O";
+                cells[randomIndex].innerText = "O";
+                cells[randomIndex].classList.add("o");
+                
+                checkResult();
+                if (gameActive) {
+                    currentPlayer = "X";
+                    statusDisplay.innerText = "Giliran: X";
+                }
+            }
+        }
+
+        function checkResult() {
+            let roundWon = false;
+            for (let condition of winConditions) {
+                let [a, b, c] = condition;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    roundWon = true;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                statusDisplay.innerText = `Pemain ${currentPlayer} Menang! 🎉`;
+                gameActive = false;
+                return;
+            }
+
+            if (!board.includes("")) {
+                statusDisplay.innerText = "Hasil Seri! 🤝";
+                gameActive = false;
+            }
+        }
+
+        function resetGame() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            gameActive = true;
+            statusDisplay.innerText = "Giliran: X";
+            cells.forEach(cell => {
+                cell.innerText = "";
+                cell.className = "cell";
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Waktu Indonesia - Responsive</title>
+    <style>
+        body {
+            background-color: #0096d6;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; padding: 20px; box-sizing: border-box;
+        }
+
+        /* Tombol kembali yang lebih fleksibel */
+        .btn-back {
+            position: absolute; top: 15px; left: 15px;
+            padding: 8px 15px; background: rgba(255,255,255,0.2); border-radius: 50px;
+            text-decoration: none; color: white; font-weight: bold; border: 1px solid white;
+            font-size: 0.9rem;
+        }
+
+        h1 { 
+            letter-spacing: 2px; margin-bottom: 30px; margin-top: 50px;
+            text-transform: uppercase; text-align: center; font-size: 1.5rem;
+        }
+
+        /* Container menggunakan Flexbox agar otomatis membungkus (wrap) */
+        .clock-container { 
+            display: flex; gap: 20px; flex-wrap: wrap; 
+            justify-content: center; width: 100%; max-width: 1200px;
+        }
+
+        .clock-item { 
+            text-align: center; flex: 1 1 250px; /* Lebar fleksibel, minimal 250px */
+            max-width: 300px; padding: 10px;
+        }
+
+        /* Lingkaran Jam menggunakan Aspect Ratio agar tetap bulat */
+        .clock-circle {
+            aspect-ratio: 1 / 1; width: 80%; max-width: 220px; 
+            background: white; border-radius: 50%;
+            margin: 0 auto 15px; position: relative; border: 0.5rem solid #a8c2c6;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .dot { 
+            width: 5%; height: 5%; background: #222; border-radius: 50%; 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; 
+        }
+
+        .number {
+            position: absolute; width: 100%; height: 100%;
+            text-align: center; color: #333; font-weight: bold; font-size: 0.9rem;
+            padding: 5%; box-sizing: border-box;
+        }
+
+        /* Jarum Jam menggunakan persen agar ikut mengecil */
+        .hand {
+            position: absolute; bottom: 50%; left: 50%;
+            transform-origin: bottom; transform: translateX(-50%);
+            background: #333; border-radius: 5px;
+        }
+        .hour-hand { width: 3%; height: 25%; z-index: 3; }
+        .min-hand { width: 2%; height: 35%; z-index: 2; }
+        .sec-hand { width: 1%; height: 40%; background: #e74c3c; z-index: 1; }
+
+        .digital-box {
+            background: rgba(0,0,0,0.3); padding: 8px 15px; border-radius: 20px;
+            display: inline-block; margin-top: 10px; font-family: monospace; font-size: 1.1rem;
+        }
+        
+        h2 { margin: 5px 0; font-size: 1.5rem; }
+        .sub { font-size: 0.8rem; opacity: 0.9; }
+
+        /* Media Query untuk layar sangat kecil */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.2rem; }
+            .clock-circle { width: 60%; }
+            h2 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="btn-back">← MENU</a>
+    <h1>ZONA WAKTU INDONESIA</h1>
+    
+    <div class="clock-container">
+        <div class="clock-item">
+            <div class="clock-circle" id="circle-wib">
+                <div class="hand hour-hand" id="h-wib"></div>
+                <div class="hand min-hand" id="m-wib"></div>
+                <div class="hand sec-hand" id="s-wib"></div>
+                <div class="dot"></div>
+            </div>
+            <h2>WIB</h2>
+            <div class="sub">Waktu Indonesia Barat</div>
+            <div class="digital-box" id="d-wib">00:00:00</div>
+        </div>
+
+        <div class="clock-item">
+            <div class="clock-circle" id="circle-wita">
+                <div class="hand hour-hand" id="h-wita"></div>
+                <div class="hand min-hand" id="m-wita"></div>
+                <div class="hand sec-hand" id="s-wita"></div>
+                <div class="dot"></div>
+            </div>
+            <h2>WITA</h2>
+            <div class="sub">Waktu Indonesia Tengah</div>
+            <div class="digital-box" id="d-wita">00:00:00</div>
+        </div>
+
+        <div class="clock-item">
+            <div class="clock-circle" id="circle-wit">
+                <div class="hand hour-hand" id="h-wit"></div>
+                <div class="hand min-hand" id="m-wit"></div>
+                <div class="hand sec-hand" id="s-wit"></div>
+                <div class="dot"></div>
+            </div>
+            <h2>WIT</h2>
+            <div class="sub">Waktu Indonesia Timur</div>
+            <div class="digital-box" id="d-wit">00:00:00</div>
+        </div>
+    </div>
+
+    <script>
+        function drawNumbers() {
+            const ids = ['circle-wib', 'circle-wita', 'circle-wit'];
+            ids.forEach(id => {
+                const clock = document.getElementById(id);
+                for (let i = 1; i <= 12; i++) {
+                    const numDiv = document.createElement('div');
+                    numDiv.className = 'number';
+                    numDiv.style.transform = `rotate(${i * 30}deg)`;
+                    numDiv.innerHTML = `<span style="display:inline-block; transform:rotate(-${i * 30}deg)">${i}</span>`;
+                    clock.appendChild(numDiv);
+                }
+            });
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const config = [{id:'wib',off:7}, {id:'wita',off:8}, {id:'wit',off:9}];
+
+            config.forEach(z => {
+                const t = new Date(utc + (3600000 * z.off));
+                const s = t.getSeconds(), m = t.getMinutes(), h = t.getHours();
+                document.getElementById(`s-${z.id}`).style.transform = `translateX(-50%) rotate(${(s/60)*360}deg)`;
+                document.getElementById(`m-${z.id}`).style.transform = `translateX(-50%) rotate(${(m/60)*360 + (s/60)*6}deg)`;
+                document.getElementById(`h-${z.id}`).style.transform = `translateX(-50%) rotate(${((h%12)/12)*360 + (m/60)*30}deg)`;
+                document.getElementById(`d-${z.id}`).innerText = t.toLocaleTimeString('id-ID', {hour12:false}).replace(/\./g,':');
+            });
+        }
+
+        drawNumbers();
+        setInterval(updateClocks, 1000);
+        updateClocks();
+    </script>
+</body>
+</html>
