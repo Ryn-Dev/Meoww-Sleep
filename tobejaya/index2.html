@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV TOBE JAYA | Spesialis Manufaktur Stainless Steel Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'tobe-black': '#0f0f0f',
+                        'tobe-red': '#e11d48',
+                        'tobe-white': '#ffffff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(8px); 
+        }
+        .hover-lift { 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .hover-lift:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
+        }
+    </style>
+</head>
+<body class="antialiased bg-white text-tobe-black">
+
+    <nav class="fixed w-full z-50 glass-nav border-b border-gray-100 h-24">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-tobe-red flex items-center justify-center rounded-sm">
+                    <span class="text-white font-bold text-2xl">T</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl tracking-tighter uppercase leading-none">CV TOBE JAYA</span>
+                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Stainless Steel Specialist</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-1">
+                <div class="flex items-center space-x-9 text-sm font-medium tracking-wide uppercase mr-10">
+                    <a href="#" class="hover:text-tobe-red transition py-2">Beranda</a>
+                    <a href="#about" class="hover:text-tobe-red transition py-2">Tentang</a>
+                    <a href="#produk" class="hover:text-tobe-red transition py-2">Produk</a>
+                    <a href="#gallery" class="hover:text-tobe-red transition py-2">Galeri</a>
+                </div>
+                <a href="#contact" class="bg-tobe-black text-white px-7 py-3 rounded-full text-sm font-semibold uppercase tracking-wider hover:bg-tobe-red transition duration-300">
+                    Hubungi Kami
+                </a>
+            </div>
+            
+            <button class="md:hidden text-tobe-black p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-7 h-7">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center overflow-hidden bg-tobe-black">
+        <div class="absolute inset-0 opacity-40">
+            <img src="https://images.unsplash.com/photo-1590402444211-13c5fdf686f0?q=80&w=2070&auto=format&fit=crop" alt="Industrial Stainless Steel Facility" class="w-full h-full object-cover">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-6 pt-24 z-10">
+            <div class="max-w-3xl">
+                <span class="text-tobe-red font-semibold tracking-[0.2em] uppercase mb-4 block">Premium Stainless Steel Manufacturing</span>
+                <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight mb-8">
+                    Inovasi Tanpa Batas, <br>Presisi Tanpa Kompromi.
+                </h1>
+                <p class="text-gray-300 text-xl mb-12 leading-relaxed font-light">
+                    Solusi fabrikasi baja tahan karat terbaik untuk industri Horeca, Medis, dan Konstruksi dengan standar kualitas internasional.
+                </p>
+                <div class="flex space-x-5">
+                    <a href="#produk" class="bg-tobe-red text-white px-10 py-5 rounded-sm font-semibold text-sm uppercase tracking-wider hover:bg-red-700 transition">Jelajahi Produk</a>
+                    <a href="#about" class="border border-white text-white px-10 py-5 rounded-sm font-semibold text-sm uppercase tracking-wider hover:bg-white hover:text-tobe-black transition">Profil Perusahaan</a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+            </svg>
+        </div>
+    </section>
+
+    <section id="about" class="py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1597733336794-12d05021d510?q=80&w=1974&auto=format&fit=crop" alt="Tim Teknis CV TOBE JAYA" class="rounded-lg shadow-xl">
+                    <div class="absolute -bottom-10 -right-10 bg-tobe-red p-10 hidden lg:block rounded-sm">
+                        <p class="text-white text-5xl font-extrabold">15+</p>
+                        <p class="text-white text-xs uppercase tracking-widest mt-1 font-medium">Tahun Dedikasi</p>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-4xl font-extrabold mb-8 italic leading-tight">Membangun Kepercayaan <br>Melalui Setiap Detail Baja.</h2>
+                    <p class="text-gray-600 leading-relaxed mb-10 text-lg">
+                        CV TOBE JAYA adalah manufaktur spesialis stainless steel yang berfokus pada ketahanan, estetika, dan fungsionalitas. Kami melayani pembuatan industrial kitchen set, peralatan medis, hingga custom fabrikasi untuk proyek besar di seluruh Indonesia.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-5 bg-gray-50 p-6 rounded-lg">
+                            <span class="text-tobe-red font-bold text-2xl mt-1">01.</span>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Material Standar Internasional</h4>
+                                <p class="text-gray-500">Kami hanya menggunakan baja tahan karat grade premium (304/316) yang bersertifikat.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-5 bg-gray-50 p-6 rounded-lg">
+                            <span class="text-tobe-red font-bold text-2xl mt-1">02.</span>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Tenaga Ahli Bersertifikasi</h4>
+                                <p class="text-gray-500">Dikerjakan oleh teknisi berpengalaman dengan pengawasan QC yang sangat ketat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="produk" class="py-28 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 text-center mb-20">
+            <span class="text-tobe-red font-semibold tracking-widest uppercase text-sm">Our Specialties</span>
+            <h2 class="text-5xl font-bold uppercase tracking-tighter mt-3">Layanan Utama</h2>
+            <div class="w-24 h-1.5 bg-tobe-red mx-auto mt-6"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-10">
+            <div class="group bg-white hover-lift overflow-hidden border border-gray-100 rounded-sm">
+                <div class="h-64 bg-gray-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1556911220-e150223bbc7b?q=80&w=2070&auto=format&fit=crop" alt="Dapur Komersial Profesional" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-10">
+                    <h3 class="text-2xl font-bold mb-3 uppercase tracking-tight">Komersial Kitchen</h3>
+                    <p class="text-gray-500 mb-6 text-sm leading-relaxed">Solusi lengkap dapur industri untuk hotel, restoran, dan katering skala besar.</p>
+                    <a href="#" class="text-tobe-red font-semibold text-sm inline-flex items-center group-hover:underline">Selengkapnya →</a>
+                </div>
+            </div>
+            <div class="group bg-white hover-lift overflow-hidden border border-gray-100 rounded-sm">
+                <div class="h-64 bg-gray-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=2080&auto=format&fit=crop" alt="Peralatan Steril Medis" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-10">
+                    <h3 class="text-2xl font-bold mb-3 uppercase tracking-tight">Peralatan Medis</h3>
+                    <p class="text-gray-500 mb-6 text-sm leading-relaxed">Meja operasi, trolley, dan kabinet steril dengan material anti-korosi terbaik.</p>
+                    <a href="#" class="text-tobe-red font-semibold text-sm inline-flex items-center group-hover:underline">Selengkapnya →</a>
+                </div>
+            </div>
+            <div class="group bg-white hover-lift overflow-hidden border border-gray-100 rounded-sm">
+                <div class="h-64 bg-gray-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=2027&auto=format&fit=crop" alt="Custom Stainless Steel" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-10">
+                    <h3 class="text-2xl font-bold mb-3 uppercase tracking-tight">Kustom Fabrikasi</h3>
+                    <p class="text-gray-500 mb-6 text-sm leading-relaxed">Pengerjaan custom sesuai spesifikasi unik dan desain arsitektur klien.</p>
+                    <a href="#" class="text-tobe-red font-semibold text-sm inline-flex items-center group-hover:underline">Selengkapnya →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-16 border-b border-gray-100 pb-8">
+                <div>
+                    <h2 class="text-4xl font-bold uppercase tracking-tight">Proyek Terbaru</h2>
+                    <p class="text-gray-500 mt-2 text-lg">Bukti nyata dedikasi dan kualitas pengerjaan tim kami.</p>
+                </div>
+                <a href="#" class="text-sm font-semibold text-tobe-red hover:text-red-700 uppercase tracking-wider">Lihat Semua Proyek →</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="aspect-square bg-gray-100 overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1556912173-3bb406ef7e77?q=80&w=2070&auto=format&fit=crop" alt="Instalasi Dapur Restoran" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="aspect-square bg-gray-100 overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=1981&auto=format&fit=crop" alt="Detail Peralatan Stainless" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="aspect-square bg-gray-100 overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop" alt="Pabrik Fabrikasi" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="aspect-square bg-gray-100 overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1584620182415-3f3f01c2a1c1?q=80&w=2070&auto=format&fit=crop" alt="Custom Stainless Sink" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-tobe-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-tobe-black p-16 md:p-24 text-center relative overflow-hidden rounded-lg">
+                <div class="absolute top-0 right-0 w-80 h-80 bg-tobe-red opacity-10 rounded-full -mr-40 -mt-40"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-5 rounded-full -ml-20 -mb-20"></div>
+                <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-8 relative z-10 leading-tight">Mulai Proyek Stainless Steel <br>Anda Hari Ini.</h2>
+                <p class="text-gray-300 mb-12 text-xl relative z-10 font-light">Diskusikan kebutuhan spesifik Anda dengan tim konsultan ahli kami secara gratis.</p>
+                <a href="https://wa.me/your-number" class="inline-block bg-tobe-red text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition transform duration-300 relative z-10 shadow-lg">
+                    Konsultasi via WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-gray-50 pt-24 pb-12 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-tobe-black flex items-center justify-center rounded-sm">
+                        <span class="text-white font-bold text-xl">T</span>
+                    </div>
+                    <span class="font-bold text-xl uppercase tracking-tighter">CV TOBE JAYA</span>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed max-w-sm">
+                    Perusahaan manufaktur spesialis stainless steel tepercaya yang mengedepankan presisi dan kepuasan pelanggan.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-wider">Halaman Utama</h4>
+                <ul class="text-sm text-gray-500 space-y-4">
+                    <li><a href="#" class="hover:text-tobe-red transition">Beranda</a></li>
+                    <li><a href="#about" class="hover:text-tobe-red transition">Tentang Kami</a></li>
+                    <li><a href="#produk" class="hover:text-tobe-red transition">Produk & Layanan</a></li>
+                    <li><a href="#gallery" class="hover:text-tobe-red transition">Galeri Proyek</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-wider">Kategori Produk</h4>
+                <ul class="text-sm text-gray-500 space-y-4">
+                    <li>Komersial Kitchen Set</li>
+                    <li>Peralatan Medis</li>
+                    <li>Custom Fabrikasi</li>
+                    <li>Instalasi Industri</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-wider">Kontak & Lokasi</h4>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    Jl. Industri Stainless No. 123<br>
+                    Kec. Cikarang Pusat, Bekasi<br>
+                    Jawa Barat, Indonesia<br><br>
+                    <strong>Email:</strong> sales@tobejaya.com<br>
+                    <strong>Phone:</strong> +62 21 8888 9999
+                </p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <p class="text-xs text-gray-400">© 2024 CV TOBE JAYA. Seluruh hak cipta dilindungi undang-undang.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="text-gray-400 hover:text-tobe-red text-xs">Kebijakan Privasi</a>
+                <a href="#" class="text-gray-400 hover:text-tobe-red text-xs">Syarat & Ketentuan</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV TOBE JAYA | Engineering & Construction Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        'tobe-black': '#0f0f0f',
+                        'tobe-red': '#e11d48',
+                        'tobe-white': '#ffffff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-white text-tobe-black">
+
+    <nav class="fixed w-full z-50 glass-nav border-b border-gray-100 h-24">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-16 h-16 flex items-center justify-center rounded-sm">
+                    <img src="images/tobejaya5.png" alt="Logo CV TOBE JAYA" class="object-contain">
+                </div>
+                <div class="flex flex-col justify-center">
+                    <span class="font-bold text-xl tracking-tighter uppercase leading-none">CV TOBE JAYA</span>
+                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mt-1 font-semibold">Engineering &
+                        Construction</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center">
+                <div
+                    class="flex items-center space-x-10 text-[13px] font-bold tracking-widest uppercase mr-12 text-gray-600">
+                    <a href="#" class="hover:text-tobe-red transition">Beranda</a>
+                    <a href="#about" class="hover:text-tobe-red transition">Tentang</a>
+                    <a href="#layanan" class="hover:text-tobe-red transition">Layanan</a>
+                    <a href="#legal" class="hover:text-tobe-red transition">Legalitas</a>
+                </div>
+                <a href="https://wa.me/6287782613955"
+                    class="bg-tobe-black text-white px-8 py-3.5 rounded-full text-[12px] font-bold uppercase tracking-widest hover:bg-tobe-red transition duration-300 shadow-md">
+                    Hubungi Kami
+                </a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" class="text-tobe-black focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-b border-gray-100 absolute w-full left-0 px-6 py-6 shadow-xl">
+            <div class="flex flex-col space-y-4 text-[13px] font-bold tracking-widest uppercase text-gray-600">
+                <a href="#" class="hover:text-tobe-red py-2 border-b border-gray-50">Beranda</a>
+                <a href="#about" class="hover:text-tobe-red py-2 border-b border-gray-50">Tentang</a>
+                <a href="#layanan" class="hover:text-tobe-red py-2 border-b border-gray-50">Layanan</a>
+                <a href="#legal" class="hover:text-tobe-red py-2 border-b border-gray-50">Legalitas</a>
+                <a href="https://wa.me/6287782613955" class="text-tobe-red pt-2">Hubungi Kami (WhatsApp)</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center overflow-hidden bg-tobe-black">
+        <div class="absolute inset-0 opacity-50">
+            <img src="https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=2070&auto=format&fit=crop"
+                alt="Construction Background" class="w-full h-full object-cover">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-6 pt-24 z-10 text-white">
+            <div class="max-w-3xl">
+                <span class="text-tobe-red font-bold tracking-[0.3em] uppercase mb-5 block text-sm">Professional
+                    Engineering Solutions</span>
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-8 uppercase">
+                    Membangun Dengan <br><span class="text-tobe-red italic">Integritas & Inovasi.</span>
+                </h1>
+                <p class="text-gray-300 text-lg md:text-xl mb-12 leading-relaxed font-light max-w-2xl">
+                    CV TOBE JAYA adalah perusahaan terdaftar yang dikelola oleh tim profesional di bidang Engineering &
+                    Construction, mulai dari desain awal hingga tahap akhir proyek.
+                </p>
+                <div class="flex flex-wrap gap-5">
+                    <a href="#layanan"
+                        class="bg-tobe-red text-white px-10 py-5 rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-red-700 transition shadow-lg">Layanan
+                        Kami</a>
+                    <a href="#legal"
+                        class="border-2 border-white text-white px-10 py-[18px] rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-tobe-black transition">Dokumen
+                        Legalitas</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop"
+                    alt="Engineering Project"
+                    class="rounded-lg shadow-2xl grayscale hover:grayscale-0 transition duration-700">
+                <div class="absolute -bottom-10 -left-10 bg-tobe-black p-12 hidden lg:block rounded-sm">
+                    <p class="text-white text-sm uppercase tracking-[0.3em] font-light">Berdiri Sejak</p>
+                    <p class="text-tobe-red text-4xl font-bold mt-1">2022</p>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-4xl font-bold uppercase tracking-tighter leading-tight mb-8">
+                    Dedikasi Untuk <br><span class="text-tobe-red underline decoration-4 underline-offset-8">Kualitas &
+                        Efisiensi.</span>
+                </h2>
+                <p class="text-gray-600 leading-relaxed mb-8 text-lg">
+                    Kami berupaya terus meningkatkan mutu dengan fokus utama pada tujuan bisnis klien. Dengan sikap
+                    profesional, integritas, dan dedikasi, kami memberikan solusi inovatif untuk setiap kebutuhan
+                    konstruksi.
+                </p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="border-l-4 border-tobe-red pl-4">
+                        <h4 class="font-bold uppercase text-sm">Direktur</h4>
+                        <p class="text-gray-500 text-sm">Ence Sumpena</p>
+                    </div>
+                    <div class="border-l-4 border-tobe-red pl-4">
+                        <h4 class="font-bold uppercase text-sm">Lokasi</h4>
+                        <p class="text-gray-500 text-sm">Kabupaten Bogor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="layanan" class="py-28 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold uppercase tracking-tighter mb-4">Bidang Usaha Kami</h2>
+            <div class="w-20 h-1 bg-tobe-red mx-auto mb-16"></div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="group bg-white p-10 hover-lift border border-gray-100 text-left">
+                    <div
+                        class="w-12 h-12 bg-tobe-red/10 flex items-center justify-center mb-6 group-hover:bg-tobe-red transition">
+                        <svg class="w-6 h-6 text-tobe-red group-hover:text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl mb-4 uppercase">Civil Engineering</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Pekerjaan konstruksi sipil, dekorasi interior, dan
+                        pengerjaan lantai/dinding bangunan.</p>
+                </div>
+                <div class="group bg-white p-10 hover-lift border border-gray-100 text-left">
+                    <div
+                        class="w-12 h-12 bg-tobe-red/10 flex items-center justify-center mb-6 group-hover:bg-tobe-red transition">
+                        <svg class="w-6 h-6 text-tobe-red group-hover:text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl mb-4 uppercase">Barang Dari Logam</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Industri pembuatan pagar besi, teralis,
+                        pintu/jendela, dan konstruksi baja siap pasang.</p>
+                </div>
+                <div class="group bg-white p-10 hover-lift border border-gray-100 text-left">
+                    <div
+                        class="w-12 h-12 bg-tobe-red/10 flex items-center justify-center mb-6 group-hover:bg-tobe-red transition">
+                        <svg class="w-6 h-6 text-tobe-red group-hover:text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 00-2 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl mb-4 uppercase">Project Management</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Layanan terintegrasi mulai dari konsep desain,
+                        pengelolaan proyek, hingga tahap komersial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="legal" class="py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-100 pb-8">
+                <div>
+                    <h2 class="text-4xl font-bold uppercase tracking-tight">Legalitas Perusahaan</h2>
+                    <p class="text-gray-500 mt-2 text-lg">Dokumen resmi operasional CV TOBE JAYA.</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <span
+                        class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">Terverifikasi
+                        OSS</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="p-6 bg-gray-50 rounded-sm">
+                    <h5 class="text-[10px] font-bold text-tobe-red uppercase tracking-widest mb-2">NIB</h5>
+                    <p class="font-bold text-sm">1005220036249</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-sm">
+                    <h5 class="text-[10px] font-bold text-tobe-red uppercase tracking-widest mb-2">Akte Pendirian</h5>
+                    <p class="font-bold text-sm">No. 11 (26 April 2022)</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-sm">
+                    <h5 class="text-[10px] font-bold text-tobe-red uppercase tracking-widest mb-2">Pengesahan AHU</h5>
+                    <p class="font-bold text-sm">AHU-0030053-AH.01.14</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-sm">
+                    <h5 class="text-[10px] font-bold text-tobe-red uppercase tracking-widest mb-2">Skala Usaha</h5>
+                    <p class="font-bold text-sm">Usaha Mikro (UMK)</p>
+                </div>
+            </div>
+
+            <div class="mt-12 overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-tobe-black text-white uppercase text-[11px] tracking-widest">
+                        <tr>
+                            <th class="p-4">Kode KBLI</th>
+                            <th class="p-4">Deskripsi Bidang Usaha</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600">
+                        <tr class="border-b border-gray-100">
+                            <td class="p-4 font-bold">25111</td>
+                            <td class="p-4">Industri Barang Dari Logam Bukan Aluminium Siap Pasang Untuk Bangunan</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="p-4 font-bold">43304</td>
+                            <td class="p-4">Dekorasi Interior (Plafon, Partisi, Wallpaper, dll)</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="p-4 font-bold">47528</td>
+                            <td class="p-4">Perdagangan Eceran Berbagai Macam Material Bangunan</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-tobe-black text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
+            <div>
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-16 h-16  flex items-center justify-center rounded-sm">
+                        <!-- <span class="text-white font-bold text-xl">T</span> -->
+                        <img src="images/tobejaya5.png" alt="Logo CV TOBE JAYA" class="object-contain">
+                    </div>
+                    <span class="font-bold text-xl uppercase tracking-tighter">CV TOBE JAYA</span>
+                </div>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Spesialis Engineering & Construction yang berlokasi di Gunung Sindur, Bogor. Kami berkomitmen pada
+                    profesionalisme dan hasil akhir yang presisi.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-8 uppercase text-xs tracking-[0.3em] text-tobe-red">Alamat Kantor</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Kampung Cibadung, Desa/Kelurahan Cibadung,<br>
+                    Kec. Gunung Sindur, Kab. Bogor,<br>
+                    Provinsi Jawa Barat, 16340
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-8 uppercase text-xs tracking-[0.3em] text-tobe-red">Hubungi Kami</h4>
+                <p class="text-sm text-gray-400">
+                    <strong>Tlp:</strong> 0877 8261 3955 / 0812 2280 0289<br>
+                    <strong>Email:</strong> tobejaya212@gmail.com
+                </p>
+            </div>
+        </div>
+        <div
+            class="max-w-7xl mx-auto px-6 pt-10 border-t border-white/10 flex flex-col md:row justify-between items-center text-[11px] text-gray-500 uppercase tracking-widest">
+            <p>© 2026 CV TOBE JAYA. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Menutup menu saat link di klik (opsional)
+        const links = menu.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+    </script>
+
+</body>
+
+</html>
