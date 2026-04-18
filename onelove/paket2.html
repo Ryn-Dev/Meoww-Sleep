@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paket Wisata - OneLove Minimalist</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .table-scroll::-webkit-scrollbar { height: 6px; }
+        .table-scroll::-webkit-scrollbar-track { background: #f8fafc; border-radius: 4px; }
+        .table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .tab-active { background-color: #0d9488; color: white; border-color: #0d9488; }
+        .tab-inactive { background-color: transparent; color: #475569; border-color: #cbd5e1; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur border-b border-slate-200 transition-all duration-300 py-4">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white">
+                    <i class="fa-solid fa-plane-departure text-sm"></i>
+                </div>
+                <h1 class="font-bold text-slate-800 text-xl tracking-tight">OneLove.</h1>
+            </a>
+            
+            <ul class="hidden md:flex gap-8 font-medium text-slate-600 text-sm">
+                <li><a href="#" class="hover:text-teal-600 transition">Home</a></li>
+                <li><a href="#" class="text-teal-600 font-bold border-b-2 border-teal-600 pb-1">Paket Wisata</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition">Fasilitas</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition">Galeri</a></li>
+            </ul>
+            
+            <div class="hidden md:block">
+                <button class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-6 py-2.5 rounded-full transition">
+                    Pesan Sekarang
+                </button>
+            </div>
+            
+            <button id="mobile-menu-btn" class="md:hidden text-2xl text-slate-800 focus:outline-none">
+                <i class="fa-solid fa-bars transition-all duration-300"></i>
+            </button>
+        </div>
+    </nav>
+
+    <section class="pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-b from-teal-50/50 to-slate-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 text-center relative z-10" data-aos="fade-up">
+            <span class="text-teal-600 font-bold tracking-widest uppercase text-xs mb-4 block">Destinasi Favorit</span>
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Paket Wisata Pulau Tidung</h1>
+            <p class="text-slate-500 text-lg max-w-2xl mx-auto mb-8">Eksplorasi keindahan bawah laut dan pantai pasir putih dengan paket liburan hemat maupun lengkap dari kami.</p>
+            
+            <div class="inline-flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-full shadow-sm text-sm">
+                <i class="fa-solid fa-calendar-check text-teal-500"></i>
+                <span class="font-medium text-slate-700">Periode High Season:</span>
+                <span class="text-slate-500">29 Dec 2025 – 2 Jan 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 max-w-7xl mx-auto px-6">
+        
+        <div class="flex justify-center mb-10" data-aos="fade-up">
+            <div class="inline-flex p-1 bg-slate-200/50 rounded-full border border-slate-200">
+                <button id="btn-hemat" onclick="switchTab('hemat')" class="tab-active px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-wallet"></i> Paket Hemat
+                </button>
+                <button id="btn-lengkap" onclick="switchTab('lengkap')" class="tab-inactive border border-transparent px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-star"></i> Paket Lengkap
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-hemat" class="grid lg:grid-cols-3 gap-8 animate-fade-in">
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                    <h3 class="font-bold text-lg text-slate-800">Daftar Harga Paket Hemat</h3>
+                </div>
+                <div class="table-scroll overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-4 px-6 font-semibold">Jumlah Peserta</th>
+                                <th class="py-4 px-6 font-semibold">2 Hari 1 Malam</th>
+                                <th class="py-4 px-6 font-semibold">3 Hari 2 Malam</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700 text-sm divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">2 Orang</td><td class="py-4 px-6">Rp 320.000</td><td class="py-4 px-6 text-slate-400">Call</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">3 Orang</td><td class="py-4 px-6">Rp 280.000</td><td class="py-4 px-6 text-slate-400">Call</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">4 Orang</td><td class="py-4 px-6">Rp 250.000</td><td class="py-4 px-6 text-slate-400">Call</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">5 Orang</td><td class="py-4 px-6">Rp 220.000</td><td class="py-4 px-6 text-slate-400">Call</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">6 Orang</td><td class="py-4 px-6">Rp 200.000</td><td class="py-4 px-6 text-slate-400">Call</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">7-9 Orang</td><td class="py-4 px-6">Rp 190.000</td><td class="py-4 px-6 text-slate-400">Call</td></tr>
+                            <tr class="bg-teal-50/50"><td class="py-4 px-6 font-bold text-teal-700">10-14 Orang</td><td class="py-4 px-6 font-bold text-teal-700">Rp 170.000</td><td class="py-4 px-6 font-bold text-teal-700">Rp 320.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">15-100 Orang</td><td class="py-4 px-6">Rp 160.000</td><td class="py-4 px-6">Rp 300.000</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-8 shadow-md text-white">
+                <h4 class="font-bold text-lg mb-6 flex items-center gap-2"><i class="fa-solid fa-list-check text-teal-400"></i> Fasilitas Hemat</h4>
+                <ul class="space-y-4 text-sm text-slate-300">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5"></i> Tiket Kapal Feri PP</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5"></i> Homestay AC (Kamar Mandi Dalam)</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5"></i> Makan 3x (2D1N) / 6x (3D2N)</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5"></i> Sepeda Santai 1 Orang 1</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="tab-lengkap" class="hidden grid lg:grid-cols-3 gap-8 animate-fade-in">
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-teal-200 overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-teal-100 bg-teal-50/30 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-slate-800">Daftar Harga Paket Lengkap</h3>
+                    <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2.5 py-1 rounded-md">Best Seller</span>
+                </div>
+                <div class="table-scroll overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-4 px-6 font-semibold">Jumlah Peserta</th>
+                                <th class="py-4 px-6 font-semibold">2 Hari 1 Malam</th>
+                                <th class="py-4 px-6 font-semibold">3 Hari 2 Malam</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700 text-sm divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">2 Orang</td><td class="py-4 px-6">Rp 570.000</td><td class="py-4 px-6">Rp 1.100.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">3 Orang</td><td class="py-4 px-6">Rp 470.000</td><td class="py-4 px-6">Rp 1.000.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">4 Orang</td><td class="py-4 px-6">Rp 400.000</td><td class="py-4 px-6">Rp 850.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">5 Orang</td><td class="py-4 px-6">Rp 370.000</td><td class="py-4 px-6">Rp 750.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">6 Orang</td><td class="py-4 px-6">Rp 340.000</td><td class="py-4 px-6">Rp 700.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">7-9 Orang</td><td class="py-4 px-6">Rp 320.000</td><td class="py-4 px-6">Rp 650.000</td></tr>
+                            <tr class="bg-teal-50/50"><td class="py-4 px-6 font-bold text-teal-700">10-14 Orang</td><td class="py-4 px-6 font-bold text-teal-700">Rp 290.000</td><td class="py-4 px-6 font-bold text-teal-700">Rp 570.000</td></tr>
+                            <tr class="hover:bg-slate-50"><td class="py-4 px-6 font-medium">15-100 Orang</td><td class="py-4 px-6">Rp 270.000</td><td class="py-4 px-6">Rp 550.000</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-teal-600 rounded-2xl border border-teal-500 p-8 shadow-md text-white">
+                <h4 class="font-bold text-lg mb-6 flex items-center gap-2"><i class="fa-solid fa-list-check text-teal-200"></i> Fasilitas Lengkap</h4>
+                <ul class="space-y-4 text-sm text-teal-50">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-white mt-0.5"></i> Tiket Kapal Feri PP</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-white mt-0.5"></i> Homestay AC (Kamar Mandi Dalam)</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-white mt-0.5"></i> Makan 3x (2D1N) / 6x (3D2N)</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-white mt-0.5"></i> Sepeda Santai 1 Orang 1</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-yellow-300 mt-0.5"></i> Alat Snorkeling Lengkap</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-yellow-300 mt-0.5"></i> Kapal Snorkeling Tradisional</li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-yellow-300 mt-0.5"></i> Tour Guide Lokal</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-slate-800">Rundown Perjalanan</h2>
+                <p class="text-slate-500 mt-2">Jadwal kegiatan selama di Pulau Tidung</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-16">
+                <div data-aos="fade-right">
+                    <div class="inline-flex bg-slate-100 text-slate-700 px-4 py-1.5 rounded-lg font-bold mb-8">
+                        Hari Pertama
+                    </div>
+                    
+                    <ul class="space-y-6">
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">06:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Kumpul di Pelabuhan</h5>
+                                <p class="text-slate-500 text-sm mt-1">Meeting point di Muara Angke - Jakarta Utara.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">07:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Berangkat ke Pulau</h5>
+                                <p class="text-slate-500 text-sm mt-1">Perjalanan laut menuju Pulau Tidung.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">10:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Tiba & Check-in</h5>
+                                <p class="text-slate-500 text-sm mt-1">Menuju Homestay, istirahat sejenak.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">11:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Makan Siang</h5>
+                                <p class="text-slate-500 text-sm mt-1">ISHOMA dan persiapan kegiatan snorkeling.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">13:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Snorkeling & Sunset</h5>
+                                <p class="text-slate-500 text-sm mt-1">Snorkeling, hopping island ke P. Payung/Tidung Kecil, dan hunting sunset di Jembatan Cinta.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">18:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Istirahat Malam</h5>
+                                <p class="text-slate-500 text-sm mt-1">Mandi, makan malam, dan istirahat.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">20:30</div>
+                            <div>
+                                <h5 class="font-bold text-slate-800">BBQ Time</h5>
+                                <p class="text-slate-500 text-sm mt-1">Menikmati hidangan BBQ dan acara bebas.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div data-aos="fade-left">
+                    <div class="inline-flex bg-slate-100 text-slate-700 px-4 py-1.5 rounded-lg font-bold mb-8">
+                        Hari Kedua
+                    </div>
+                    
+                    <ul class="space-y-6">
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">05:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Hunting Sunrise</h5>
+                                <p class="text-slate-500 text-sm mt-1">Melihat matahari terbit di sekitar area pulau.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">07:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Sarapan & Sepeda</h5>
+                                <p class="text-slate-500 text-sm mt-1">Sarapan pagi dilanjutkan keliling pulau dengan sepeda santai.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">09:00</div>
+                            <div class="pb-6 border-b border-slate-100 w-full">
+                                <h5 class="font-bold text-slate-800">Persiapan Check-out</h5>
+                                <p class="text-slate-500 text-sm mt-1">Kembali ke homestay, packing, dan menuju pelabuhan.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-16 shrink-0 text-sm font-bold text-teal-600 pt-1">10:30</div>
+                            <div>
+                                <h5 class="font-bold text-slate-800">Perjalanan Pulang</h5>
+                                <p class="text-slate-500 text-sm mt-1">Kapal berangkat kembali menuju Jakarta. Berakhirnya trip.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-8">
+            
+            <div class="md:col-span-7 lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-8" data-aos="fade-up">
+                <h3 class="font-bold text-slate-800 text-lg mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-yellow-500"></i> Catatan Penting
+                </h3>
+                <div class="grid sm:grid-cols-2 gap-4 text-sm text-slate-600">
+                    <div class="flex gap-3"><i class="fa-solid fa-check text-slate-300 mt-1"></i> <p>Jadwal di atas bersifat kondisional / dapat berubah sewaktu-waktu.</p></div>
+                    <div class="flex gap-3"><i class="fa-solid fa-check text-slate-300 mt-1"></i> <p>Meeting point Muara Angke / Kaliadem (Dekat pom bensin Pertamina).</p></div>
+                    <div class="flex gap-3"><i class="fa-solid fa-check text-slate-300 mt-1"></i> <p>Kapal berangkat jam 08:00 - 09:00 WIB.</p></div>
+                    <div class="flex gap-3"><i class="fa-solid fa-check text-slate-300 mt-1"></i> <p>Silakan hubungi agen kami saat tiba di pelabuhan.</p></div>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-4 sm:items-center justify-between bg-slate-50 p-4 rounded-xl">
+                    <div>
+                        <span class="block font-semibold text-slate-800 text-sm mb-1">Belum Termasuk:</span>
+                        <span class="text-sm text-slate-500">Kamera dokumentasi, Banana Boat (Rp 35k), dan Parkir.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-5 lg:col-span-4 space-y-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-teal-600 text-white rounded-2xl p-6 shadow-sm">
+                    <h3 class="font-bold mb-4 text-teal-50">Reservasi & Tanya Jawab</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fa-brands fa-whatsapp text-sm"></i></div>
+                            <div>
+                                <p class="text-xs text-teal-100">CS 1</p>
+                                <p class="font-semibold">+62 878 0407 XXXX</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fa-brands fa-whatsapp text-sm"></i></div>
+                            <div>
+                                <p class="text-xs text-teal-100">CS 2</p>
+                                <p class="font-semibold">+62 896 5013 1133</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xl"><i class="fa-solid fa-building-columns"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Transfer Bank BCA</p>
+                        <p class="font-mono font-bold text-slate-800 tracking-wide">1234-5678-90</p>
+                        <p class="text-xs text-slate-500">A.n: Onelove Travel</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-slate-200 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-teal-600 rounded flex items-center justify-center text-white">
+                    <i class="fa-solid fa-plane-departure text-[10px]"></i>
+                </div>
+                <span class="font-bold text-slate-800">OneLove Travel.</span>
+            </div>
+            
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-teal-600 transition">Kebijakan Privasi</a>
+                <a href="#" class="hover:text-teal-600 transition">Syarat & Ketentuan</a>
+                <a href="#" class="hover:text-teal-600 transition">FAQ</a>
+            </div>
+
+            <p>© 2026 OneLove Travel. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 600 });
+
+        // Script untuk pindah Tab Harga
+        function switchTab(tabId) {
+            const tabHemat = document.getElementById('tab-hemat');
+            const tabLengkap = document.getElementById('tab-lengkap');
+            const btnHemat = document.getElementById('btn-hemat');
+            const btnLengkap = document.getElementById('btn-lengkap');
+
+            if (tabId === 'hemat') {
+                tabHemat.classList.remove('hidden');
+                tabLengkap.classList.add('hidden');
+                
+                btnHemat.className = "tab-active px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 flex items-center gap-2 border border-teal-600";
+                btnLengkap.className = "tab-inactive px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 flex items-center gap-2 border border-transparent hover:border-slate-300";
+            } else {
+                tabLengkap.classList.remove('hidden');
+                tabHemat.classList.add('hidden');
+                
+                btnLengkap.className = "tab-active px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 flex items-center gap-2 border border-teal-600";
+                btnHemat.className = "tab-inactive px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 flex items-center gap-2 border border-transparent hover:border-slate-300";
+            }
+        }
+    </script>
+</body>
+</html>
