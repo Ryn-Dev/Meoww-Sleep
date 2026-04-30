@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Galeri - OneLove Island CMS</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased flex h-screen overflow-hidden">
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/50 z-20 hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
+
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-[280px] bg-slate-900 text-white transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col border-r border-slate-800">
+        
+        <div class="py-5 flex items-center justify-center border-b border-slate-800">
+            <a href="{{ route('front.index') }}" class="flex items-center space-x-3 group transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 w-fit bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+                <div class="w-16 h-16 flex items-center justify-center rounded-sm">
+                    <img src="{{asset('images/onelove2.png')}}" alt="OneLove Island" class="object-contain">
+                </div>
+                <div class="flex flex-col justify-center leading-tight pr-2">
+                    <h1 class="font-bold text-2xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300">
+                        OneLove.
+                    </h1>
+                    <span class="text-xs text-slate-300 uppercase tracking-widest mt-1 font-medium group-hover:text-teal-400 transition-colors duration-300">
+                        Island
+                    </span>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Menu Utama</p>
+            
+            <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-xl font-medium transition">
+                <i class="fa-solid fa-gauge-high w-5"></i> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-xl font-medium transition">
+                <i class="fa-solid fa-ticket w-5"></i> Pesanan Trip
+            </a>
+            <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-xl font-medium transition">
+                <i class="fa-solid fa-box-open w-5"></i> Paket Wisata
+            </a>
+            <a href="#" class="flex items-center gap-3 bg-teal-600 text-white px-4 py-3 rounded-xl font-medium shadow-md shadow-teal-600/20 transition">
+                <i class="fa-solid fa-images w-5"></i> Galeri Web
+            </a>
+            <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-xl font-medium transition">
+                <i class="fa-solid fa-users w-5"></i> Pelanggan
+            </a>
+
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6">Sistem</p>
+            
+            <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-xl font-medium transition">
+                <i class="fa-solid fa-gear w-5"></i> Pengaturan
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-teal-600 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-5">
+                <button class="relative text-slate-400 hover:text-teal-600 transition">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                
+                <div class="h-8 w-px bg-slate-200"></div>
+                
+                <div class="relative">
+                    <button id="profileBtn" class="flex items-center gap-3 focus:outline-none group">
+                        <div class="text-right hidden md:block">
+                            <p class="text-sm font-bold text-slate-700 group-hover:text-teal-600 transition">Admin Utama</p>
+                            <p class="text-xs text-slate-500">Administrator</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 border-2 border-white shadow-sm flex items-center justify-center font-bold">
+                            A
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 group-hover:text-teal-600 transition"></i>
+                    </button>
+
+                    <div id="profileDropdown" class="hidden absolute right-0 mt-4 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50 origin-top-right transition-all">
+                        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
+                            <p class="text-sm text-slate-500">Masuk sebagai</p>
+                            <p class="text-sm font-bold text-slate-800 truncate">admin@onelove.com</p>
+                        </div>
+                        <div class="py-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-teal-600 hover:bg-teal-50 transition">
+                                <i class="fa-regular fa-user w-4 text-center"></i> Profil Saya
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition">
+                                <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Keluar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-6 md:p-8">
+            
+            <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Tambah Foto Galeri</h2>
+                    <div class="text-sm text-slate-500 flex items-center gap-2 mt-2 font-medium">
+                        <a href="#" class="hover:text-teal-600 transition">Dashboard</a>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        <a href="#" class="hover:text-teal-600 transition">Galeri Web</a>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        <span class="text-teal-600 font-bold">Tambah Baru</span>
+                    </div>
+                </div>
+                <a href="#" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </a>
+            </div>
+
+            <div class="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+                <form action="#" method="POST" enctype="multipart/form-data" class="p-6 md:p-8">
+                    
+                    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
+                        
+                        <div class="lg:col-span-5">
+                            <label class="block text-sm font-bold text-slate-700 mb-3">Upload Gambar / Foto</label>
+                            
+                            <div class="relative w-full h-80 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 hover:border-teal-400 transition cursor-pointer flex flex-col items-center justify-center text-center p-6 group" id="drop-area">
+                                
+                                <input type="file" name="image" id="file-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*">
+                                
+                                <div class="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-teal-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                                </div>
+                                <h4 class="text-slate-800 font-bold text-lg mb-1">Klik atau Drag & Drop</h4>
+                                <p class="text-slate-500 text-sm">PNG, JPG, JPEG (Maks. 2MB)</p>
+                                
+                                <div id="file-name" class="hidden mt-4 px-4 py-2 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100 truncate w-full">
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-7 space-y-6">
+                            
+                            <div>
+                                <label for="title" class="block text-sm font-bold text-slate-700 mb-2">Judul Foto</label>
+                                <input type="text" id="title" name="title" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition text-slate-800 font-medium" placeholder="Masukkan judul gambar (ex: Sunset di Jembatan Cinta)" required>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="category" class="block text-sm font-bold text-slate-700 mb-2">Kategori</label>
+                                    <div class="relative">
+                                        <select id="category" name="category" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition text-slate-800 font-medium appearance-none cursor-pointer">
+                                            <option value="">Pilih Kategori...</option>
+                                            <option value="snorkeling">Kegiatan Snorkeling</option>
+                                            <option value="pantai">Pantai & Pemandangan</option>
+                                            <option value="homestay">Fasilitas & Homestay</option>
+                                            <option value="rombongan">Grup / Rombongan</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                                            <i class="fa-solid fa-chevron-down text-sm"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="status" class="block text-sm font-bold text-slate-700 mb-2">Status Publikasi</label>
+                                    <div class="relative">
+                                        <select id="status" name="status" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition text-slate-800 font-medium appearance-none cursor-pointer">
+                                            <option value="active">🟢 Publikasikan (Tampil)</option>
+                                            <option value="draft">🟡 Draft (Sembunyikan)</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                                            <i class="fa-solid fa-chevron-down text-sm"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="description" class="block text-sm font-bold text-slate-700 mb-2">Deskripsi (Opsional)</label>
+                                <textarea id="description" name="description" rows="4" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition text-slate-800 font-medium resize-none" placeholder="Tambahkan keterangan singkat tentang foto ini..."></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-10 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-end gap-4">
+                        <button type="button" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition">
+                            Batal
+                        </button>
+                        <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-white bg-teal-600 hover:bg-teal-500 shadow-lg shadow-teal-600/30 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan Data
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="mt-12 text-center text-sm text-slate-400">
+                &copy; 2026 OneLove Island CMS. All rights reserved.
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Toggle Sidebar Mobile
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        function toggleSidebar() {
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Profile Dropdown
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        });
+        window.addEventListener('click', (e) => {
+            if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Tampilkan Nama File yang diupload
+        const fileInput = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        fileInput.addEventListener('change', function(e) {
+            if(e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                fileNameDisplay.textContent = 'File terpilih: ' + fileName;
+                fileNameDisplay.classList.remove('hidden');
+            } else {
+                fileNameDisplay.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
