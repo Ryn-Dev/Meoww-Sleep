@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="head-title">Febryan — Flight Countdown</title>
+  <link rel="icon" type="image/png" href="https://cdn.icon-icons.com/icons2/931/PNG/512/plane_airplane_icon-icons.com_72440.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="style/count_app.css">
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div id="splash-screen">
+    <div class="splash-inner">
+      <svg class="splash-plane" width="48" height="48" viewBox="0 0 24 24" fill="#C9A84C">
+        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+      <div class="splash-text">Febryan Air</div>
+      <div class="splash-sub">Preparing boarding pass...</div>
+    </div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div id="custom-cursor"></div>
+
+  <!-- Background -->
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+
+  <!-- Flying plane trail -->
+  <div class="plane-trail" aria-hidden="true">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#C9A84C">
+      <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+    </svg>
+  </div>
+
+  <!-- Settings Button -->
+  <a target="_blank" href="https://countdown.febryann.my.id/setting" id="settings-link" title="Settings">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+    </svg>
+  </a>
+
+  <!-- Main Card -->
+  <div class="boarding-card">
+
+    <!-- Gold accent bar -->
+    <div class="card-accent-bar"></div>
+
+    <!-- Card Header -->
+    <div class="card-header">
+      <div class="airline-brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#C9A84C">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Febryan Air</div>
+          <div class="brand-sub">Boarding Pass</div>
+        </div>
+      </div>
+      <div class="flight-meta">
+        <div class="flight-num-label">Flight</div>
+        <div class="flight-num">FR-2024</div>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span>Scheduled</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route -->
+    <div class="route-section">
+      <div class="airport origin">
+        <div class="airport-code">CGK</div>
+        <div class="airport-name">Jakarta</div>
+        <div class="airport-sub">Soekarno-Hatta</div>
+      </div>
+
+      <div class="route-connector">
+        <div class="route-path">
+          <div class="route-dot"></div>
+          <div class="route-dashes"></div>
+          <div class="route-plane-icon">&#9992;</div>
+          <div class="route-dashes"></div>
+          <div class="route-dot"></div>
+        </div>
+        <div class="route-label">Direct</div>
+      </div>
+
+      <div class="airport destination">
+        <div class="airport-code" id="dest-code">???</div>
+        <div class="airport-name" id="dest-city">Destination</div>
+        <div class="airport-sub" id="dest-sub">—</div>
+      </div>
+    </div>
+
+    <!-- Tear line -->
+    <div class="tear-line">
+      <div class="tear-notch left"></div>
+      <div class="tear-dashes"></div>
+      <div class="tear-notch right"></div>
+    </div>
+
+    <!-- Flight title -->
+    <div class="flight-title-wrap">
+      <div class="flight-title-label">Mission</div>
+      <h1 id="countdown-title">Loading...</h1>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown-section">
+      <div class="countdown-top-label">Time Until Departure</div>
+      <div id="countdown-digits">
+        <div class="time-block">
+          <div class="time-num" id="days">00</div>
+          <div class="time-lbl">Days</div>
+        </div>
+        <div class="time-colon"><span></span><span></span></div>
+        <div class="time-block">
+          <div class="time-num" id="hours">00</div>
+          <div class="time-lbl">Hours</div>
+        </div>
+        <div class="time-colon"><span></span><span></span></div>
+        <div class="time-block">
+          <div class="time-num" id="minutes">00</div>
+          <div class="time-lbl">Min</div>
+        </div>
+        <div class="time-colon"><span></span><span></span></div>
+        <div class="time-block">
+          <div class="time-num" id="seconds">00</div>
+          <div class="time-lbl">Sec</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Footer -->
+    <div class="card-footer">
+      <div class="footer-field">
+        <div class="footer-label">Passenger</div>
+        <div class="footer-value">Febryan</div>
+      </div>
+      <div class="footer-field center">
+        <div class="footer-label">Departure</div>
+        <div class="footer-value" id="target-date-label">—</div>
+      </div>
+      <div class="footer-field right">
+        <div class="footer-label">Class</div>
+        <div class="footer-value">Economy</div>
+      </div>
+    </div>
+
+    <!-- Tear line 2 -->
+    <div class="tear-line">
+      <div class="tear-notch left"></div>
+      <div class="tear-dashes"></div>
+      <div class="tear-notch right"></div>
+    </div>
+
+    <!-- Barcode strip -->
+    <div class="barcode-strip">
+      <div class="barcode" id="barcode"></div>
+      <div class="barcode-text">**** **** FEBRYAN ****</div>
+    </div>
+
+  </div>
+
+  <!-- Corner label -->
+  <div class="corner-watermark">✈ Febryan</div>
+
+  <script src="js/cursor_count_app.js"></script>
+  <script src="js/get_count.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</body>
+</html>
