@@ -1,0 +1,197 @@
+/* Google Fonts: Plus Jakarta Sans for UI, Amiri for Authentic Quran Arabic Typography */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-gold: #D09B32;
+  --primary-gold-hover: #e0ac43;
+  --primary-gold-dark: #b28124;
+  --primary-gold-glow: rgba(208, 155, 50, 0.45);
+  --bg-dark: #0b1120;
+  --bg-card: rgba(17, 24, 39, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(208, 155, 50, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: #f3f4f6;
+  min-height: 100vh;
+}
+
+/* Arabic Script Font */
+.font-arabic {
+  font-family: 'Amiri', serif;
+  direction: rtl;
+}
+
+/* Glassmorphism Card */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+/* Gold Accent Elements */
+.bg-gold {
+  background-color: var(--primary-gold);
+}
+.bg-gold:hover {
+  background-color: var(--primary-gold-hover);
+}
+.text-gold {
+  color: var(--primary-gold);
+}
+.border-gold {
+  border-color: var(--primary-gold);
+}
+
+/* Playing Disc Pulse Animation */
+.disc-container {
+  position: relative;
+  transition: transform 0.4s ease;
+}
+.disc-playing {
+  animation: discPulse 3.5s ease-in-out infinite alternate;
+}
+@keyframes discPulse {
+  0% {
+    filter: drop-shadow(0 0 15px rgba(208, 155, 50, 0.3));
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 30px rgba(208, 155, 50, 0.65));
+    transform: scale(1.025);
+  }
+}
+
+/* Sound Wave Equalizer Bars */
+.sound-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 18px;
+}
+.sound-wave .bar {
+  width: 3px;
+  height: 6px;
+  background-color: var(--primary-gold);
+  border-radius: 9999px;
+  transition: height 0.2s ease;
+}
+.sound-wave.playing .bar {
+  animation: waveAnimation 1.2s ease-in-out infinite alternate;
+}
+.sound-wave.playing .bar:nth-child(1) { animation-delay: 0.1s; height: 14px; }
+.sound-wave.playing .bar:nth-child(2) { animation-delay: 0.3s; height: 18px; }
+.sound-wave.playing .bar:nth-child(3) { animation-delay: 0.5s; height: 10px; }
+.sound-wave.playing .bar:nth-child(4) { animation-delay: 0.2s; height: 16px; }
+
+@keyframes waveAnimation {
+  0% { height: 4px; }
+  100% { height: 18px; }
+}
+
+/* Interactive Sliders (Progress Bar & Volume) */
+input[type="range"].custom-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
+  background: #374151;
+  transition: height 0.2s ease;
+}
+
+input[type="range"].custom-range:hover {
+  height: 8px;
+}
+
+/* WebKit Slider Thumb (Chrome, Edge, Safari) */
+input[type="range"].custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: 2px solid var(--primary-gold);
+  box-shadow: 0 0 10px var(--primary-gold-glow);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+input[type="range"].custom-range::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  background: var(--primary-gold);
+}
+
+/* Firefox Slider Thumb */
+input[type="range"].custom-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: 2px solid var(--primary-gold);
+  box-shadow: 0 0 10px var(--primary-gold-glow);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+input[type="range"].custom-range::-moz-range-thumb:hover {
+  transform: scale(1.25);
+  background: var(--primary-gold);
+}
+
+/* Playlist Items Hover & Active State */
+.playlist-item {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.playlist-item:hover {
+  background-color: rgba(55, 65, 81, 0.85);
+  transform: translateY(-1px);
+}
+.playlist-item.active {
+  background: linear-gradient(135deg, rgba(208, 155, 50, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%) !important;
+  border-color: rgba(208, 155, 50, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(208, 155, 50, 0.2) !important;
+}
+
+/* Button Micro-interactions */
+.btn-control {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-control:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+.btn-control:active:not(:disabled) {
+  transform: translateY(1px) scale(0.96);
+}
+.btn-control:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Custom Scrollbar for Long Lists */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #111827;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}

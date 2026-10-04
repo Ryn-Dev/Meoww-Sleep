@@ -1,94 +1,436 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pemutar Audio Quran</title>
+  <title>Al-Qur'an Al-Karim - Pemutar Audio Murottal 30 Juz</title>
+  <meta name="description" content="Dengarkan lantunan suci Al-Qur'an 30 Juz lengkap 114 surah dengan pilihan qari ternama, terjemahan Indonesia, timer tidur, dan kontrol kecepatan.">
+  <meta name="author" content="Febryan">
+  <meta name="theme-color" content="#0b1120">
   <link rel="shortcut icon" href="images/quran.png" type="image/x-icon">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style/microinteraction.css">
-  <link rel="stylesheet" href="style/progress.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              400: '#e5ad3c',
+              500: '#D09B32',
+              600: '#b88526',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Amiri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- SweetAlert2 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style/style.css">
 </head>
-<body class="bg-gray-900 text-white">
+<body class="text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950 pb-16">
 
-  <div class="max-w-4xl mx-auto p-8">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-bold">Pemutar Audio Quran</h2>
-    </div>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
 
-    <div class="mb-4 text-left flex flex-col items-center justify-center space-y-4 md:space-y-0 lg:flex-row lg:justify-between">
-      <div class="flex items-center w-full sm:w-auto md:w-auto lg:w-auto">
-        <label for="qariSelect" class="text-xl">Qari : </label>
-        <select id="qariSelect" class="bg-gray-800 text-white p-2 rounded-lg ml-2">
+    <!-- Header & Bismillah Banner -->
+    <header class="text-center mb-9">
+      <p class="font-arabic text-3xl sm:text-4xl text-amber-400 mb-6 sm:mb-8 tracking-wide select-none">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white flex items-center justify-center gap-3">
+        <i class="fas fa-quran text-amber-500 text-2xl"></i>
+        <span>Al-Qur'an Al-Karim</span>
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base mt-1.5 max-w-xl mx-auto">
+        Pemutar Audio Murottal 30 Juz & 114 Surah Lengkap dengan Pilihan Qari Internasional
+      </p>
+    </header>
+
+    <!-- Top Settings Bar: Qari, Sleep Timer, Playback Speed -->
+    <div class="glass-panel p-4 rounded-2xl mb-6 flex flex-wrap items-center justify-between gap-4">
+      <!-- Qari Select -->
+      <div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
+        <label for="qariSelect" class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fas fa-microphone-lines text-amber-400"></i>
+          <span>Qari:</span>
+        </label>
+        <select id="qariSelect" class="bg-slate-800 text-slate-100 text-sm font-medium py-2 px-3 rounded-xl border border-slate-700/80 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition">
           <option value="01">1. Abdullah Al-Juhany</option>
           <option value="02">2. Abdul-Muhsin Al-Qasim</option>
           <option value="03">3. Abdurrahman as-Sudais</option>
           <option value="04">4. Ibrahim Al-Dossari</option>
           <option value="05">5. Misyari Rasyid Al-Afasi</option>
+          <option value="06">6. Yasser Al-Dosari</option>
         </select>
       </div>
+
+      <!-- Controls Group: Speed & Timer -->
+      <div class="flex items-center flex-wrap gap-4 w-full sm:w-auto justify-between sm:justify-end">
+        <!-- Playback Speed -->
+        <div class="flex items-center space-x-2">
+          <label for="speedSelect" class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fas fa-gauge-high text-amber-400"></i>
+            <span>Tempo:</span>
+          </label>
+          <select id="speedSelect" class="bg-slate-800 text-slate-100 text-sm font-medium py-2 px-2.5 rounded-xl border border-slate-700/80 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition">
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1.0x (Normal)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2.0x</option>
+          </select>
+        </div>
+
+        <!-- Sleep Timer -->
+        <div class="flex items-center space-x-2">
+          <label for="timerSelect" class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fas fa-moon text-amber-400"></i>
+            <span>Timer:</span>
+          </label>
+          <select id="timerSelect" class="bg-slate-800 text-slate-100 text-sm font-medium py-2 px-3 rounded-xl border border-slate-700/80 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition">
+            <option value="0">Nonaktif</option>
+            <option value="5">5 Menit</option>
+            <option value="10">10 Menit</option>
+            <option value="15">15 Menit</option>
+            <option value="30">30 Menit</option>
+            <option value="45">45 Menit</option>
+            <option value="60">60 Menit</option>
+            <option value="surah_end">Akhir Surah Ini</option>
+          </select>
+        </div>
+
+        <!-- Keyboard Shortcut Hint Modal Button -->
+        <button id="shortcutBtn" class="text-slate-400 hover:text-amber-400 transition p-2 text-sm rounded-lg hover:bg-slate-800" title="Petunjuk Tombol Pintas">
+          <i class="fas fa-keyboard"></i>
+        </button>
+      </div>
     </div>
 
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg text-center relative">
-
-      <!-- Timer Text in the Top-Right Corner -->
-      <div class="absolute top-3 right-4 text-sm font-semibold text-gray-400 hidden" id="timerText">
-        00:00
+    <!-- Active Sleep Timer Live Banner -->
+    <div id="timerBanner" class="hidden mb-6 bg-amber-500/15 border border-amber-500/40 rounded-xl px-4 py-3 flex items-center justify-between text-sm animate-pulse">
+      <div class="flex items-center space-x-2 text-amber-300">
+        <i class="fas fa-hourglass-half"></i>
+        <span>Timer tidur aktif: audio akan berhenti dalam <strong id="timerCountdownText" class="font-bold text-amber-200 ml-1">00:00</strong></span>
       </div>
+      <button id="cancelTimerBtn" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-lg border border-slate-700 transition">
+        Batalkan
+      </button>
+    </div>
+
+    <!-- Error Banner (Shown if fetch fails) -->
+    <div id="errorBanner" class="hidden mb-6 bg-rose-500/15 border border-rose-500/40 rounded-xl px-4 py-3 flex items-center justify-between text-sm text-rose-300">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-triangle-exclamation text-rose-400"></i>
+        <span id="errorBannerText">Gagal memuat data surah.</span>
+      </div>
+      <button id="retryFetchBtn" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded-lg transition font-semibold">
+        Coba Lagi
+      </button>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MAIN PLAYER CARD -->
+    <!-- ============================================== -->
+    <section class="glass-panel p-6 sm:p-8 rounded-3xl mb-10 shadow-2xl relative overflow-hidden" aria-label="Pemutar Audio Utama">
+      <!-- Background Glow Accent -->
+      <div class="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 relative z-10">
         
-      <div class="mb-6 mt-3">
-        <img src="images/quran.png" alt="Cover Album" class="w-48 h-48 mx-auto rounded-lg shadow-xl">
+        <!-- Album Art / Mushaf Emblem -->
+        <div class="flex-shrink-0 text-center">
+          <div id="discContainer" class="disc-container w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-full p-2 bg-gradient-to-tr from-amber-600/30 via-slate-800 to-amber-400/20 border-2 border-amber-500/40 shadow-xl flex items-center justify-center">
+            <img src="images/quran.png" alt="Emblem Al-Qur'anul Karim" class="w-full h-full object-contain rounded-full drop-shadow-lg select-none pointer-events-none">
+          </div>
+        </div>
+
+        <!-- Surah Details & Controls -->
+        <div class="flex-grow w-full text-center md:text-left">
+          
+          <!-- Title & Arabic Heading -->
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+            <div>
+              <h2 id="songTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                1. Al-Fatihah
+              </h2>
+              <p id="surahMeta" class="text-slate-400 text-sm mt-1">
+                Pembukaan • 7 Ayat • Surah Mekah
+              </p>
+            </div>
+            <!-- Arabic Script Badge -->
+            <div class="mt-1 md:mt-0">
+              <span id="arabicTitle" class="font-arabic text-3xl sm:text-4xl text-amber-400 drop-shadow">
+                الفاتحة
+              </span>
+            </div>
+          </div>
+
+          <!-- Reciter Info & Soundwave Indicator -->
+          <div class="flex items-center justify-center md:justify-start gap-4 mt-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 border border-slate-700 text-amber-300">
+              <i class="fas fa-user text-amber-400"></i>
+              <span id="qariName">Abdullah Al-Juhany</span>
+            </span>
+
+            <!-- Subtle Audio Waveform Visualizer -->
+            <div id="soundWave" class="sound-wave" title="Audio Equalizer">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+          </div>
+
+          <!-- Progress Slider & Timestamps -->
+          <div class="mt-6">
+            <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mb-1.5 px-0.5">
+              <span id="currentTime" class="font-mono">00:00</span>
+              <span id="totalDuration" class="font-mono text-amber-400">Loading...</span>
+            </div>
+            <input type="range" id="progressBar" class="custom-range" value="0" min="0" max="100" step="0.1" aria-label="Progress Durasi Surah">
+          </div>
+
+          <!-- Main Player Control Buttons (100% Symmetrically Centered on Mobile & Desktop) -->
+          <div class="flex items-center justify-center gap-3 sm:gap-6 mt-6 pt-2">
+            
+            <!-- Repeat Mode Button -->
+            <div class="relative">
+              <button id="repeatBtn" class="btn-control w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 flex items-center justify-center transition border border-slate-700/60 shadow-sm" title="Mode: Lanjut Berurutan">
+                <i id="repeatIcon" class="fas fa-repeat text-sm"></i>
+                <span id="repeatBadge" class="hidden absolute -top-1 -right-1 bg-amber-500 text-slate-950 font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">1</span>
+              </button>
+            </div>
+
+            <!-- Previous Button -->
+            <button id="prevSurahBtn" class="btn-control w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center transition shadow-md" title="Surah Sebelumnya (P)">
+              <i class="fas fa-backward-step text-base sm:text-lg"></i>
+            </button>
+
+            <!-- Primary Play / Pause Button (Hero Cetar & Center) -->
+            <button id="playBtn" class="btn-control w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold hover:bg-gold text-slate-950 flex items-center justify-center transition shadow-xl shadow-amber-500/35 relative focus:outline-none hover:scale-105 active:scale-95 mx-1" title="Putar / Jeda (Spasi)">
+              <i id="playIcon" class="fas fa-play text-2xl translate-x-0.5"></i>
+              <i id="audioLoadingSpinner" class="fas fa-circle-notch fa-spin text-2xl text-slate-950 absolute hidden"></i>
+            </button>
+
+            <!-- Next Button -->
+            <button id="nextSurahBtn" class="btn-control w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center transition shadow-md" title="Surah Berikutnya (N)">
+              <i class="fas fa-forward-step text-base sm:text-lg"></i>
+            </button>
+
+            <!-- Volume Button + Desktop Slider -->
+            <div class="relative flex items-center">
+              <button id="volumeBtn" class="btn-control w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 flex items-center justify-center transition border border-slate-700/60 shadow-sm" title="Bisukan / Nyalakan Suara (M)">
+                <i id="volumeIcon" class="fas fa-volume-high text-sm"></i>
+              </button>
+              <div class="hidden lg:flex items-center ml-2.5 w-20">
+                <input type="range" id="volumeBar" class="custom-range h-1.5" min="0" max="100" value="85" aria-label="Kontrol Volume">
+              </div>
+            </div>
+
+          </div>
+
+        </div>
       </div>
-      <div>
-        <p class="text-xl font-semibold" id="songTitle">Nama Surat</p>
-        <p class="text-gray-400" id="qariName">Nama Qari</p>
-      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PLAYLIST & SEARCH SECTION -->
+    <!-- ============================================== -->
+    <section class="mt-8" aria-label="Daftar Surah Al-Qur'an">
       
-      <div class="flex justify-center items-center space-x-6 mt-6">
-        <button class="bg-gray-700 p-4 w-14 rounded-full hover:bg-gray-600 alive" id="prevSurahBtn">
-          <i class="fas fa-backward"></i>
-        </button>
-        <button class="bg-baru p-4 w-14 rounded-full hover:bg-[#deaf52] text-white alive" id="playBtn">
-          <i class="fas fa-play" id="playIcon"></i>
-        </button>
-        <button class="bg-gray-700 p-4 w-14 rounded-full hover:bg-gray-600 alive" id="nextSurahBtn">
-          <i class="fas fa-forward"></i>
-        </button>
+      <!-- Search & Filters Container -->
+      <div class="glass-panel p-5 rounded-2xl mb-6">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          
+          <!-- Search Input -->
+          <div class="relative flex-grow max-w-md">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="fas fa-magnifying-glass"></i>
+            </span>
+            <input 
+              type="text" 
+              id="searchInput" 
+              class="w-full bg-slate-800/90 text-white pl-10 pr-10 py-2.5 rounded-xl border border-slate-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm placeholder-slate-400 transition" 
+              placeholder="Cari nama surah, nomor (misal: 36), atau terjemahan..."
+            >
+            <button id="clearSearchBtn" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 hidden" title="Hapus pencarian">
+              <i class="fas fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Revelation Filters & Page Size -->
+          <div class="flex items-center flex-wrap gap-2.5 justify-between md:justify-end">
+            <!-- Filter Tabs -->
+            <div class="inline-flex rounded-xl bg-slate-800 p-1 border border-slate-700 text-xs">
+              <button class="revelation-filter px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition" data-filter="all">
+                Semua (114)
+              </button>
+              <button class="revelation-filter px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition" data-filter="mekah">
+                Makkiyyah
+              </button>
+              <button class="revelation-filter px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition" data-filter="madinah">
+                Madaniyyah
+              </button>
+            </div>
+
+            <!-- Items Per Page Dropdown -->
+            <select id="perPageSelect" class="bg-slate-800 text-slate-300 text-xs font-medium py-2 px-3 rounded-xl border border-slate-700 focus:border-amber-500 focus:outline-none cursor-pointer">
+              <option value="10">10 / Hal</option>
+              <option value="20">20 / Hal</option>
+              <option value="114">Semua Surah</option>
+            </select>
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="mt-6">
-        <p class="text-sm font-semibold text-right text-[#D09B32]" id="surahDuration">
-          00:00 / 00:00
+      <!-- Loading Skeleton Indicator -->
+      <div id="loadingSkeleton" class="space-y-3">
+        <div class="h-20 bg-slate-800/60 rounded-xl animate-pulse"></div>
+        <div class="h-20 bg-slate-800/60 rounded-xl animate-pulse"></div>
+        <div class="h-20 bg-slate-800/60 rounded-xl animate-pulse"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden text-center py-16 glass-panel rounded-2xl">
+        <i class="fas fa-file-circle-question text-5xl text-slate-600 mb-3"></i>
+        <h3 class="text-lg font-semibold text-slate-300">Surah Tidak Ditemukan</h3>
+        <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+          Tidak ada surah yang cocok dengan kata kunci pencarian Anda. Coba cari berdasarkan nomor atau arti surah.
         </p>
-        <input type="range" id="progressBar" class="progress-bar" value="0" max="100">
-        <!-- <input type="range" id="progressBar" class="w-full h-2 bg-gray-600 rounded-lg" value="0" max="100"> -->
       </div>
-    </div>
 
-    <div class="mt-10">
-      <div class="flex flex-col justify-between items-center md:flex-row">
-        <h3 class="text-xl font-semibold mb-4 ">Daftar Surat</h3>
-        <div class="mb-6 text-center w-full md:w-auto">
-          <input type="text" id="searchInput" class="bg-gray-800 text-white p-2 rounded-lg mt-2 w-full" placeholder="Cari surah...">
+      <!-- Rendered Playlist (Grid 1 Col on Mobile / Tablet / Desktop) -->
+      <div id="playlist" class="grid grid-cols-1 gap-3">
+        <!-- Rendered dynamically by quran.js -->
+      </div>
+
+      <!-- Smart Pagination Navigation -->
+      <div id="paginationNav" class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800 pt-6">
+        <span id="paginationInfo" class="text-xs sm:text-sm font-medium text-slate-400 text-center sm:text-left">
+          Menampilkan 1-10 dari 114 Surah
+        </span>
+
+        <div class="flex items-center justify-center space-x-1.5 sm:space-x-2 w-full sm:w-auto">
+          <!-- Previous Page Button -->
+          <button id="prevPageBtn" class="btn-control w-8 h-8 sm:w-auto sm:h-9 sm:px-4 rounded-xl bg-slate-800 text-slate-300 text-sm font-semibold hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/80 transition flex items-center justify-center gap-1.5 flex-shrink-0" title="Halaman Sebelumnya">
+            <i class="fas fa-chevron-left text-xs"></i>
+            <span class="hidden sm:inline">Sebelumnya</span>
+          </button>
+          
+          <!-- Numbered Pages -->
+          <div id="pageNumbers" class="flex items-center space-x-1 sm:space-x-1.5 justify-center">
+            <!-- Dynamic page buttons -->
+          </div>
+
+          <!-- Next Page Button -->
+          <button id="nextPageBtn" class="btn-control w-8 h-8 sm:w-auto sm:h-9 sm:px-4 rounded-xl bg-slate-800 text-slate-300 text-sm font-semibold hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/80 transition flex items-center justify-center gap-1.5 flex-shrink-0" title="Halaman Selanjutnya">
+            <span class="hidden sm:inline">Selanjutnya</span>
+            <i class="fas fa-chevron-right text-xs"></i>
+          </button>
         </div>
       </div>
 
-      <ul id="playlist" class="space-y-4">
-      </ul>
+    </section>
 
-      <div class="mt-4 flex justify-center" id="paginationSurah">
-        <button id="prevPage" class="alive d3">Prev</button>
-        <!-- <button id="prevPage" class="bg-gray-700 p-2 rounded-lg text-white">Prev</button> -->
-        <span id="pageNum" class="mx-4 text-lg font-semibold">1</span>
-        <!-- <button id="nextPage" class="bg-gray-700 p-2 rounded-lg text-white">Next</button> -->
-        <button id="nextPage" class="alive d3">Next</button>
+    <!-- Footer -->
+    <footer class="mt-16 text-center text-xs text-slate-400 border-t border-slate-800/80 pt-6 pb-2 space-y-2">
+      <p class="flex items-center justify-center gap-1.5 flex-wrap">
+        <span>Dikembangkan dengan</span>
+        <i class="fas fa-heart text-rose-500 text-xs"></i>
+        <span>oleh</span>
+        <a href="https://febryann.my.id/" target="_blank" rel="noopener noreferrer" class="font-bold text-amber-400 hover:text-amber-300 transition underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-400 inline-flex items-center gap-1">
+          <span>Febryan</span>
+          <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+      </p>
+      <p class="text-slate-500 text-[11px]">
+        Data audio dan surah bersumber dari API Resmi <a href="https://equran.id" target="_blank" rel="noopener noreferrer" class="text-amber-500/80 hover:text-amber-400 underline">equran.id</a> • Untuk kemudahan tilawah, murottal, dan tadabbur Al-Qur'anul Karim.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Modal Keyboard Shortcuts -->
+  <dialog id="shortcutModal" class="bg-slate-900 border border-slate-700 text-slate-200 p-6 rounded-2xl max-w-md w-full shadow-2xl backdrop:bg-black/70">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+        <i class="fas fa-keyboard"></i>
+        <span>Pintasan Keyboard</span>
+      </h3>
+      <button id="closeShortcutBtn" class="text-slate-400 hover:text-white">
+        <i class="fas fa-xmark text-lg"></i>
+      </button>
+    </div>
+    <div class="space-y-2.5 text-sm">
+      <div class="flex justify-between py-1 border-b border-slate-800">
+        <span class="text-slate-400">Putar / Jeda</span>
+        <kbd class="px-2 py-0.5 bg-slate-800 rounded text-amber-300 font-mono text-xs">Spasi</kbd>
+      </div>
+      <div class="flex justify-between py-1 border-b border-slate-800">
+        <span class="text-slate-400">Maju / Mundur 5 Detik</span>
+        <kbd class="px-2 py-0.5 bg-slate-800 rounded text-amber-300 font-mono text-xs">Arah Kiri / Kanan</kbd>
+      </div>
+      <div class="flex justify-between py-1 border-b border-slate-800">
+        <span class="text-slate-400">Atur Volume (+/- 5%)</span>
+        <kbd class="px-2 py-0.5 bg-slate-800 rounded text-amber-300 font-mono text-xs">Arah Atas / Bawah</kbd>
+      </div>
+      <div class="flex justify-between py-1 border-b border-slate-800">
+        <span class="text-slate-400">Surah Berikutnya</span>
+        <kbd class="px-2 py-0.5 bg-slate-800 rounded text-amber-300 font-mono text-xs">N</kbd>
+      </div>
+      <div class="flex justify-between py-1 border-b border-slate-800">
+        <span class="text-slate-400">Surah Sebelumnya</span>
+        <kbd class="px-2 py-0.5 bg-slate-800 rounded text-amber-300 font-mono text-xs">P</kbd>
+      </div>
+      <div class="flex justify-between py-1">
+        <span class="text-slate-400">Bisukan (Mute)</span>
+        <kbd class="px-2 py-0.5 bg-slate-800 rounded text-amber-300 font-mono text-xs">M</kbd>
       </div>
     </div>
-  </div>
+  </dialog>
+
+  <!-- SweetAlert2 Script -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="js/quran3.js"></script>
-  <!-- <script type="module" src="js/q/app.js"></script>  -->
+
+  <!-- Surahs Offline & Instant Fallback Data (114 Surahs) -->
+  <script src="js/surahs-data.js"></script>
+
+  <!-- Main Quran Player Logic -->
+  <script src="js/quran.js"></script>
+
+  <script>
+    // Modal Shortcut toggle
+    const shortcutBtn = document.getElementById('shortcutBtn');
+    const shortcutModal = document.getElementById('shortcutModal');
+    const closeShortcutBtn = document.getElementById('closeShortcutBtn');
+
+    if (shortcutBtn && shortcutModal) {
+      shortcutBtn.addEventListener('click', () => shortcutModal.showModal());
+    }
+    if (closeShortcutBtn && shortcutModal) {
+      closeShortcutBtn.addEventListener('click', () => shortcutModal.close());
+      shortcutModal.addEventListener('click', (e) => {
+        if (e.target === shortcutModal) shortcutModal.close();
+      });
+    }
+  </script>
 </body>
 </html>
