@@ -60,7 +60,152 @@
       </p>
     </header>
 
-    <!-- Top Settings Bar: Qari, Sleep Timer, Playback Speed -->
+    <!-- ============================================== -->
+    <!-- JADWAL SHOLAT WIDGET (API equran.id) -->
+    <!-- ============================================== -->
+    <section id="prayerTimesWidget" class="glass-panel p-5 sm:p-6 rounded-3xl mb-6 relative overflow-hidden shadow-2xl border border-slate-700/70" aria-label="Jadwal Sholat Berdasarkan Lokasi">
+      
+      <!-- Background Ambient Glow Accent -->
+      <div class="absolute -top-20 -left-20 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Header: Title, Hijri Date, Actions (Location, GPS, Monthly, Bell, Collapse) -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+        
+        <!-- Title & Date -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-amber-600/30 to-amber-400/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md flex-shrink-0">
+            <i class="fas fa-mosque text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+                <span>Jadwal Sholat Hari Ini</span>
+              </h2>
+              <span id="prayerSourceBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                <i class="fas fa-satellite-dish text-[10px] mr-1"></i>GPS
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+              <span id="prayerDateText">Memuat tanggal...</span>
+              <span id="prayerHijriDateText" class="text-amber-400/90 font-medium"></span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center gap-2 flex-wrap w-full sm:w-auto justify-between sm:justify-end">
+          
+          <!-- Location Picker Button -->
+          <button id="changePrayerLocationBtn" class="btn-control flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/90 text-xs font-semibold transition" title="Ganti Wilayah / Kota">
+            <i class="fas fa-location-dot text-amber-400"></i>
+            <span id="prayerLocationText" class="max-w-[140px] sm:max-w-[180px] truncate">Mendeteksi lokasi...</span>
+            <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+          </button>
+
+          <!-- Detect GPS Button -->
+          <button id="detectPrayerGpsBtn" class="btn-control w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700/80 flex items-center justify-center text-xs transition" title="Deteksi Lokasi GPS Saya Saat Ini">
+            <i class="fas fa-crosshairs"></i>
+          </button>
+
+          <!-- Monthly Schedule Modal Trigger -->
+          <button id="viewMonthlyPrayerBtn" class="btn-control px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700/80 text-xs font-semibold flex items-center gap-1.5 transition" title="Lihat Jadwal Sholat 1 Bulan Penuh">
+            <i class="fas fa-calendar-days text-amber-400"></i>
+            <span class="hidden sm:inline">1 Bulan</span>
+          </button>
+
+          <!-- Sound Notification Toggle -->
+          <button id="prayerSoundToggleBtn" class="btn-control w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700/80 flex items-center justify-center text-xs transition" title="Pengingat Waktu Sholat (Aktif)">
+            <i id="prayerSoundIcon" class="fas fa-bell text-amber-400"></i>
+          </button>
+
+          <!-- Collapse / Expand Toggle -->
+          <button id="togglePrayerCollapseBtn" class="btn-control w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/80 flex items-center justify-center transition" title="Sembunyikan / Tampilkan Jadwal">
+            <i id="prayerCollapseIcon" class="fas fa-chevron-up text-xs"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Collapsed State Preview Bar (shown only when collapsed) -->
+      <div id="prayerCollapsedBar" class="hidden mt-3 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300 cursor-pointer hover:text-white transition">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-clock text-amber-400"></i>
+          <span id="prayerCollapsedText">Memuat waktu sholat...</span>
+        </div>
+        <span class="text-xs text-amber-400 hover:underline">Perluas <i class="fas fa-chevron-down text-[10px] ml-0.5"></i></span>
+      </div>
+
+      <!-- Main Widget Body (Collapsible) -->
+      <div id="prayerWidgetBody" class="mt-4 relative z-10">
+
+        <!-- Loading State Skeleton -->
+        <div id="prayerLoadingState" class="space-y-3 py-2">
+          <div class="h-14 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+          <div class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+            <div class="h-24 bg-slate-800/60 rounded-2xl animate-pulse"></div>
+          </div>
+        </div>
+
+        <!-- Error State Banner -->
+        <div id="prayerErrorState" class="hidden bg-rose-500/15 border border-rose-500/40 rounded-2xl p-4 text-center my-2">
+          <p id="prayerErrorMessage" class="text-xs sm:text-sm text-rose-300 mb-2">Gagal memuat jadwal sholat.</p>
+          <button id="retryPrayerBtn" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded-lg transition font-semibold">
+            Coba Lagi
+          </button>
+        </div>
+
+        <!-- Content State -->
+        <div id="prayerContentState" class="hidden">
+          
+          <!-- Live Countdown to Next Prayer Banner -->
+          <div class="bg-gradient-to-r from-amber-500/15 via-slate-800/70 to-emerald-500/15 border border-amber-500/30 rounded-2xl p-3 sm:p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-inner">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-lg flex-shrink-0 animate-pulse">
+                <i class="fas fa-hourglass-start"></i>
+              </div>
+              <div class="text-center sm:text-left">
+                <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold flex items-center justify-center sm:justify-start gap-1.5">
+                  <span>Waktu Sholat Berikutnya</span>
+                  <span id="nextPrayerArabic" class="font-arabic text-amber-400 font-normal"></span>
+                </div>
+                <div class="text-base sm:text-lg font-extrabold text-white flex items-center justify-center sm:justify-start gap-2">
+                  <span id="nextPrayerName" class="text-amber-400">--</span>
+                  <span class="text-slate-400 text-xs font-normal">pukul</span>
+                  <span id="nextPrayerTime" class="font-mono text-amber-300">--:--</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Countdown Timer Display -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400 hidden md:inline">Tersisa:</span>
+              <div id="nextPrayerCountdown" class="font-mono text-lg sm:text-2xl font-black text-amber-400 tracking-wider bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-amber-500/35 shadow-md">
+                --:--:--
+              </div>
+            </div>
+          </div>
+
+          <!-- 8 Prayer Times Cards Grid (4 cols on mobile, 8 cols on desktop) -->
+          <div id="prayerCardsContainer" class="grid grid-cols-4 sm:grid-cols-8 gap-2 sm:gap-2.5">
+            <!-- Dynamically populated by prayer-times.js -->
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Top Settings Bar: Qari, Sleep Timer, Playback Speed (Dekat dengan Player) -->
     <div class="glass-panel p-4 rounded-2xl mb-6 flex flex-wrap items-center justify-between gap-4">
       <!-- Qari Select -->
       <div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
@@ -407,6 +552,157 @@
     </div>
   </dialog>
 
+  <!-- Modal Ganti Lokasi Jadwal Sholat -->
+  <dialog id="prayerLocationModal" class="bg-slate-900 border border-slate-700 text-slate-200 p-6 rounded-3xl max-w-lg w-full shadow-2xl backdrop:bg-black/75">
+    <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-800">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm border border-amber-500/30">
+          <i class="fas fa-location-dot"></i>
+        </div>
+        <h3 class="text-base sm:text-lg font-bold text-white">Pilih Wilayah / Kota</h3>
+      </div>
+      <button id="closePrayerLocationModalBtn" class="text-slate-400 hover:text-white transition p-1" title="Tutup">
+        <i class="fas fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Quick GPS Button -->
+    <button id="modalPrayerGpsBtn" class="w-full mb-5 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-110 text-slate-950 font-extrabold text-sm transition shadow-lg shadow-amber-500/25 active:scale-[0.99]">
+      <i class="fas fa-crosshairs"></i>
+      <span>Deteksi Lokasi GPS Saya Otomatis</span>
+    </button>
+
+    <div class="relative flex py-2 items-center mb-4">
+      <div class="flex-grow border-t border-slate-800"></div>
+      <span class="flex-shrink mx-4 text-slate-500 text-xs uppercase tracking-wider font-semibold">Atau Pilih Manual</span>
+      <div class="flex-grow border-t border-slate-800"></div>
+    </div>
+
+    <!-- Manual Form -->
+    <div class="space-y-4">
+      <div>
+        <label for="modalPrayerProvSelect" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+          1. Pilih Provinsi (34 Provinsi):
+        </label>
+        <select id="modalPrayerProvSelect" class="w-full bg-slate-800 text-slate-100 text-sm font-medium py-2.5 px-3 rounded-xl border border-slate-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label for="modalPrayerCitySelect" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            2. Pilih Kabupaten / Kota:
+          </label>
+          <span id="modalLocationLoading" class="text-[11px] text-amber-400 hidden">
+            <i class="fas fa-circle-notch fa-spin mr-1"></i>Memuat kota...
+          </span>
+        </div>
+
+        <!-- Quick filter input for city -->
+        <input 
+          type="text" 
+          id="modalPrayerCitySearch" 
+          class="w-full bg-slate-800/90 text-white px-3 py-2 rounded-xl border border-slate-700 focus:border-amber-500 focus:outline-none text-xs placeholder-slate-400 mb-2" 
+          placeholder="Ketik untuk filter nama kota..."
+        >
+
+        <select id="modalPrayerCitySelect" class="w-full bg-slate-800 text-slate-100 text-sm font-medium py-2.5 px-3 rounded-xl border border-slate-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+      <button onclick="document.getElementById('prayerLocationModal').close()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition border border-slate-700">
+        Batal
+      </button>
+      <button id="savePrayerLocationBtn" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition shadow-md shadow-amber-500/20">
+        Simpan & Terapkan
+      </button>
+    </div>
+  </dialog>
+
+  <!-- Modal Jadwal Sholat 1 Bulan Penuh -->
+  <dialog id="prayerMonthlyModal" class="bg-slate-900 border border-slate-700 text-slate-200 p-6 rounded-3xl max-w-4xl w-full shadow-2xl backdrop:bg-black/75">
+    <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-800">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm border border-amber-500/30">
+          <i class="fas fa-calendar-days"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-white">Jadwal Sholat 1 Bulan</h3>
+          <p id="monthlyModalTitle" class="text-xs text-slate-400 mt-0.5 truncate max-w-md">Memuat...</p>
+        </div>
+      </div>
+      <button id="closePrayerMonthlyModalBtn" class="text-slate-400 hover:text-white transition p-1" title="Tutup">
+        <i class="fas fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Filter Bulan & Tahun -->
+    <div class="flex items-center justify-between flex-wrap gap-3 mb-4 bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
+      <div class="flex items-center gap-2">
+        <label class="text-xs font-semibold text-slate-300">Bulan:</label>
+        <select id="monthlyMonthSelect" class="bg-slate-800 text-slate-100 text-xs font-medium py-1.5 px-2.5 rounded-lg border border-slate-700 focus:border-amber-500 focus:outline-none">
+          <option value="1">Januari</option>
+          <option value="2">Februari</option>
+          <option value="3">Maret</option>
+          <option value="4">April</option>
+          <option value="5">Mei</option>
+          <option value="6">Juni</option>
+          <option value="7">Juli</option>
+          <option value="8">Agustus</option>
+          <option value="9">September</option>
+          <option value="10">Oktober</option>
+          <option value="11">November</option>
+          <option value="12">Desember</option>
+        </select>
+
+        <label class="text-xs font-semibold text-slate-300 ml-2">Tahun:</label>
+        <select id="monthlyYearSelect" class="bg-slate-800 text-slate-100 text-xs font-medium py-1.5 px-2.5 rounded-lg border border-slate-700 focus:border-amber-500 focus:outline-none">
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+        </select>
+      </div>
+
+      <span id="monthlyLoading" class="text-xs text-amber-400 hidden">
+        <i class="fas fa-circle-notch fa-spin mr-1"></i>Memuat data bulan...
+      </span>
+    </div>
+
+    <!-- Responsive Table -->
+    <div class="overflow-x-auto max-h-[55vh] rounded-2xl border border-slate-700/70">
+      <table class="w-full text-xs text-left">
+        <thead class="text-[11px] text-slate-300 uppercase bg-slate-800/90 sticky top-0 border-b border-slate-700">
+          <tr>
+            <th class="px-3 py-2.5 text-center">Tgl</th>
+            <th class="px-3 py-2.5">Hari</th>
+            <th class="px-3 py-2.5 text-center">Imsak</th>
+            <th class="px-3 py-2.5 text-center">Subuh</th>
+            <th class="px-3 py-2.5 text-center">Terbit</th>
+            <th class="px-3 py-2.5 text-center">Dhuha</th>
+            <th class="px-3 py-2.5 text-center">Dzuhur</th>
+            <th class="px-3 py-2.5 text-center">Ashar</th>
+            <th class="px-3 py-2.5 text-center">Maghrib</th>
+            <th class="px-3 py-2.5 text-center">Isya</th>
+          </tr>
+        </thead>
+        <tbody id="monthlyTableBody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
+      <span>Sumber: Bimas Islam Kemenag RI via API Resmi equran.id</span>
+      <button onclick="document.getElementById('prayerMonthlyModal').close()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700">
+        Tutup
+      </button>
+    </div>
+  </dialog>
+
   <!-- SweetAlert2 Script -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -415,6 +711,9 @@
 
   <!-- Main Quran Player Logic -->
   <script src="js/quran.js"></script>
+
+  <!-- Jadwal Sholat Module (API equran.id) -->
+  <script src="js/prayer-times.js"></script>
 
   <script>
     // Modal Shortcut toggle

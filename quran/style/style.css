@@ -195,3 +195,57 @@ input[type="range"].custom-range::-moz-range-thumb:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #4b5563;
 }
+
+/* ========================================================
+   Jadwal Sholat (Prayer Times) Styles & Animations
+   ======================================================== */
+
+.text-glow-gold {
+  text-shadow: 0 0 15px rgba(208, 155, 50, 0.55), 0 0 30px rgba(208, 155, 50, 0.25);
+}
+
+.prayer-card {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  min-height: 100px;
+}
+
+.prayer-card-active {
+  animation: prayerPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes prayerPulse {
+  0% {
+    box-shadow: 0 0 15px rgba(208, 155, 50, 0.25), inset 0 0 12px rgba(208, 155, 50, 0.15);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(208, 155, 50, 0.5), inset 0 0 20px rgba(208, 155, 50, 0.3);
+  }
+}
+
+/* Dialog Backdrop & Glass Styling */
+dialog {
+  max-height: 90vh;
+}
+
+dialog::backdrop {
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Custom Modal Animation */
+dialog[open] {
+  animation: modalFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
