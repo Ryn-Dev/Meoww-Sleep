@@ -678,8 +678,9 @@ body.ctrl-mode-bottom .hero-controls-bar {
 }
 
 /* ==========================================================================
-   HIDDEN YOUTUBE AUDIO CONTAINER
-   "Cukup suaranya saja, tidak perlu menampilkan videonya"
+   YOUTUBE AUDIO CONTAINER & OPTIONAL VIDEO PEEK
+   Default: Audio-only in background.
+   Opsional: Intip video mengambang untuk mengklik 'Lewati Iklan' / Skip Ad
    ========================================================================== */
 
 .hidden-yt-audio-container {
@@ -692,6 +693,94 @@ body.ctrl-mode-bottom .hero-controls-bar {
   pointer-events: none;
   z-index: -9999;
   visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Mode Intip Video (Picture-in-Picture Mengambang) */
+.hidden-yt-audio-container.peek-active {
+  top: auto;
+  left: auto;
+  bottom: 105px;
+  right: 20px;
+  width: 320px;
+  height: 215px;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 180;
+  visibility: visible;
+  background: #090c13;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(244, 63, 94, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.yt-peek-header {
+  display: none;
+  background: rgba(14, 18, 27, 0.95);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.hidden-yt-audio-container.peek-active .yt-peek-header {
+  display: flex;
+}
+
+.btn-close-yt-peek {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-close-yt-peek:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.hidden-yt-audio-container.peek-active #hiddenYtPlayerSlot,
+.hidden-yt-audio-container.peek-active iframe {
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1;
+  border: none;
+}
+
+/* YouTube Peek Button in UI */
+.btn-yt-peek {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-yt-peek:hover {
+  background: rgba(239, 68, 68, 0.24);
+  border-color: #f87171;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================

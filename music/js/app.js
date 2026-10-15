@@ -45,6 +45,11 @@
   let toastTimer = null;
   let ytDetectTimeout = null;
 
+  // Mobile Background Playback & Screen Wake Lock
+  let wakeLockSentinel = null;
+  const SILENT_AUDIO_URI = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+  const silentCarrierEl = document.getElementById("silentCarrierAudio");
+
   // --- DOM Elements Cache ---
   const audio = document.getElementById("audioEngine");
   const toastEl = document.getElementById("toastPill");
@@ -159,6 +164,51 @@
     return String(str).replace(/[&<>"']/g, m => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[m]));
+  }
+
+  // --- Screen Wake Lock API (Mencegah Layar HP Mati Otomatis Saat Mendengarkan Musik) ---
+  async function requestScreenWakeLock() {
+    if ("wakeLock" in navigator && document.visibilityState === "visible") {
+      try {
+        if (!wakeLockSentinel) {
+          wakeLockSentinel = await navigator.wakeLock.request("screen");
+          wakeLockSentinel.addEventListener("release", () => {
+            wakeLockSentinel = null;
+          });
+        }
+      } catch (err) {
+        // Mode hemat baterai atau pembatasan OS ditangani secara aman
+      }
+    }
+  }
+
+  function releaseScreenWakeLock() {
+    if (wakeLockSentinel) {
+      try {
+        wakeLockSentinel.release();
+      } catch (e) {}
+      wakeLockSentinel = null;
+    }
+  }
+
+  // --- Silent Audio Carrier Bridge (Mencegah OS Menutup Audio di Latar Belakang) ---
+  function startSilentCarrier() {
+    if (silentCarrierEl) {
+      if (!silentCarrierEl.src || silentCarrierEl.src === "") {
+        silentCarrierEl.src = SILENT_AUDIO_URI;
+      }
+      silentCarrierEl.volume = 0.01;
+      silentCarrierEl.play().catch(() => {});
+    }
+  }
+
+  function stopSilentCarrier() {
+    if (silentCarrierEl) {
+      try {
+        silentCarrierEl.pause();
+        silentCarrierEl.currentTime = 0;
+      } catch (e) {}
+    }
   }
 
   // --- Controller Display Mode Management ---
@@ -548,15 +598,18 @@
 
     window.onYouTubeIframeAPIReady = () => {
       ytPlayer = new YT.Player("hiddenYtPlayerSlot", {
-        width: "200",
-        height: "200",
+        width: "100%",
+        height: "100%",
         videoId: pendingYtId || "",
+        host: "https://www.youtube-nocookie.com",
         playerVars: {
           autoplay: 1,
           playsinline: 1,
-          controls: 0,
+          controls: 1, // Memungkinkan tombol 'Lewati Iklan' / Skip Ad milik YouTube diklik saat diintip
           rel: 0,
-          modestbranding: 1
+          modestbranding: 1,
+          enablejsapi: 1,
+          origin: window.location.origin
         },
         events: {
           onReady: () => {
@@ -590,10 +643,23 @@
   function startYtTracking() {
     clearInterval(ytInterval);
     ytInterval = setInterval(() => {
-      if (ytPlayer && ytReady && isPlaying && typeof ytPlayer.getCurrentTime === "function") {
-        const cur = ytPlayer.getCurrentTime() || 0;
-        const dur = ytPlayer.getDuration() || 0;
-        syncTimeDisplays(cur, dur);
+      if (ytPlayer && ytReady && isPlaying) {
+        if (typeof ytPlayer.getCurrentTime === "function") {
+          const cur = ytPlayer.getCurrentTime() || 0;
+          const dur = ytPlayer.getDuration() || 0;
+          syncTimeDisplays(cur, dur);
+        }
+
+        // Deteksi apakah YouTube sedang menayangkan iklan
+        if (typeof ytPlayer.getVideoData === "function") {
+          const vData = ytPlayer.getVideoData();
+          const curTrack = playlist.find(t => t.id === currentId);
+          const expectedYtId = curTrack ? extractYouTubeId(curTrack.url) : null;
+          const isAd = vData && (vData.isAd || (expectedYtId && vData.video_id && vData.video_id !== expectedYtId));
+          if (isAd) {
+            if (liveStatusText) liveStatusText.textContent = "Memutar Iklan (Klik 'Intip Video' jika ingin Skip)";
+          }
+        }
       }
     }, 500);
   }
@@ -612,6 +678,19 @@
 
     if (progressBar) progressBar.value = progressVal;
     if (heroProgressBar) heroProgressBar.value = progressVal;
+
+    // Sinkronisasi posisi waktu secara langsung ke MediaSession OS / Lock Screen HP
+    if ("mediaSession" in navigator && typeof navigator.mediaSession.setPositionState === "function") {
+      if (Number.isFinite(dur) && dur > 0 && Number.isFinite(cur) && cur >= 0 && cur <= dur) {
+        try {
+          navigator.mediaSession.setPositionState({
+            duration: dur,
+            playbackRate: playbackSpeed || 1.0,
+            position: Math.min(cur, dur)
+          });
+        } catch (e) {}
+      }
+    }
   }
 
   // Seek / Jump to track position ("Bisa dilompati durasinya")
@@ -630,6 +709,34 @@
       const targetSec = ratio * audio.duration;
       audio.currentTime = targetSec;
       syncTimeDisplays(targetSec, audio.duration);
+    }
+  }
+
+  function seekToSeconds(sec) {
+    const track = playlist.find(t => t.id === currentId);
+    if (!track || !Number.isFinite(sec)) return;
+
+    if (track.type === "youtube" && ytPlayer && ytReady) {
+      const dur = ytPlayer.getDuration() || 0;
+      const targetSec = Math.max(0, Math.min(sec, dur || sec));
+      ytPlayer.seekTo(targetSec, true);
+      syncTimeDisplays(targetSec, dur);
+    } else if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      const targetSec = Math.max(0, Math.min(sec, audio.duration));
+      audio.currentTime = targetSec;
+      syncTimeDisplays(targetSec, audio.duration);
+    }
+  }
+
+  function seekRelative(offsetSec) {
+    const track = playlist.find(t => t.id === currentId);
+    if (!track) return;
+    if (track.type === "youtube" && ytPlayer && ytReady) {
+      const cur = ytPlayer.getCurrentTime() || 0;
+      seekToSeconds(cur + offsetSec);
+    } else {
+      const cur = audio.currentTime || 0;
+      seekToSeconds(cur + offsetSec);
     }
   }
 
@@ -689,6 +796,8 @@
       try { ytPlayer.stopVideo(); } catch (e) {}
     }
     clearInterval(ytInterval);
+    stopSilentCarrier();
+    releaseScreenWakeLock();
 
     setPlaybackActive(false, "Dijeda");
   }
@@ -696,6 +805,26 @@
   function setPlaybackActive(active, statusMessage) {
     isPlaying = active;
     const playIconHtml = active ? FA_PAUSE : FA_PLAY;
+
+    // Sinkronisasi status MediaSession ke OS / Lock Screen HP
+    if ("mediaSession" in navigator) {
+      try {
+        navigator.mediaSession.playbackState = active ? "playing" : "paused";
+      } catch (e) {}
+    }
+
+    if (active) {
+      requestScreenWakeLock();
+      const currentTrack = playlist.find(t => t.id === currentId);
+      if (currentTrack && currentTrack.type === "youtube") {
+        startSilentCarrier();
+      } else {
+        stopSilentCarrier();
+      }
+    } else {
+      releaseScreenWakeLock();
+      stopSilentCarrier();
+    }
 
     if (mainPlayBtn) {
       mainPlayBtn.innerHTML = playIconHtml;
@@ -843,6 +972,15 @@
       nowHeroSourceTag.className = `track-type-badge ${track.type === "youtube" ? "youtube" : "audio"}`;
     }
 
+    // Tampilkan tombol intip video jika sedang memutar YouTube
+    const isYt = track.type === "youtube";
+    const btnYtPeekHero = document.getElementById("btnYtPeekHero");
+    const btnYtPeekBottom = document.getElementById("btnYtPeekBottom");
+
+    if (btnYtPeekHero) btnYtPeekHero.style.display = isYt ? "inline-flex" : "none";
+    if (btnYtPeekBottom) btnYtPeekBottom.style.display = isYt ? "inline-flex" : "none";
+    if (!isYt) closeYtPeek();
+
     if (miniTitleText) miniTitleText.textContent = title;
     if (miniArtistText) miniArtistText.textContent = artist;
     if (miniCoverArt) {
@@ -850,6 +988,30 @@
       miniCoverArt.onerror = () => { miniCoverArt.src = DEFAULT_LOGO; };
     }
   }
+
+  // --- YouTube Video Peek Window (Melihat video & mengklik 'Lewati Iklan' / Skip Ad) ---
+  const ytAudioContainer = document.getElementById("ytAudioContainer");
+  const btnYtPeekHero = document.getElementById("btnYtPeekHero");
+  const btnYtPeekBottom = document.getElementById("btnYtPeekBottom");
+  const closeYtPeekBtn = document.getElementById("closeYtPeekBtn");
+
+  function toggleYtPeek() {
+    if (!ytAudioContainer) return;
+    const isPeek = ytAudioContainer.classList.toggle("peek-active");
+    if (isPeek) {
+      showToast("Jendela video YouTube dibuka. Klik 'Lewati Iklan' jika ada.");
+    }
+  }
+
+  function closeYtPeek() {
+    if (ytAudioContainer) {
+      ytAudioContainer.classList.remove("peek-active");
+    }
+  }
+
+  if (btnYtPeekHero) btnYtPeekHero.addEventListener("click", toggleYtPeek);
+  if (btnYtPeekBottom) btnYtPeekBottom.addEventListener("click", toggleYtPeek);
+  if (closeYtPeekBtn) closeYtPeekBtn.addEventListener("click", closeYtPeek);
 
   // --- Audio Element Events ---
   audio.addEventListener("timeupdate", () => {
@@ -993,7 +1155,7 @@
   if (nextTrackBtn) nextTrackBtn.addEventListener("click", playNextTrack);
   if (prevTrackBtn) prevTrackBtn.addEventListener("click", playPreviousTrack);
 
-  // --- MediaSession OS API ---
+  // --- MediaSession OS API (Widget Kontrol Layar Kunci / Background HP) ---
   function registerMediaSession(track) {
     if (!("mediaSession" in navigator) || !track) return;
     try {
@@ -1001,16 +1163,49 @@
       navigator.mediaSession.metadata = new MediaMetadata({
         title: track.title,
         artist: track.artist || "Febryan Music",
-        album: "Web Link LocalStorage Playlist",
+        album: "Febryan Music Player",
         artwork: [
+          { src: coverUrl, sizes: "96x96", type: "image/png" },
+          { src: coverUrl, sizes: "128x128", type: "image/png" },
+          { src: coverUrl, sizes: "192x192", type: "image/png" },
+          { src: coverUrl, sizes: "256x256", type: "image/png" },
+          { src: coverUrl, sizes: "384x384", type: "image/png" },
           { src: coverUrl, sizes: "512x512", type: "image/png" }
         ]
       });
+
+      navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
 
       navigator.mediaSession.setActionHandler("play", () => togglePlayPause());
       navigator.mediaSession.setActionHandler("pause", () => togglePlayPause());
       navigator.mediaSession.setActionHandler("previoustrack", () => playPreviousTrack());
       navigator.mediaSession.setActionHandler("nexttrack", () => playNextTrack());
+
+      try {
+        navigator.mediaSession.setActionHandler("seekto", (details) => {
+          if (details && typeof details.seekTime === "number") {
+            seekToSeconds(details.seekTime);
+          }
+        });
+      } catch (e) {}
+
+      try {
+        navigator.mediaSession.setActionHandler("seekforward", (details) => {
+          seekRelative((details && details.seekOffset) || 10);
+        });
+      } catch (e) {}
+
+      try {
+        navigator.mediaSession.setActionHandler("seekbackward", (details) => {
+          seekRelative(-((details && details.seekOffset) || 10));
+        });
+      } catch (e) {}
+
+      try {
+        navigator.mediaSession.setActionHandler("stop", () => {
+          stopMediaEngines();
+        });
+      } catch (e) {}
     } catch (e) {}
   }
 
@@ -1822,6 +2017,13 @@
       toggleMute();
     } else if (e.code === "Escape") {
       document.querySelectorAll(".modal-layer.active").forEach(m => m.classList.remove("active"));
+    }
+  });
+
+  // --- Visibility Change Listener (Perbarui Screen Wake Lock saat kembali ke Tab) ---
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && isPlaying) {
+      requestScreenWakeLock();
     }
   });
 

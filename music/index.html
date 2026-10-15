@@ -36,8 +36,14 @@
     <span id="toastText">Pesan sistem</span>
   </div>
 
-  <!-- Invisible YouTube Audio Player Container ("Cukup suaranya saja, tanpa video") -->
-  <div class="hidden-yt-audio-container" aria-hidden="true">
+  <!-- YouTube Audio Player Container (Default: Audio saja, Opsional: Intip Video / Lewati Iklan) -->
+  <div class="hidden-yt-audio-container" id="ytAudioContainer" aria-hidden="true">
+    <div class="yt-peek-header">
+      <span><i class="fa-brands fa-youtube" style="color:#f87171"></i> YouTube Player (Klik 'Lewati Iklan')</span>
+      <button type="button" class="btn-close-yt-peek" id="closeYtPeekBtn" title="Sembunyikan Video (Kembali ke audio saja)" aria-label="Sembunyikan">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
     <div id="hiddenYtPlayerSlot"></div>
   </div>
 
@@ -122,6 +128,9 @@
             <span class="track-type-badge audio" id="nowHeroSourceTag" style="display:none">
               <i class="fa-solid fa-wave-square"></i> AUDIO LINK
             </span>
+            <button type="button" class="btn-yt-peek" id="btnYtPeekHero" title="Tampilkan video untuk melewati iklan YouTube jika ada" style="display:none;">
+              <i class="fa-brands fa-youtube"></i> Intip Video / Lewati Iklan
+            </button>
           </div>
 
           <!-- Hero Timeline Progress Scrubber ("Bisa dilompati durasinya") -->
@@ -261,6 +270,9 @@
 
       <!-- Volume, Speed & Extra Controls -->
       <div class="right-aux-controls">
+        <button type="button" class="btn-yt-peek" id="btnYtPeekBottom" title="Tampilkan video untuk melewati iklan YouTube jika ada" style="display:none; padding:4px 8px;">
+          <i class="fa-brands fa-youtube"></i> Skip Iklan
+        </button>
         <button class="speed-badge-btn" id="speedToggleBtn" title="Kecepatan Pemutaran">1.0x</button>
         <button class="ctrl-btn" id="muteToggleBtn" title="Mute / Unmute">
           <i class="fa-solid fa-volume-high"></i>
@@ -441,6 +453,13 @@
           <strong style="color:#fff;">5. Backup & Restore Playlist:</strong>
           <p>Gunakan tombol <strong>Export JSON</strong> untuk mengunduh cadangan playlist Anda ke file, dan <strong>Import JSON</strong> untuk membukanya kembali kapan pun.</p>
         </div>
+        <div>
+          <strong style="color:#fff;">6. Pemutaran di Latar Belakang (Layar HP Mati / Terkunci):</strong>
+          <p>
+            • <strong>Audio Langsung (.mp3, .wav):</strong> Otomatis berputar terus tanpa henti di latar belakang walau layar HP mati/dikunci, dengan kontrol widget di Layar Kunci (Lock Screen).<br>
+            • <strong>YouTube Audio:</strong> Jika terjeda saat layar mati (aturan bawaan Google pada browser HP), cukup tekan tombol <strong>▶ Play pada Notifikasi / Layar Kunci</strong> atau tombol earphone/TWS untuk melanjutkannya tanpa membuka kunci HP. Fitur <em>Screen Wake Lock</em> otomatis aktif agar layar tidak sleep mendadak saat mendengarkan musik.
+          </p>
+        </div>
       </div>
       <div style="display:flex; justify-content:flex-end; margin-top:20px;">
         <button type="button" class="btn-primary-glow" data-close-modal="infoModalLayer" style="padding:9px 24px;">
@@ -535,6 +554,8 @@
 
   <!-- HTML5 Audio Engine for direct audio URLs -->
   <audio id="audioEngine" preload="metadata"></audio>
+  <!-- Background Silent Audio Carrier for keeping audio thread alive on mobile -->
+  <audio id="silentCarrierAudio" loop playsinline preload="auto" style="display:none;"></audio>
 
   <!-- External JavaScript Application -->
   <script src="js/app.js"></script>
