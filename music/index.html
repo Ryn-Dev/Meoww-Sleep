@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07080c">
+  <meta name="description" content="Febryan Music - Pemutar musik web modern berbasis input link dengan penyimpanan LocalStorage.">
+  <title>Febryan Music · Web Link Audio Player</title>
+  
+  <!-- Favicons from folder images/favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon/Febryan%20Music%20%E2%80%94%20Favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/Febryan%20Music%20%E2%80%94%20Favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/Febryan%20Music%20%E2%80%94%20Favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="48x48" href="images/favicon/Febryan%20Music%20%E2%80%94%20Favicon-48.png">
+  <link rel="shortcut icon" href="images/favicon/favicon-32.png">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 CDN for Crisp Professional Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="ctrl-mode-both">
+
+  <!-- Floating Toast Notification -->
+  <div class="toast-pill" id="toastPill" role="status" aria-live="polite">
+    <i class="fa-solid fa-music" style="color:var(--emerald-light)"></i>
+    <span id="toastText">Pesan sistem</span>
+  </div>
+
+  <!-- Invisible YouTube Audio Player Container ("Cukup suaranya saja, tanpa video") -->
+  <div class="hidden-yt-audio-container" aria-hidden="true">
+    <div id="hiddenYtPlayerSlot"></div>
+  </div>
+
+  <!-- Main Application Wrapper -->
+  <main class="app">
+
+    <!-- Header Navigation with fm-navbar.svg Logo -->
+    <header>
+      <a href="#" class="brand" title="Febryan Music">
+        <img src="images/fm-navbar.svg" alt="Febryan Music Logo" class="brand-navbar-img">
+      </a>
+
+      <nav class="header-nav">
+        <!-- Main Action: Buka Modal Tambah Musik -->
+        <button class="btn-primary-glow" id="openAddModalHeaderBtn" data-open-modal="addMusicModalLayer" title="Tambah lagu baru dari link">
+          <i class="fa-solid fa-plus"></i> Tambah Musik
+        </button>
+        <button class="nav-pill-btn" id="openSettingsBtn" data-open-modal="settingsModalLayer" title="Pengaturan tampilan controller">
+          <i class="fa-solid fa-gear"></i> Pengaturan
+        </button>
+        <button class="nav-pill-btn" id="openBatchBtn" data-open-modal="batchModalLayer" title="Input banyak link sekaligus">
+          <i class="fa-solid fa-list-check"></i> Batch Link
+        </button>
+        <button class="nav-pill-btn" id="exportJsonBtn" title="Unduh backup playlist ke file JSON">
+          <i class="fa-solid fa-file-export"></i> Export JSON
+        </button>
+        <button class="nav-pill-btn" id="importJsonBtn" title="Pulihkan playlist dari file JSON">
+          <i class="fa-solid fa-file-import"></i> Import JSON
+        </button>
+        <input type="file" id="importFileInput" accept=".json,application/json" style="display:none">
+        <button class="nav-pill-btn" id="openInfoBtn" data-open-modal="infoModalLayer" title="Panduan dan bantuan format link">
+          <i class="fa-solid fa-circle-info"></i> Panduan
+        </button>
+      </nav>
+    </header>
+
+    <!-- Hero Showcase: Vinyl Player & Now Playing Deck -->
+    <section class="hero-showcase">
+      <div class="hero-status-bar">
+        <div class="live-badge">
+          <span class="pulse-dot idle" id="liveStatusDot"></span>
+          <span id="liveStatusText">Siap Memutar</span>
+        </div>
+
+        <!-- Dynamic 8-bar sound wave visualizer -->
+        <div class="sound-wave" id="soundWave" aria-hidden="true">
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+          <div class="sound-wave-bar"></div>
+        </div>
+      </div>
+
+      <div class="hero-deck-grid">
+        <!-- Turntable Vinyl Deck with Stylus Tonearm -->
+        <div class="turntable-stage">
+          <div class="vinyl-deck" id="vinylDeck">
+            <div class="vinyl-record" id="vinylRecord">
+              <div class="vinyl-label">
+                <img src="images/fm1.png" alt="Vinyl Label" id="nowHeroCover">
+              </div>
+            </div>
+            <!-- Mechanical Tonearm that swivels onto the record when music plays -->
+            <div class="tonearm" id="tonearm">
+              <div class="tonearm-base"></div>
+              <div class="tonearm-rod">
+                <div class="tonearm-head"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Track Metadata & Interactive Control Center -->
+        <div class="hero-track-info">
+          <h2 class="hero-track-title" id="nowHeroTitle">Belum ada lagu dipilih</h2>
+          <div class="hero-track-artist">
+            <span id="nowHeroArtist">Pilih dari playlist atau klik tombol Tambah Musik</span>
+            <span class="track-type-badge audio" id="nowHeroSourceTag" style="display:none">
+              <i class="fa-solid fa-wave-square"></i> AUDIO LINK
+            </span>
+          </div>
+
+          <!-- Hero Timeline Progress Scrubber ("Bisa dilompati durasinya") -->
+          <div class="hero-timeline-box" id="heroTimelineBox">
+            <span class="hero-time-num" id="heroCurTime">0:00</span>
+            <div class="hero-slider-wrap">
+              <input type="range" class="hero-progress-slider" id="heroProgressBar" min="0" max="1000" value="0" aria-label="Progress Bar Utama">
+            </div>
+            <span class="hero-time-num" id="heroDurTime">0:00</span>
+          </div>
+
+          <!-- Hero Main Controls ("Tombol kontrol di card utama") -->
+          <div class="hero-controls-bar" id="heroControlsBar">
+            <div class="hero-playback-buttons">
+              <button class="hero-aux-btn" id="heroShuffleBtn" title="Mode Acak (Shuffle)">
+                <i class="fa-solid fa-shuffle"></i>
+              </button>
+              <button class="hero-aux-btn" id="heroPrevBtn" title="Lagu Sebelumnya (Shift + ←)">
+                <i class="fa-solid fa-backward-step"></i>
+              </button>
+              <button class="hero-main-play-btn" id="heroPlayBtn" title="Putar / Jeda (Spasi)">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <button class="hero-aux-btn" id="heroNextBtn" title="Lagu Berikutnya (Shift + →)">
+                <i class="fa-solid fa-forward-step"></i>
+              </button>
+              <button class="hero-aux-btn" id="heroRepeatBtn" title="Mode Ulang (Off)">
+                <i class="fa-solid fa-repeat"></i>
+              </button>
+            </div>
+
+            <!-- Hero Embedded Volume -->
+            <div class="hero-vol-container">
+              <button class="hero-vol-icon-btn" id="heroMuteBtn" title="Mute / Unmute">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+              <input type="range" class="hero-vol-slider" id="heroVolumeSlider" min="0" max="1" step="0.01" value="0.85" aria-label="Volume Hero">
+            </div>
+          </div>
+
+          <!-- Quick Action Bar -->
+          <div class="hero-actions-bar">
+            <button class="btn-primary-glow" id="openAddModalHeroBtn" data-open-modal="addMusicModalLayer">
+              <i class="fa-solid fa-plus"></i> Tambah Musik
+            </button>
+            <button class="nav-pill-btn" id="loadSamplesBtn">
+              <i class="fa-solid fa-bolt-lightning"></i> 3 Lagu Contoh
+            </button>
+            <button class="nav-pill-btn" id="openBatchHeroBtn" data-open-modal="batchModalLayer">
+              <i class="fa-solid fa-list-check"></i> Batch Link
+            </button>
+            <button class="nav-pill-btn" data-open-modal="settingsModalLayer" title="Ubah tampilan controller">
+              <i class="fa-solid fa-sliders"></i> Controller
+            </button>
+            <button class="nav-pill-btn" data-open-modal="infoModalLayer" title="Panduan dan bantuan fitur">
+              <i class="fa-solid fa-circle-info"></i> Panduan
+            </button>
+            <span style="font-size:12px; color:var(--text-dim); margin-left:auto;" id="totalCountLabel">
+              0 lagu tersimpan
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playlist Section -->
+    <section class="playlist-card">
+      <div class="playlist-header">
+        <div class="playlist-titles">
+          <h2>Daftar Playlist</h2>
+          <p>Lagu tersimpan di LocalStorage · <span style="color:var(--emerald-light); font-weight:600;"><i class="fa-solid fa-up-down-left-right"></i> Tekan & geser untuk atur urutan</span></p>
+        </div>
+        <div class="playlist-control-actions">
+          <button class="btn-primary-glow" style="padding:7px 15px; font-size:12.5px;" data-open-modal="addMusicModalLayer">
+            <i class="fa-solid fa-plus"></i> Tambah
+          </button>
+          <button class="nav-pill-btn" id="clearPlaylistBtn" style="color:var(--danger)">
+            <i class="fa-solid fa-trash-can"></i> Hapus Semua
+          </button>
+        </div>
+      </div>
+
+      <div class="search-filter-row">
+        <div class="search-field-container">
+          <span class="search-lens-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input class="search-field-input" id="searchFieldInput" type="search" placeholder="Cari judul lagu atau nama artis...">
+        </div>
+        <span class="preset-chip-btn" id="searchCountBadge">0 lagu</span>
+      </div>
+
+      <div class="tracks-container" id="tracksList">
+        <!-- Rendered dynamically by js/app.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Fixed Music Player Bar -->
+  <aside class="bottom-player-bar" id="bottomPlayerBar">
+    <div class="player-bar-grid">
+
+      <!-- Mini Track Info -->
+      <div class="mini-now-track">
+        <img src="images/fm1.png" alt="Mini Cover" class="mini-cover-art" id="miniCoverArt">
+        <div class="mini-text-wrap">
+          <div class="mini-title" id="miniTitleText">Belum ada lagu</div>
+          <div class="mini-artist" id="miniArtistText">Pilih lagu dari playlist</div>
+        </div>
+      </div>
+
+      <!-- Main Controls & Scrub Timeline -->
+      <div class="center-controls-box">
+        <div class="player-buttons-strip">
+          <button class="ctrl-btn" id="shuffleToggleBtn" title="Acak Lagu (Shuffle)">
+            <i class="fa-solid fa-shuffle"></i>
+          </button>
+          <button class="ctrl-btn" id="prevTrackBtn" title="Lagu Sebelumnya (Shift + ←)">
+            <i class="fa-solid fa-backward-step"></i>
+          </button>
+          <button class="btn-big-play" id="mainPlayBtn" title="Putar / Jeda (Spasi)">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          <button class="ctrl-btn" id="nextTrackBtn" title="Lagu Berikutnya (Shift + →)">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+          <button class="ctrl-btn" id="repeatToggleBtn" title="Ulangi Lagu (Off)">
+            <i class="fa-solid fa-repeat"></i>
+          </button>
+        </div>
+
+        <div class="timeline-scrubber">
+          <span id="curTimeDisplay">0:00</span>
+          <input type="range" id="progressBar" min="0" max="1000" value="0" aria-label="Progress Lagu">
+          <span id="durTimeDisplay">0:00</span>
+        </div>
+      </div>
+
+      <!-- Volume, Speed & Extra Controls -->
+      <div class="right-aux-controls">
+        <button class="speed-badge-btn" id="speedToggleBtn" title="Kecepatan Pemutaran">1.0x</button>
+        <button class="ctrl-btn" id="muteToggleBtn" title="Mute / Unmute">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+        <div class="volume-container">
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.85" aria-label="Volume">
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       MODALS
+       ======================================================================== -->
+
+  <!-- Modal 1: Input Link Musik (Auto YouTube Title Detection) -->
+  <div class="modal-layer" id="addMusicModalLayer">
+    <div class="modal-card">
+      <div class="modal-header-bar">
+        <h3><i class="fa-solid fa-plus-circle" style="color:var(--emerald-light)"></i> Tambah Musik dari Link</h3>
+        <button class="btn-close-modal" data-close-modal="addMusicModalLayer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+        Masukkan link audio publik (.mp3, .ogg, stream) atau link YouTube (audio-only). Musik langsung tersimpan di LocalStorage browser Anda.
+      </p>
+
+      <form id="addMusicForm" autocomplete="off">
+        <div class="field-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label class="field-label" for="inputTrackUrl" style="margin-bottom:0">URL / Link Musik <span>*</span></label>
+            <span id="ytDetectStatus" style="font-size:11.5px; color:var(--emerald-light); font-weight:700; display:none;">
+              <i class="fa-solid fa-spinner fa-spin"></i> Mendeteksi info YouTube...
+            </span>
+          </div>
+          <div class="field-input-wrap">
+            <input class="app-input" id="inputTrackUrl" type="url" placeholder="https://domain.com/lagu.mp3 atau link YouTube" required>
+            <button type="button" class="paste-quick-btn" id="btnPasteClipboard" title="Tempel dari Clipboard">
+              <i class="fa-solid fa-paste"></i> Paste
+            </button>
+          </div>
+        </div>
+
+        <div class="field-grid-2">
+          <div class="field-group">
+            <label class="field-label" for="inputTrackTitle">Judul Lagu (Otomatis)</label>
+            <input class="app-input" id="inputTrackTitle" type="text" placeholder="Otomatis diambil dari link jika kosong">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="inputTrackArtist">Artis / Pencipta</label>
+            <input class="app-input" id="inputTrackArtist" type="text" placeholder="Contoh: Febryan / Lofi Vibes">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="inputTrackCover">URL Gambar Kover (Opsional)</label>
+          <input class="app-input" id="inputTrackCover" type="url" placeholder="Biarkan kosong untuk memakai Thumbnail YouTube / Logo FM">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:18px;">
+          <button type="button" class="nav-pill-btn" data-close-modal="addMusicModalLayer">Batal</button>
+          <button type="submit" class="btn-add-music">
+            <i class="fa-solid fa-plus"></i> Simpan ke LocalStorage
+          </button>
+        </div>
+      </form>
+
+      <div class="presets-wrap">
+        <span style="font-size:11px; color:var(--text-dim); font-weight:700; text-transform:uppercase;">Preset Cepat:</span>
+        <button type="button" class="preset-chip-btn" data-preset="lofi">
+          <i class="fa-solid fa-mug-hot"></i> Lofi Beats
+        </button>
+        <button type="button" class="preset-chip-btn" data-preset="ambient">
+          <i class="fa-solid fa-leaf"></i> Ambient Piano
+        </button>
+        <button type="button" class="preset-chip-btn" data-preset="synth">
+          <i class="fa-solid fa-bolt"></i> Synthwave 80s
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Batch Link Importer -->
+  <div class="modal-layer" id="batchModalLayer">
+    <div class="modal-card">
+      <div class="modal-header-bar">
+        <h3><i class="fa-solid fa-list-check" style="color:var(--emerald-light)"></i> Tempel Banyak Link Sekaligus</h3>
+        <button class="btn-close-modal" data-close-modal="batchModalLayer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+        Masukkan satu link URL per baris. Format yang didukung:<br>
+        <code>https://domain.com/lagu.mp3</code> atau <code>URL | Judul Lagu | Nama Artis</code>
+      </p>
+      <textarea id="batchInputTextarea" rows="7" class="app-input" style="width:100%; resize:vertical; font-family:monospace; font-size:13px;" placeholder="https://example.com/lagu1.mp3&#10;https://www.youtube.com/watch?v=... | Lagu Keren | Artis"></textarea>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
+        <button class="nav-pill-btn" data-close-modal="batchModalLayer">Batal</button>
+        <button class="btn-add-music" id="saveBatchLinksBtn" style="padding:10px 20px;">
+          <i class="fa-solid fa-check"></i> Simpan Semua
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Pengaturan Controller Display Mode ("Pengaturan controller mau di card atau di bawah") -->
+  <div class="modal-layer" id="settingsModalLayer">
+    <div class="modal-card">
+      <div class="modal-header-bar">
+        <h3><i class="fa-solid fa-sliders" style="color:var(--emerald-light)"></i> Pengaturan Tampilan Controller</h3>
+        <button class="btn-close-modal" data-close-modal="settingsModalLayer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">
+        Pilih posisi tombol pemutar musik (*controller*) yang ingin Anda tampilkan di layar:
+      </p>
+
+      <div class="settings-options-group">
+        <!-- Opsi 1: Tampilkan Keduanya -->
+        <label class="settings-radio-label">
+          <input type="radio" name="ctrlDisplayMode" value="both" class="settings-radio-input" checked>
+          <div class="settings-radio-content">
+            <h4><i class="fa-solid fa-layer-group" style="color:var(--emerald-light)"></i> Tampilkan Kedua Controller</h4>
+            <p>Tombol kontrol pemutar tampil di Card Utama (Vinyl) dan di Bar Melayang Bawah.</p>
+          </div>
+        </label>
+
+        <!-- Opsi 2: Hanya Card Utama -->
+        <label class="settings-radio-label">
+          <input type="radio" name="ctrlDisplayMode" value="hero" class="settings-radio-input">
+          <div class="settings-radio-content">
+            <h4><i class="fa-solid fa-compact-disc" style="color:var(--cyan)"></i> Hanya di Card Utama</h4>
+            <p>Tombol kontrol hanya berada di Card Piringan Hitam atas. Bar pemutar di bawah disembunyikan.</p>
+          </div>
+        </label>
+
+        <!-- Opsi 3: Hanya Bar Bawah -->
+        <label class="settings-radio-label">
+          <input type="radio" name="ctrlDisplayMode" value="bottom" class="settings-radio-input">
+          <div class="settings-radio-content">
+            <h4><i class="fa-solid fa-window-maximize" style="color:var(--purple)"></i> Hanya di Bar Bawah</h4>
+            <p>Tombol kontrol hanya ada di Bar Melayang Bawah. Kontrol di Card Utama disembunyikan.</p>
+          </div>
+        </label>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+        <button class="btn-primary-glow" data-close-modal="settingsModalLayer" style="padding:9px 24px;">
+          <i class="fa-solid fa-check"></i> Selesai
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Panduan Format Link & Fitur -->
+  <div class="modal-layer" id="infoModalLayer" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header-bar">
+        <h3><i class="fa-solid fa-circle-info" style="color:var(--cyan)"></i> Panduan Link & Fitur</h3>
+        <button class="btn-close-modal" data-close-modal="infoModalLayer" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div style="font-size:13.5px; color:var(--text-muted); line-height:1.6; display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <strong style="color:#fff;">1. Link YouTube (Audio Saja):</strong>
+          <p>Mendukung link video YouTube biasa (<code>watch?v=...</code>), <code>youtu.be</code>, atau Shorts. Judul dan artis otomatis terisi dari internet, dan hanya suaranya yang dimainkan tanpa video!</p>
+        </div>
+        <div>
+          <strong style="color:#fff;">2. Link Audio Langsung (.mp3, .ogg, .wav, .m4a):</strong>
+          <p>Gunakan URL audio langsung dari internet (misal: hosting web, Discord CDN, stream radio internet, atau file publik).</p>
+        </div>
+        <div>
+          <strong style="color:#fff;">3. Tekan & Geser Lagu (Ubah Urutan):</strong>
+          <p>Gunakan ikon pegangan <code><i class="fa-solid fa-grip-vertical"></i></code> di sebelah nomor lagu pada playlist untuk menggeser posisi lagu ke atas atau ke bawah secara langsung!</p>
+        </div>
+        <div>
+          <strong style="color:#fff;">4. Tampilan Controller (Pengaturan):</strong>
+          <p>Klik tombol <strong>Pengaturan</strong> di navbar atau hero deck untuk memilih apakah tombol kontrol pemutar ditampilkan di Card Utama (Vinyl), Bar Melayang Bawah, atau keduanya.</p>
+        </div>
+        <div>
+          <strong style="color:#fff;">5. Backup & Restore Playlist:</strong>
+          <p>Gunakan tombol <strong>Export JSON</strong> untuk mengunduh cadangan playlist Anda ke file, dan <strong>Import JSON</strong> untuk membukanya kembali kapan pun.</p>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+        <button type="button" class="btn-primary-glow" data-close-modal="infoModalLayer" style="padding:9px 24px;">
+          <i class="fa-solid fa-check"></i> Mengerti
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Edit Track -->
+  <div class="modal-layer" id="editModalLayer">
+    <div class="modal-card">
+      <div class="modal-header-bar">
+        <h3><i class="fa-solid fa-pen-to-square" style="color:var(--emerald-light)"></i> Edit Data Lagu</h3>
+        <button class="btn-close-modal" data-close-modal="editModalLayer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="editTrackForm">
+        <input type="hidden" id="editTrackId">
+        <div class="field-group">
+          <label class="field-label" for="editTrackUrl">URL Link Audio / YouTube</label>
+          <input class="app-input" id="editTrackUrl" type="url" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="editTrackTitle">Judul Lagu</label>
+          <input class="app-input" id="editTrackTitle" type="text" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="editTrackArtist">Artis / Pencipta</label>
+          <input class="app-input" id="editTrackArtist" type="text">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="editTrackCover">URL Gambar Kover</label>
+          <input class="app-input" id="editTrackCover" type="url" placeholder="Kosongkan untuk memakai Logo FM">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+          <button type="button" class="nav-pill-btn" data-close-modal="editModalLayer">Batal</button>
+          <button type="submit" class="btn-add-music" style="padding:10px 22px;">
+            <i class="fa-solid fa-check"></i> Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 6: Modal Konfirmasi Hapus Musik Khusus (Profesional & Modern) -->
+  <div class="modal-layer" id="confirmDeleteModalLayer" role="dialog" aria-modal="true" aria-labelledby="confirmDeleteTitle">
+    <div class="modal-card modal-card-confirm">
+      <div class="confirm-modal-header">
+        <div class="confirm-icon-badge" id="confirmIconBadge">
+          <i class="fa-solid fa-trash-can"></i>
+        </div>
+        <div class="confirm-modal-headings">
+          <h3 class="confirm-modal-title" id="confirmDeleteTitle">Hapus Musik?</h3>
+          <p class="confirm-modal-desc" id="confirmDeleteDesc">Apakah Anda yakin ingin menghapus lagu ini dari playlist?</p>
+        </div>
+        <button class="btn-close-modal" data-close-modal="confirmDeleteModalLayer" aria-label="Tutup modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Kartu Preview Lagu yang akan dihapus (Mode Single) -->
+      <div class="confirm-track-preview" id="confirmTrackPreviewCard">
+        <img class="confirm-track-thumb" id="confirmTrackThumb" src="images/fm1.png" alt="Cover Lagu">
+        <div class="confirm-track-info">
+          <div class="confirm-track-name" id="confirmTrackTitle">Judul Lagu</div>
+          <div class="confirm-track-meta">
+            <span id="confirmTrackArtist">Nama Artis</span>
+            <span class="confirm-source-tag tag-yt" id="confirmTrackType">YouTube</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Peringatan Bersihkan Semua (Mode Clear All) -->
+      <div class="confirm-clear-all-banner" id="confirmClearAllBanner" style="display:none;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div id="confirmClearAllText">
+          Tindakan ini akan mengosongkan seluruh lagu dari LocalStorage browser Anda.
+        </div>
+      </div>
+
+      <div class="confirm-modal-actions">
+        <button type="button" class="btn-confirm-cancel" data-close-modal="confirmDeleteModalLayer" id="cancelDeleteBtn">
+          Batal
+        </button>
+        <button type="button" class="btn-confirm-danger" id="executeDeleteBtn">
+          <i class="fa-solid fa-trash"></i>
+          <span id="executeDeleteBtnText">Ya, Hapus Musik</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTML5 Audio Engine for direct audio URLs -->
+  <audio id="audioEngine" preload="metadata"></audio>
+
+  <!-- External JavaScript Application -->
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -85,8 +85,14 @@
               <span id="prayerSourceBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
                 <i class="fas fa-satellite-dish text-[10px] mr-1"></i>GPS
               </span>
+              <!-- Jam Live Berdasarkan Lokasi (WIB / WITA / WIT) -->
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-slate-900/90 border border-slate-700/80 text-xs shadow-inner" title="Waktu lokal berdasarkan zona waktu wilayah terpilih">
+                <i class="fas fa-clock text-amber-400 text-[10px]"></i>
+                <span id="prayerLiveClock" class="font-mono font-bold text-white text-xs tracking-wider">--:--:--</span>
+                <span id="prayerTimezoneBadge" class="text-[9px] font-black text-slate-950 bg-amber-400 px-1.5 py-0.2 rounded font-mono">WIB</span>
+              </div>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5 flex-wrap">
               <span id="prayerDateText">Memuat tanggal...</span>
               <span id="prayerHijriDateText" class="text-amber-400/90 font-medium"></span>
             </p>
@@ -106,6 +112,12 @@
           <!-- Detect GPS Button -->
           <button id="detectPrayerGpsBtn" class="btn-control w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700/80 flex items-center justify-center text-xs transition" title="Deteksi Lokasi GPS Saya Saat Ini">
             <i class="fas fa-crosshairs"></i>
+          </button>
+
+          <!-- Card Filter Settings Trigger Button (Pilih Waktu Sholat yang Ditampilkan) -->
+          <button id="prayerFilterCardBtn" class="btn-control px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700/80 text-xs font-semibold flex items-center gap-1.5 transition" title="Pilih Waktu Sholat yang Ditampilkan">
+            <i class="fas fa-sliders text-amber-400"></i>
+            <span class="hidden sm:inline">Pilih Waktu</span>
           </button>
 
           <!-- Monthly Schedule Modal Trigger -->
@@ -700,6 +712,164 @@
       <button onclick="document.getElementById('prayerMonthlyModal').close()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700">
         Tutup
       </button>
+    </div>
+  </dialog>
+
+  <!-- Modal Pengaturan Pilihan Kartu Waktu Sholat & Kalender Hijriah -->
+  <dialog id="prayerFilterCardModal" class="bg-slate-900 border border-slate-700 text-slate-200 p-6 rounded-3xl max-w-lg w-full shadow-2xl backdrop:bg-black/75">
+    <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-800">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm border border-amber-500/30">
+          <i class="fas fa-sliders"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-white">Pilih Waktu Sholat yang Ditampilkan</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Pilih card waktu sholat yang ingin Anda tampilkan di dashboard.</p>
+        </div>
+      </div>
+      <button id="closePrayerFilterCardModalBtn" class="text-slate-400 hover:text-white transition p-1" title="Tutup">
+        <i class="fas fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Quick Preset Buttons -->
+    <div class="flex items-center gap-2 mb-4 flex-wrap">
+      <span class="text-xs text-slate-400 font-medium mr-1">Preset Cepat:</span>
+      <button type="button" id="preset5FardhuBtn" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold transition flex items-center gap-1.5">
+        <i class="fas fa-check-double text-[11px]"></i> 5 Waktu Fardhu (Default)
+      </button>
+      <button type="button" id="presetAll8Btn" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold transition flex items-center gap-1.5">
+        <i class="fas fa-list text-[11px]"></i> Semua (8 Waktu)
+      </button>
+    </div>
+
+    <!-- Checkbox Grid (8 Waktu) -->
+    <div class="bg-slate-800/50 p-3.5 rounded-2xl border border-slate-700/60 mb-4">
+      <label class="block text-xs font-semibold text-slate-300 mb-2">Pilihan Waktu Sholat & Sunnah:</label>
+      <div class="grid grid-cols-2 gap-2 text-xs" id="filterPrayerCheckboxes">
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="imsak" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-slate-200">Imsak</div>
+              <div class="text-[10px] text-slate-400">Penanda Puasa</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-300">Sunnah</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="subuh" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-white">Subuh</div>
+              <div class="text-[10px] text-amber-400/90 font-medium">Sholat Fardhu</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Fardhu</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="terbit" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-slate-200">Terbit</div>
+              <div class="text-[10px] text-slate-400">Syuruq</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-300">Waktu</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="dhuha" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-slate-200">Dhuha</div>
+              <div class="text-[10px] text-slate-400">Sholat Sunnah</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-300">Sunnah</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="dzuhur" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-white">Dzuhur</div>
+              <div class="text-[10px] text-amber-400/90 font-medium">Sholat Fardhu</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Fardhu</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="ashar" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-white">Ashar</div>
+              <div class="text-[10px] text-amber-400/90 font-medium">Sholat Fardhu</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Fardhu</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="maghrib" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-white">Maghrib</div>
+              <div class="text-[10px] text-amber-400/90 font-medium">Sholat Fardhu</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Fardhu</span>
+        </label>
+
+        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700/80 cursor-pointer transition select-none">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="prayerCardItem" value="isya" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-900 cursor-pointer">
+            <div>
+              <div class="font-bold text-white">Isya</div>
+              <div class="text-[10px] text-amber-400/90 font-medium">Sholat Fardhu</div>
+            </div>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">Fardhu</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Hijri Date Adjustment -->
+    <div class="bg-slate-800/50 p-3.5 rounded-2xl border border-slate-700/60 mb-5">
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <label for="hijriOffsetSelect" class="block text-xs font-semibold text-slate-200">
+            <i class="fas fa-moon text-amber-400 mr-1"></i>Koreksi Tanggal Hijriah:
+          </label>
+          <p class="text-[11px] text-slate-400 mt-0.5">Sesuaikan jika ada selisih 1 hari berdasarkan rukyatul hilal wilayah Anda.</p>
+        </div>
+        <select id="hijriOffsetSelect" class="bg-slate-800 text-slate-100 text-xs font-semibold py-1.5 px-3 rounded-xl border border-slate-700 focus:border-amber-500 focus:outline-none">
+          <option value="-2">-2 Hari</option>
+          <option value="-1">-1 Hari</option>
+          <option value="0" selected>Standar (0 Hari)</option>
+          <option value="1">+1 Hari</option>
+          <option value="2">+2 Hari</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+      <button type="button" id="resetPrayerFilterDefaultBtn" class="text-xs text-slate-400 hover:text-amber-400 transition font-medium">
+        <i class="fas fa-rotate-left mr-1"></i>Reset Default
+      </button>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="document.getElementById('prayerFilterCardModal').close()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition border border-slate-700">
+          Batal
+        </button>
+        <button type="button" id="savePrayerFilterCardBtn" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition shadow-md shadow-amber-500/20">
+          Simpan Pilihan
+        </button>
+      </div>
     </div>
   </dialog>
 

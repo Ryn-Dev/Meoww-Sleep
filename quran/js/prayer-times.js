@@ -61,16 +61,120 @@
     } catch (e) {}
   }
 
+  // Default 5 Waktu Sholat Fardhu sesuai instruksi pengguna
+  const DEFAULT_VISIBLE_PRAYERS = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+
+  // Pemetaan Zona Waktu Indonesia (WIB, WITA, WIT)
+  const TIMEZONE_MAP = {
+    // WIT (UTC+9 / Asia/Jayapura)
+    'Maluku': { code: 'WIT', utcOffset: 9, timeZone: 'Asia/Jayapura', name: 'Waktu Indonesia Timur' },
+    'Maluku Utara': { code: 'WIT', utcOffset: 9, timeZone: 'Asia/Jayapura', name: 'Waktu Indonesia Timur' },
+    'Papua': { code: 'WIT', utcOffset: 9, timeZone: 'Asia/Jayapura', name: 'Waktu Indonesia Timur' },
+    'Papua Barat': { code: 'WIT', utcOffset: 9, timeZone: 'Asia/Jayapura', name: 'Waktu Indonesia Timur' },
+
+    // WITA (UTC+8 / Asia/Makassar)
+    'Bali': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Nusa Tenggara Barat': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Nusa Tenggara Timur': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Kalimantan Selatan': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Kalimantan Timur': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Kalimantan Utara': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Sulawesi Utara': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Gorontalo': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Sulawesi Tengah': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Sulawesi Barat': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Sulawesi Selatan': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' },
+    'Sulawesi Tenggara': { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' }
+  };
+
+  function getLocationTimezone(province) {
+    if (TIMEZONE_MAP[province]) return TIMEZONE_MAP[province];
+    const norm = (province || '').toLowerCase();
+    if (norm.includes('papua') || norm.includes('maluku')) {
+      return { code: 'WIT', utcOffset: 9, timeZone: 'Asia/Jayapura', name: 'Waktu Indonesia Timur' };
+    }
+    if (
+      norm.includes('bali') ||
+      norm.includes('nusa tenggara') ||
+      norm.includes('sulawesi') ||
+      norm.includes('gorontalo') ||
+      norm.includes('kalimantan selatan') ||
+      norm.includes('kalimantan timur') ||
+      norm.includes('kalimantan utara')
+    ) {
+      return { code: 'WITA', utcOffset: 8, timeZone: 'Asia/Makassar', name: 'Waktu Indonesia Tengah' };
+    }
+    return { code: 'WIB', utcOffset: 7, timeZone: 'Asia/Jakarta', name: 'Waktu Indonesia Barat' };
+  }
+
+  function getLocationCurrentTime(province) {
+    const tz = getLocationTimezone(province);
+    const now = new Date();
+    try {
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz.timeZone,
+        year: 'numeric', month: 'numeric', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        hour12: false
+      });
+      const parts = formatter.formatToParts(now);
+      const getPart = type => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+      return {
+        hours: getPart('hour') % 24,
+        minutes: getPart('minute'),
+        seconds: getPart('second'),
+        year: getPart('year'),
+        month: getPart('month'),
+        day: getPart('day'),
+        tz
+      };
+    } catch (e) {
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const targetDate = new Date(utc + (3600000 * tz.utcOffset));
+      return {
+        hours: targetDate.getHours(),
+        minutes: targetDate.getMinutes(),
+        seconds: targetDate.getSeconds(),
+        year: targetDate.getFullYear(),
+        month: targetDate.getMonth() + 1,
+        day: targetDate.getDate(),
+        tz
+      };
+    }
+  }
+
+  function getVisiblePrayerKeys() {
+    try {
+      const raw = safeGet('quran_prayer_visible_cards');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const validKeys = PRAYER_KEYS.map(p => p.key);
+          const filtered = parsed.filter(k => validKeys.includes(k));
+          if (filtered.length > 0) return filtered;
+        }
+      }
+    } catch (e) {}
+    // Default 5 Waktu Sholat Fardhu
+    return [...DEFAULT_VISIBLE_PRAYERS];
+  }
+
+  function setVisiblePrayerKeys(keys) {
+    safeSet('quran_prayer_visible_cards', JSON.stringify(keys));
+  }
+
   // App State
   let currentProvince = safeGet('quran_prayer_province', 'DKI Jakarta');
   let currentCity = safeGet('quran_prayer_city', 'Kota Jakarta');
   let locationSource = safeGet('quran_prayer_source', 'default'); // 'gps' | 'manual' | 'ip' | 'default'
   let isSoundEnabled = safeGet('quran_prayer_sound', 'true') === 'true';
   let isWidgetCollapsed = safeGet('quran_prayer_collapsed', 'false') === 'true';
+  let hijriOffset = parseInt(safeGet('quran_prayer_hijri_offset', '0'), 10) || 0;
 
   let currentMonthlyData = null;
   let todaySchedule = null;
   let countdownInterval = null;
+  let liveClockInterval = null;
   let lastNotifiedPrayer = null;
   let kabkotaCache = {}; // { provinceName: [kabkotaList] }
 
@@ -84,6 +188,8 @@
     locationSourceBadge: document.getElementById('prayerSourceBadge'),
     prayerDateText: document.getElementById('prayerDateText'),
     hijriDateText: document.getElementById('prayerHijriDateText'),
+    prayerLiveClock: document.getElementById('prayerLiveClock'),
+    prayerTimezoneBadge: document.getElementById('prayerTimezoneBadge'),
     changeLocationBtn: document.getElementById('changePrayerLocationBtn'),
     detectGpsBtn: document.getElementById('detectPrayerGpsBtn'),
     monthlyBtn: document.getElementById('viewMonthlyPrayerBtn'),
@@ -105,6 +211,16 @@
     // Compact bar when collapsed
     collapsedBar: document.getElementById('prayerCollapsedBar'),
     collapsedText: document.getElementById('prayerCollapsedText'),
+
+    // Card Filter Modal Elements
+    filterCardBtn: document.getElementById('prayerFilterCardBtn'),
+    filterCardModal: document.getElementById('prayerFilterCardModal'),
+    closeFilterCardModalBtn: document.getElementById('closePrayerFilterCardModalBtn'),
+    saveFilterCardBtn: document.getElementById('savePrayerFilterCardBtn'),
+    resetFilterCardDefaultBtn: document.getElementById('resetPrayerFilterDefaultBtn'),
+    preset5FardhuBtn: document.getElementById('preset5FardhuBtn'),
+    presetAll8Btn: document.getElementById('presetAll8Btn'),
+    hijriOffsetSelect: document.getElementById('hijriOffsetSelect'),
 
     // Location Modal Elements
     locationModal: document.getElementById('prayerLocationModal'),
@@ -455,25 +571,83 @@
   }
 
   // ==========================================
-  // UI RENDERING
+  // UI RENDERING & TIME LOGIC
   // ==========================================
 
-  function getHijriDate(date = new Date()) {
-    try {
-      // Intl format kalender Hijriah
-      const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-      return formatter.format(date);
-    } catch (e) {
-      return '';
+  function updateLiveClock() {
+    const locTime = getLocationCurrentTime(currentProvince);
+    const hh = String(locTime.hours).padStart(2, '0');
+    const mm = String(locTime.minutes).padStart(2, '0');
+    const ss = String(locTime.seconds).padStart(2, '0');
+
+    if (els.prayerLiveClock) {
+      els.prayerLiveClock.textContent = `${hh}:${mm}:${ss}`;
+    }
+    if (els.prayerTimezoneBadge) {
+      els.prayerTimezoneBadge.textContent = locTime.tz.code;
+      els.prayerTimezoneBadge.title = `Zona Waktu: ${locTime.tz.code} (${locTime.tz.name})`;
     }
   }
 
-  function getIndonesianDate(date = new Date()) {
-    return date.toLocaleDateString('id-ID', {
+  /**
+   * Perhitungan Kalender Hijriah Astronomis Universal (Julian Day Hisab)
+   * Menggantikan Intl Umalqura yang bermasalah di mobile Safari / WebKit.
+   * Mendukung pergantian hari saat Maghrib serta koreksi offset rukyah.
+   */
+  function calculateHijriDate(date = new Date(), maghribTime = null, offsetDays = 0) {
+    let d = new Date(date);
+
+    // Koreksi offset rukyah pengguna (-2, -1, 0, +1, +2)
+    if (offsetDays !== 0) {
+      d.setDate(d.getDate() + offsetDays);
+    }
+
+    // Pergantian hari kalender Hijriah dimulai saat matahari terbenam (waktu Maghrib)
+    if (maghribTime) {
+      const [h, m] = maghribTime.split(':').map(Number);
+      if (!isNaN(h) && !isNaN(m)) {
+        if (d.getHours() * 60 + d.getMinutes() >= h * 60 + m) {
+          d.setDate(d.getDate() + 1);
+        }
+      }
+    }
+
+    let day = d.getDate();
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+
+    if (month <= 2) {
+      year--;
+      month += 12;
+    }
+
+    const a = Math.floor(year / 100);
+    const b = 2 - a + Math.floor(a / 4);
+    const jd = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + b - 1524.5;
+    const z = jd - 1948084;
+    const cyc = Math.floor(z / 10631);
+    const zRem = z - 10631 * cyc;
+    const j = Math.floor((zRem - 8.01 / 60) / (10631 / 30));
+    const iy = 30 * cyc + j;
+    const zMonth = zRem - Math.floor(j * (10631 / 30) + 8.01 / 60);
+    let im = Math.floor((zMonth + 28.5001) / 29.5);
+    if (im === 13) im = 12;
+    const id = Math.floor(zMonth - Math.floor(29.5001 * im - 29));
+
+    const HIJRI_MONTHS = [
+      'Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir',
+      'Jumadil Awal', 'Jumadil Akhir', 'Rajab', "Sya'ban",
+      'Ramadhan', 'Syawal', "Dzulqa'dah", 'Dzulhijjah'
+    ];
+
+    const monthName = HIJRI_MONTHS[im - 1] || 'Hijriah';
+    return `${id} ${monthName} ${iy} H`;
+  }
+
+  function getIndonesianDate() {
+    const locTime = getLocationCurrentTime(currentProvince);
+    const d = new Date(locTime.year, locTime.month - 1, locTime.day);
+    return d.toLocaleDateString('id-ID', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -485,13 +659,29 @@
     if (!els.cardsContainer || !todayData) return;
 
     els.cardsContainer.innerHTML = '';
+    const visibleKeys = getVisiblePrayerKeys();
+    const visibleItems = PRAYER_KEYS.filter(item => visibleKeys.includes(item.key));
 
-    PRAYER_KEYS.forEach(item => {
+    // Dynamic responsive grid layout berdasarkan jumlah kartu yang dipilih
+    if (visibleItems.length === 5) {
+      els.cardsContainer.className = 'grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-2.5';
+    } else if (visibleItems.length <= 4) {
+      els.cardsContainer.className = `grid grid-cols-2 sm:grid-cols-${visibleItems.length} gap-2 sm:gap-2.5`;
+    } else if (visibleItems.length === 8) {
+      els.cardsContainer.className = 'grid grid-cols-4 sm:grid-cols-8 gap-2 sm:gap-2.5';
+    } else {
+      els.cardsContainer.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-2.5';
+    }
+
+    visibleItems.forEach((item, index) => {
       const timeVal = todayData[item.key] || '--:--';
       const isNext = item.key === nextPrayerKey;
+      const isLastOddOnMobile5 = visibleItems.length === 5 && index === 4;
 
       const card = document.createElement('div');
       card.className = `prayer-card rounded-2xl p-3 sm:p-3.5 flex flex-col items-center justify-between transition-all duration-300 relative select-none ${
+        isLastOddOnMobile5 ? 'col-span-2 sm:col-span-1' : ''
+      } ${
         isNext
           ? 'prayer-card-active bg-gradient-to-b from-amber-500/25 via-slate-800 to-amber-500/10 border-2 border-amber-400 shadow-lg shadow-amber-500/20 scale-[1.02] -translate-y-1'
           : 'bg-slate-800/80 hover:bg-slate-800 border border-slate-700/70 hover:border-slate-600'
@@ -533,13 +723,16 @@
   function calculateNextPrayer(todayData) {
     if (!todayData) return null;
 
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    const currentSeconds = now.getSeconds();
-    const totalCurrentSec = currentMinutes * 60 + currentSeconds;
+    // Hitung berdasarkan jam zona waktu lokasi terpilih (WIB/WITA/WIT)
+    const locTime = getLocationCurrentTime(currentProvince);
+    const totalCurrentSec = (locTime.hours * 60 + locTime.minutes) * 60 + locTime.seconds;
 
-    // Cari jadwal sholat berikutnya hari ini
-    for (const item of PRAYER_KEYS) {
+    const visibleKeys = getVisiblePrayerKeys();
+    const visibleItems = PRAYER_KEYS.filter(item => visibleKeys.includes(item.key));
+    if (visibleItems.length === 0) return null;
+
+    // Cari jadwal sholat berikutnya hari ini di antara kartu yang dipilih
+    for (const item of visibleItems) {
       const timeStr = todayData[item.key];
       if (!timeStr) continue;
 
@@ -557,14 +750,15 @@
       }
     }
 
-    // Jika semua waktu hari ini sudah lewat (setelah Isya), maka sholat berikutnya adalah Imsak/Subuh besok
-    const tomorrowImsak = todayData['imsak'] || '04:15';
-    const [hh, mm] = tomorrowImsak.split(':').map(Number);
+    // Jika semua waktu aktif hari ini sudah lewat, maka sholat berikutnya adalah sholat aktif pertama besok (misal Subuh)
+    const firstActive = visibleItems[0];
+    const tomorrowTime = todayData[firstActive.key] || '04:30';
+    const [hh, mm] = tomorrowTime.split(':').map(Number);
     const tomorrowSec = (24 * 60 * 60) - totalCurrentSec + (hh * 60 + mm) * 60;
 
     return {
-      item: PRAYER_KEYS[0], // Imsak
-      time: tomorrowImsak,
+      item: firstActive,
+      time: tomorrowTime,
       diffSec: tomorrowSec,
       isTomorrow: true
     };
@@ -652,14 +846,18 @@
       }
     }
 
-    // Tanggal Masehi & Hijriah
+    // Tanggal Masehi & Hijriah (Tepat dan responsif di mobile & desktop)
     if (els.prayerDateText) {
       els.prayerDateText.textContent = getIndonesianDate();
     }
     if (els.hijriDateText) {
-      const hijri = getHijriDate();
+      const maghribTime = todaySchedule ? todaySchedule.maghrib : null;
+      const hijri = calculateHijriDate(new Date(), maghribTime, hijriOffset);
       els.hijriDateText.textContent = hijri ? `• ${hijri}` : '';
     }
+
+    // Perbarui Jam Live Berdasarkan Lokasi (WIB/WITA/WIT)
+    updateLiveClock();
 
     // Hitung waktu sholat berikutnya
     const nextPrayer = calculateNextPrayer(todaySchedule);
@@ -883,10 +1081,107 @@
   }
 
   // ==========================================
+  // CARD FILTER MODAL LOGIC
+  // ==========================================
+
+  function openFilterCardModal() {
+    if (!els.filterCardModal) return;
+
+    const currentKeys = getVisiblePrayerKeys();
+    const checkboxes = document.querySelectorAll('input[name="prayerCardItem"]');
+    checkboxes.forEach(cb => {
+      cb.checked = currentKeys.includes(cb.value);
+    });
+
+    if (els.hijriOffsetSelect) {
+      els.hijriOffsetSelect.value = String(hijriOffset);
+    }
+
+    els.filterCardModal.showModal();
+  }
+
+  function closeFilterCardModal() {
+    if (els.filterCardModal) els.filterCardModal.close();
+  }
+
+  function applyPresetInModal(keysToSelect) {
+    const checkboxes = document.querySelectorAll('input[name="prayerCardItem"]');
+    checkboxes.forEach(cb => {
+      cb.checked = keysToSelect.includes(cb.value);
+    });
+  }
+
+  function saveFilterCardSettings() {
+    const checkboxes = document.querySelectorAll('input[name="prayerCardItem"]:checked');
+    const selectedKeys = Array.from(checkboxes).map(cb => cb.value);
+
+    if (selectedKeys.length === 0) {
+      showToast('Pilih minimal 1 waktu sholat untuk ditampilkan.', 'warning');
+      return;
+    }
+
+    // Urutkan sesuai urutan waktu sholat asli
+    const sortedKeys = PRAYER_KEYS.map(p => p.key).filter(k => selectedKeys.includes(k));
+    setVisiblePrayerKeys(sortedKeys);
+
+    if (els.hijriOffsetSelect) {
+      hijriOffset = parseInt(els.hijriOffsetSelect.value, 10) || 0;
+      safeSet('quran_prayer_hijri_offset', String(hijriOffset));
+    }
+
+    closeFilterCardModal();
+
+    // Re-render kartu sholat & perbarui countdown
+    if (todaySchedule) {
+      const next = calculateNextPrayer(todaySchedule);
+      renderPrayerCards(todaySchedule, next ? next.item.key : null);
+      if (els.hijriDateText) {
+        const maghribTime = todaySchedule.maghrib;
+        const hijri = calculateHijriDate(new Date(), maghribTime, hijriOffset);
+        els.hijriDateText.textContent = hijri ? `• ${hijri}` : '';
+      }
+    }
+
+    showToast('Pilihan waktu sholat & kalender berhasil diperbarui.', 'success');
+  }
+
+  // ==========================================
   // EVENT LISTENERS & HOOKS
   // ==========================================
 
   function bindEvents() {
+    // Tombol Filter Card Waktu Sholat (Buka Modal)
+    if (els.filterCardBtn) {
+      els.filterCardBtn.addEventListener('click', openFilterCardModal);
+    }
+    if (els.closeFilterCardModalBtn) {
+      els.closeFilterCardModalBtn.addEventListener('click', closeFilterCardModal);
+    }
+    if (els.filterCardModal) {
+      els.filterCardModal.addEventListener('click', (e) => {
+        if (e.target === els.filterCardModal) closeFilterCardModal();
+      });
+    }
+    if (els.preset5FardhuBtn) {
+      els.preset5FardhuBtn.addEventListener('click', () => {
+        applyPresetInModal(['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']);
+      });
+    }
+    if (els.presetAll8Btn) {
+      els.presetAll8Btn.addEventListener('click', () => {
+        applyPresetInModal(PRAYER_KEYS.map(p => p.key));
+      });
+    }
+    if (els.resetFilterCardDefaultBtn) {
+      els.resetFilterCardDefaultBtn.addEventListener('click', () => {
+        applyPresetInModal(['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']);
+        if (els.hijriOffsetSelect) els.hijriOffsetSelect.value = '0';
+      });
+    }
+    if (els.saveFilterCardBtn) {
+      els.saveFilterCardBtn.addEventListener('click', saveFilterCardSettings);
+    }
+
     // Tombol Ganti Lokasi (Buka Modal)
     if (els.changeLocationBtn) {
       els.changeLocationBtn.addEventListener('click', openLocationModal);
@@ -1065,6 +1360,11 @@
     bindEvents();
     updateSoundUI();
     setWidgetCollapsed(isWidgetCollapsed);
+
+    // Jalankan jam live lokasi realtime setiap 1 detik
+    updateLiveClock();
+    if (liveClockInterval) clearInterval(liveClockInterval);
+    liveClockInterval = setInterval(updateLiveClock, 1000);
 
     // Cek apakah lokasi sudah pernah disimpan di localStorage
     const savedProv = safeGet('quran_prayer_province');
