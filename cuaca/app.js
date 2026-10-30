@@ -560,6 +560,9 @@
     if (state.place.source === "device") {
       badgeIcon = "locate";
       badgeLabel = "Lokasi Perangkat";
+    } else if (state.place.source === "network") {
+      badgeIcon = "compass";
+      badgeLabel = "Estimasi Jaringan";
     } else if (state.place.source === "search") {
       badgeIcon = "search";
       badgeLabel = "Hasil Pencarian";
@@ -1329,9 +1332,41 @@
     }
   }
 
+  async function networkGeocodeFallback() {
+    try {
+      const data = await fetchJSON(API.reverse + "?localityLanguage=id", 7000);
+      const lat = Number(data && data.latitude);
+      const lon = Number(data && data.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon) || (Math.abs(lat) < 0.001 && Math.abs(lon) < 0.001)) {
+        return null;
+      }
+      const name = data.city || data.locality || data.principalSubdivision || "Lokasi jaringan";
+      const admin = data.localityInfo && Array.isArray(data.localityInfo.administrative)
+        ? data.localityInfo.administrative
+        : [];
+      const province = admin.find((item) => Number(item.adminLevel) === 4);
+      let region = (province && province.name) || data.principalSubdivision || data.locality || "";
+      if (region === name) region = "";
+      return {
+        name: name,
+        region: region,
+        country: data.countryName || "",
+        latitude: lat,
+        longitude: lon,
+        source: "network"
+      };
+    } catch {
+      return null;
+    }
+  }
+
   async function handleGeoError(error) {
     const code = error && typeof error.code === "number" ? error.code : null;
+    const rawMsg = error && error.message ? String(error.message) : "";
+    const isPolicyBlocked = /permissions policy/i.test(rawMsg);
     const permission = code === 1 ? await getGeoPermissionState() : null;
+    const isWindows = /Windows/i.test(navigator.userAgent || "");
+
     let message;
     let actionLabel = "Coba lagi";
     let onAction = () => locate({ manual: true });
@@ -1339,10 +1374,22 @@
     if (error && error.geoUnsupported) {
       message = "Browser ini tidak mendukung deteksi lokasi perangkat.";
     } else if (!window.isSecureContext) {
-      message = "Halaman ini tidak dianggap aman oleh browser. Buka lewat http://localhost:4173 atau alamat https://, lalu coba lagi.";
+      message = "Halaman ini tidak dianggap aman oleh browser. Buka lewat http://localhost:8788 atau alamat https://, lalu coba lagi.";
+    } else if (isPolicyBlocked) {
+      message = "Akses GPS dibatasi oleh iframe pembungkus. Buka halaman cuaca di tab baru agar GPS perangkat aktif.";
+      actionLabel = "Buka Tab Penuh";
+      onAction = () => window.open(window.location.href, "_blank", "noopener");
     } else if (code === 1 && permission === "granted") {
-      message = "Izin situs sudah aktif, tetapi layanan lokasi perangkat masih memblokir. Nyalakan Location/Lokasi di pengaturan sistem (Windows: Settings › Privacy & security › Location), lalu coba lagi.";
+      message = isWindows
+        ? "Izin browser sudah aktif, namun Location Services di Windows masih mati (Settings › Privacy & security › Location › aktifkan 'Location services' & 'Let desktop apps access your location')."
+        : "Izin situs sudah aktif, tetapi layanan lokasi sistem perangkat masih nonaktif.";
       state.geoAwaitingPermission = false;
+      if (isWindows) {
+        actionLabel = "Buka Settings Lokasi";
+        onAction = () => {
+          window.location.href = "ms-settings:privacy-location";
+        };
+      }
     } else if (code === 1 && permission === "denied") {
       message = "Izin lokasi untuk situs ini masih diblokir. Buka ikon kunci/pengaturan di address bar → Location → Allow, lalu muat ulang halaman.";
       state.geoAwaitingPermission = true;
@@ -1352,11 +1399,28 @@
       message = "Izin lokasi ditolak. Aktifkan izin lokasi di pengaturan browser, lalu coba lagi.";
       state.geoAwaitingPermission = true;
     } else if (code === 2) {
-      message = "Lokasi perangkat tidak tersedia. Pastikan GPS atau layanan lokasi menyala.";
+      message = "Sinyal GPS perangkat tidak tersedia saat ini.";
     } else if (code === 3) {
-      message = "Deteksi lokasi terlalu lama. Coba lagi.";
+      message = "Deteksi GPS perangkat terlalu lama.";
     } else {
-      message = "Tidak dapat mendeteksi lokasi perangkat.";
+      message = "Tidak dapat mendeteksi GPS perangkat.";
+    }
+
+    // Jika user tidak menolak izin situs (misal OS Location Windows mati / sinyal GPS gagal),
+    // coba estimasi lokasi otomatis lewat jaringan agar tidak mentok di kota default.
+    const canTryNetwork = permission !== "denied" && (!code || (code === 1 && permission === "granted") || code === 2 || code === 3);
+    if (canTryNetwork) {
+      const netPlace = await networkGeocodeFallback();
+      if (netPlace) {
+        await loadPlace(netPlace, { save: true });
+        showBanner({
+          type: "info",
+          message: message + " Menampilkan estimasi lokasi jaringan: " + netPlace.name + ".",
+          actionLabel: actionLabel,
+          onAction: onAction
+        });
+        return;
+      }
     }
 
     if (!state.data) {
