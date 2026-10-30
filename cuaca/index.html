@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b57a8" id="metaTheme">
+  <meta name="description" content="Prakiraan cuaca realtime berdasarkan lokasi perangkatmu. Suhu, hujan, angin, kualitas udara, dan prakiraan 7 hari.">
+  <title>Langit — Prakiraan Cuaca Realtime</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='64' y2='64' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230e4a9e'/%3E%3Cstop offset='1' stop-color='%23061a3a'/%3E%3C/linearGradient%3E%3ClinearGradient id='sn' x1='16' y1='14' x2='48' y2='50' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23ffe9a3'/%3E%3Cstop offset='1' stop-color='%23ff9f43'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23bg)'/%3E%3Ccircle cx='38' cy='25' r='11' fill='url(%23sn)'/%3E%3Cpath d='M19 47h25a8.2 8.2 0 0 0 .9-16.3A12.4 12.4 0 0 0 21.8 29 9.8 9.8 0 0 0 19 47Z' fill='%23fff' fill-opacity='.94'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="clear-day" data-sky="clear" data-night="false" data-phase="day">
+
+  <!-- Latar langit animatif: mengikuti cuaca & waktu lokal -->
+  <div class="sky-effects" aria-hidden="true">
+    <div class="fx-stars">
+      <span class="fx-shooting" style="--x:64%;--y:12%;--delay:3s;--dur:12s"></span>
+      <span class="fx-shooting" style="--x:30%;--y:8%;--delay:8.5s;--dur:15s"></span>
+    </div>
+    <div class="fx-golden"></div>
+    <div class="fx-sun"><span class="sun-rays"></span><span class="sun-core"></span></div>
+    <div class="fx-moon"><span class="moon-glow"></span><span class="moon-core"></span></div>
+    <div class="fx-clouds">
+      <span class="fx-cloud" style="--top:6%;--scale:.8;--dur:150s;--delay:-20s;--o:.34"></span>
+      <span class="fx-cloud" style="--top:18%;--scale:1.15;--dur:110s;--delay:-70s;--o:.4"></span>
+      <span class="fx-cloud" style="--top:38%;--scale:.7;--dur:170s;--delay:-120s;--o:.28"></span>
+      <span class="fx-cloud" style="--top:12%;--scale:1.35;--dur:135s;--delay:-45s;--o:.3"></span>
+      <span class="fx-cloud" style="--top:52%;--scale:.9;--dur:190s;--delay:-150s;--o:.24"></span>
+      <span class="fx-cloud" style="--top:28%;--scale:1.05;--dur:125s;--delay:-95s;--o:.26"></span>
+      <span class="fx-cloud" style="--top:68%;--scale:1.2;--dur:210s;--delay:-35s;--o:.2"></span>
+    </div>
+    <div class="fx-rain" id="fxRain"></div>
+    <div class="fx-snow" id="fxSnow"></div>
+    <div class="fx-fog">
+      <span style="--top:18%;--dur:38s;--delay:-8s"></span>
+      <span style="--top:46%;--dur:50s;--delay:-22s"></span>
+      <span style="--top:70%;--dur:44s;--delay:-14s"></span>
+    </div>
+    <div class="fx-lightning"></div>
+  </div>
+
+  <!-- Sprite Ikon SVG -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-sun" x1="16" y1="10" x2="48" y2="54" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#fff4c2"/><stop offset=".48" stop-color="#ffd166"/><stop offset="1" stop-color="#ff922b"/>
+      </linearGradient>
+      <linearGradient id="g-moon" x1="18" y1="10" x2="46" y2="52" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#ffffff"/><stop offset=".6" stop-color="#dce7ff"/><stop offset="1" stop-color="#a5bcfa"/>
+      </linearGradient>
+      <linearGradient id="g-cloud" x1="20" y1="18" x2="44" y2="52" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#ffffff"/><stop offset=".65" stop-color="#eaf2fb"/><stop offset="1" stop-color="#bdd0e7"/>
+      </linearGradient>
+      <linearGradient id="g-cloud-dark" x1="24" y1="18" x2="46" y2="48" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#dce6f4"/><stop offset="1" stop-color="#859bb6"/>
+      </linearGradient>
+      <linearGradient id="g-rain" x1="24" y1="45" x2="34" y2="60" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#bae6fd"/><stop offset="1" stop-color="#38bdf8"/>
+      </linearGradient>
+      <linearGradient id="g-bolt" x1="28" y1="38" x2="36" y2="62" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#fef08a"/><stop offset=".5" stop-color="#facc15"/><stop offset="1" stop-color="#f97316"/>
+      </linearGradient>
+      <linearGradient id="g-snow" x1="22" y1="46" x2="36" y2="60" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#ffffff"/><stop offset="1" stop-color="#bae6fd"/>
+      </linearGradient>
+      <mask id="moonMask" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+        <rect width="64" height="64" fill="#000"/>
+        <circle cx="32" cy="32" r="18" fill="#fff"/>
+        <circle cx="41" cy="25" r="16.5" fill="#000"/>
+      </mask>
+      <mask id="moonMaskSm" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+        <rect width="64" height="64" fill="#000"/>
+        <circle cx="23" cy="21" r="12" fill="#fff"/>
+        <circle cx="29" cy="16" r="11" fill="#000"/>
+      </mask>
+
+      <!-- Ikon cuaca -->
+      <symbol id="i-sun" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="17" fill="url(#g-sun)" opacity=".18"/>
+        <circle cx="32" cy="32" r="13" fill="url(#g-sun)"/>
+        <g stroke="url(#g-sun)" stroke-width="3.6" stroke-linecap="round">
+          <path d="M32 5v6M32 53v6M5 32h6M53 32h6M12.2 12.2l4.2 4.2M47.6 47.6l4.2 4.2M51.8 12.2l-4.2 4.2M16.4 47.6l-4.2 4.2"/>
+        </g>
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 64 64">
+        <rect width="64" height="64" fill="url(#g-moon)" mask="url(#moonMask)"/>
+        <path d="M49 12l1.2 3.3 3.3 1.2-3.3 1.2L49 21l-1.2-3.3L44.5 16.5l3.3-1.2L49 12Z" fill="#eef2ff"/>
+        <path d="M15 41l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Z" fill="#eef2ff" opacity=".7"/>
+      </symbol>
+      <symbol id="i-cloud" viewBox="0 0 64 64">
+        <path d="M20 47h30a9 9 0 0 0 1.2-17.9A14 14 0 0 0 24 25.8 11 11 0 0 0 20 47Z" fill="url(#g-cloud)"/>
+      </symbol>
+      <symbol id="i-overcast" viewBox="0 0 64 64">
+        <path d="M27 36h22a7.5 7.5 0 0 0 .8-14.9A11.5 11.5 0 0 0 29 19.1 9 9 0 0 0 27 36Z" fill="url(#g-cloud-dark)" opacity=".88"/>
+        <path d="M18 48h28a8.5 8.5 0 0 0 1.1-16.9A13 13 0 0 0 22 32.4 10.2 10.2 0 0 0 18 48Z" fill="url(#g-cloud)"/>
+      </symbol>
+      <symbol id="i-cloud-sun" viewBox="0 0 64 64">
+        <g transform="translate(8 0)">
+          <circle cx="24" cy="22" r="9.2" fill="url(#g-sun)"/>
+          <g stroke="url(#g-sun)" stroke-width="2.8" stroke-linecap="round">
+            <path d="M24 7v4M24 33v4M9 22h4M39 22h-4M13.4 11.4l2.8 2.8M31.8 29.8l2.8 2.8M34.6 11.4l-2.8 2.8M16.2 29.8l-2.8 2.8"/>
+          </g>
+        </g>
+        <path d="M22 50h27a8.5 8.5 0 0 0 1-16.9A13 13 0 0 0 24.6 31 10.2 10.2 0 0 0 22 50Z" fill="url(#g-cloud)"/>
+      </symbol>
+      <symbol id="i-cloud-moon" viewBox="0 0 64 64">
+        <rect width="64" height="64" fill="url(#g-moon)" mask="url(#moonMaskSm)"/>
+        <path d="M22 50h27a8.5 8.5 0 0 0 1-16.9A13 13 0 0 0 24.6 31 10.2 10.2 0 0 0 22 50Z" fill="url(#g-cloud)"/>
+      </symbol>
+      <symbol id="i-drizzle" viewBox="0 0 64 64">
+        <path d="M20 43h30a9 9 0 0 0 1.2-17.9A14 14 0 0 0 24 21.8 11 11 0 0 0 20 43Z" fill="url(#g-cloud)"/>
+        <g fill="url(#g-rain)">
+          <circle cx="24" cy="50" r="2.3"/><circle cx="34" cy="53" r="2.3"/><circle cx="44" cy="49" r="2.3"/>
+          <circle cx="29" cy="57" r="1.8" opacity=".78"/><circle cx="39" cy="58" r="1.8" opacity=".78"/>
+        </g>
+      </symbol>
+      <symbol id="i-rain" viewBox="0 0 64 64">
+        <path d="M20 43h30a9 9 0 0 0 1.2-17.9A14 14 0 0 0 24 21.8 11 11 0 0 0 20 43Z" fill="url(#g-cloud)"/>
+        <g stroke="url(#g-rain)" stroke-width="3.4" stroke-linecap="round">
+          <path d="M24 48l-2.2 8.2M34 48l-2.2 8.2M44 49l-1.8 6.4"/>
+        </g>
+      </symbol>
+      <symbol id="i-snow" viewBox="0 0 64 64">
+        <path d="M20 42h30a9 9 0 0 0 1.2-17.9A14 14 0 0 0 24 20.8 11 11 0 0 0 20 42Z" fill="url(#g-cloud)"/>
+        <g stroke="url(#g-snow)" stroke-width="2" stroke-linecap="round">
+          <path d="M23 47v9M19.2 49.2l7.6 4.6M26.8 49.2l-7.6 4.6"/>
+          <path d="M33 48v9M29.2 50.2l7.6 4.6M36.8 50.2l-7.6 4.6"/>
+          <path d="M43 47v9M39.2 49.2l7.6 4.6M46.8 49.2l-7.6 4.6"/>
+        </g>
+      </symbol>
+      <symbol id="i-thunder" viewBox="0 0 64 64">
+        <path d="M20 42h30a9 9 0 0 0 1.2-17.9A14 14 0 0 0 24 20.8 11 11 0 0 0 20 42Z" fill="url(#g-cloud-dark)"/>
+        <path d="M33 42l-8 13h6.4l-4.2 9 12.2-13.4h-6.4l3.8-8.6Z" fill="url(#g-bolt)"/>
+      </symbol>
+      <symbol id="i-fog" viewBox="0 0 64 64">
+        <path d="M22 39h26a8 8 0 0 0 1-15.9A12.4 12.4 0 0 0 24.7 20 9.7 9.7 0 0 0 22 39Z" fill="url(#g-cloud)"/>
+        <g stroke="#e2ecf8" stroke-width="3" stroke-linecap="round" opacity=".9">
+          <path d="M14 46h36M20 52h28M26 58h20"/>
+        </g>
+      </symbol>
+
+      <!-- Ikon antarmuka -->
+      <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></g></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></g></symbol>
+      <symbol id="i-locate" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></g></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v5h-5"/></g></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></g></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-wind" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 17h7"/></g></symbol>
+      <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6 6.4 6 10.4A6 6 0 0 1 6 13.4C6 9.4 12 3 12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+      <symbol id="i-uv" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></g></symbol>
+      <symbol id="i-gauge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 14 4-4"/><circle cx="12" cy="17" r="1.4"/></g></symbol>
+      <symbol id="i-clouds" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .7-7.9A6 6 0 0 0 6 9.5 4.2 4.2 0 0 0 7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+      <symbol id="i-rain-ui" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 13s-3 3.3-3 5a3 3 0 0 0 6 0c0-1.7-3-5-3-5Z"/><path d="M17 9s-3 3.3-3 5a3 3 0 0 0 6 0c0-1.7-3-5-3-5Z"/></g></symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C11 4 4 9 4 16a4 4 0 0 0 4 4c7 0 12-7 12-16Z"/><path d="M4 20c2-6 6-9 11-11"/></g></symbol>
+      <symbol id="i-sunrise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v5M5.6 9.6 7 11M18.4 9.6 17 11M2 18h20"/><path d="M8 18a4 4 0 0 1 8 0"/><path d="M3 22h18"/></g></symbol>
+      <symbol id="i-sunset" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9V4M8 8l4 4 4-4M2 18h20"/><path d="M8 18a4 4 0 0 1 8 0"/><path d="M3 22h18"/></g></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></g></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></g></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5M12 17h.01"/></g></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.8 4.6L18.5 9l-4.7 1.5L12 15l-1.8-4.5L5.5 9l4.7-1.4L12 3Z"/><path d="m19 15 .9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1Z"/><path d="m5 16 .7 1.6 1.6.7-1.6.7L5 20.6l-.7-1.6-1.6-.7 1.6-.7L5 16Z"/></g></symbol>
+      <symbol id="i-history" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></g></symbol>
+      <symbol id="i-compass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9 16.2 7.8"/></g></symbol>
+    </defs>
+  </svg>
+
+  <main class="page">
+    <!-- Topbar Navigasi & Pencarian -->
+    <header class="topbar glass">
+      <a class="brand" href="./" aria-label="Langit — beranda">
+        <span class="brand-mark"><svg class="wx"><use href="#i-cloud-sun"/></svg></span>
+        <span class="brand-text">
+          <strong>Langit</strong>
+          <small><span class="live-dot" aria-hidden="true"></span>Cuaca Realtime</small>
+        </span>
+      </a>
+
+      <div class="search" id="searchWrap">
+        <form id="searchForm" role="search" autocomplete="off">
+          <svg class="search-icon"><use href="#i-search"/></svg>
+          <input id="searchInput" type="search" placeholder="Cari kota, kabupaten, atau negara…" aria-label="Cari kota atau wilayah"
+                 aria-expanded="false" aria-controls="searchResults" autocomplete="off" spellcheck="false">
+          <button id="searchClear" class="search-clear" type="button" aria-label="Bersihkan pencarian" hidden>
+            <svg class="icon"><use href="#i-close"/></svg>
+          </button>
+          <kbd class="search-kbd" id="searchKbd" aria-hidden="true">/</kbd>
+        </form>
+        <div class="search-results" id="searchResults" role="listbox" aria-label="Hasil pencarian lokasi" hidden></div>
+      </div>
+
+      <div class="actions">
+        <button id="locateBtn" class="btn-ghost" type="button" title="Gunakan lokasi GPS perangkat">
+          <svg class="icon"><use href="#i-locate"/></svg>
+          <span>Lokasi saya</span>
+        </button>
+        <div class="unit-toggle" role="group" aria-label="Satuan suhu">
+          <button type="button" data-unit="c" aria-pressed="true">°C</button>
+          <button type="button" data-unit="f" aria-pressed="false">°F</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Banner Status / Notifikasi -->
+    <div id="banner" class="banner" role="status" aria-live="polite" hidden>
+      <span class="banner-icon" id="bannerIcon"><svg class="icon"><use href="#i-info"/></svg></span>
+      <p id="bannerText"></p>
+      <button id="bannerAction" class="banner-action" type="button" hidden></button>
+      <button id="bannerClose" class="banner-close" type="button" aria-label="Tutup pemberitahuan"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+
+    <!-- Bento Hero: Cuaca Utama + Jam Lokal & Siklus Matahari -->
+    <section class="hero-bento" aria-label="Cuaca saat ini">
+      <div class="hero-main glass">
+        <div class="hero-top">
+          <div class="place-badges">
+            <span class="source-badge" id="placeBadge">
+              <svg class="icon"><use href="#i-locate"/></svg>
+              <span id="placeBadgeText">Mendeteksi GPS</span>
+            </span>
+            <span class="coords-badge" id="placeCoords" hidden>—</span>
+          </div>
+        </div>
+
+        <div class="place-line">
+          <span class="place-pin" aria-hidden="true"><svg class="icon"><use href="#i-pin"/></svg></span>
+          <div class="place-heading">
+            <h1 id="placeName">Mendeteksi lokasi…</h1>
+            <p class="place-meta" id="placeMeta">Izinkan akses lokasi untuk cuaca akurat di sekitarmu</p>
+          </div>
+        </div>
+
+        <div class="weather-stage">
+          <div class="hero-visual">
+            <div class="hero-icon-halo" aria-hidden="true"></div>
+            <div class="hero-icon" id="heroIcon"><svg class="wx"><use href="#i-cloud-sun"/></svg></div>
+          </div>
+
+          <div class="temp-block">
+            <div class="temp-wrap">
+              <span class="temp" id="tempValue">--</span>
+              <span class="temp-unit" id="tempUnit">°C</span>
+            </div>
+          </div>
+
+          <div class="condition-wrap">
+            <p class="condition" id="conditionText">Mengambil data cuaca…</p>
+            <p class="feels" id="feelsLike">Terasa seperti —</p>
+            <p class="range" id="todayRange">Tertinggi — · Terendah —</p>
+          </div>
+        </div>
+
+        <div class="insight-bar" id="weatherInsight">
+          <span class="insight-ico" aria-hidden="true"><svg class="icon"><use href="#i-sparkles"/></svg></span>
+          <p id="weatherInsightText">Menyiapkan ringkasan kondisi atmosfer terkini…</p>
+        </div>
+
+        <div class="hero-pills" id="heroPills"></div>
+      </div>
+
+      <aside class="hero-aside">
+        <!-- Kartu Waktu Lokal & Sinkronisasi -->
+        <div class="clock-card glass">
+          <div class="clock-head">
+            <p class="clock-label">Waktu Lokal</p>
+            <span class="tz-badge" id="tzBadge">UTC</span>
+          </div>
+          <div class="clock-display">
+            <p class="clock" id="localClock">--.--</p>
+            <span class="clock-sec" id="localSeconds"></span>
+          </div>
+          <p class="clock-date" id="localDate">—</p>
+
+          <div class="side-foot">
+            <p class="updated"><svg class="icon"><use href="#i-clock"/></svg><span>Diperbarui <strong id="updatedAt">—</strong></span></p>
+            <button id="refreshBtn" class="icon-btn" type="button" aria-label="Muat ulang data cuaca" title="Muat ulang sekarang">
+              <svg class="icon"><use href="#i-refresh"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Kartu Posisi Matahari & Horizon -->
+        <article class="sun-card glass">
+          <div class="card-top">
+            <div class="sun-title-group">
+              <span class="card-label">Siklus Matahari</span>
+              <span class="sun-phase-pill" id="daylightBadge">Horizon</span>
+            </div>
+            <span class="card-ico"><svg class="icon"><use href="#i-sunrise"/></svg></span>
+          </div>
+
+          <div class="sun-viz">
+            <svg class="sun-arc" viewBox="0 0 260 116" aria-hidden="true">
+              <defs>
+                <linearGradient id="sunAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.24"/>
+                  <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path class="arc-area" d="M 38 100 A 92 92 0 0 1 222 100 Z" fill="url(#sunAreaGrad)"/>
+              <line class="arc-horizon" x1="16" y1="100" x2="244" y2="100"/>
+              <path class="arc-track" d="M 38 100 A 92 92 0 0 1 222 100"/>
+              <path class="arc-progress" id="sunArcProgress" pathLength="100" d="M 38 100 A 92 92 0 0 1 222 100"/>
+              <circle class="sun-horizon-tick" cx="38" cy="100" r="3"/>
+              <circle class="sun-horizon-tick" cx="222" cy="100" r="3"/>
+              <circle class="sun-dot-halo" id="sunDotHalo" cx="38" cy="100" r="12"/>
+              <circle class="sun-dot" id="sunDot" cx="38" cy="100" r="5.5"/>
+            </svg>
+            <div class="sun-times">
+              <div class="sun-time-item">
+                <svg class="icon"><use href="#i-sunrise"/></svg>
+                <div>
+                  <small>Terbit</small>
+                  <strong id="sunriseValue">—</strong>
+                </div>
+              </div>
+              <div class="sun-time-item is-right">
+                <div>
+                  <small>Terbenam</small>
+                  <strong id="sunsetValue">—</strong>
+                </div>
+                <svg class="icon"><use href="#i-sunset"/></svg>
+              </div>
+            </div>
+          </div>
+          <p class="card-note" id="sunNote">—</p>
+        </article>
+      </aside>
+    </section>
+
+    <!-- Panel Prakiraan Per Jam (24 Jam + Kurva Tren Suhu) -->
+    <section class="panel glass" aria-labelledby="hourlyTitle">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Rentang Waktu</span>
+          <h2 id="hourlyTitle">Prakiraan 24 Jam</h2>
+          <p>Grafik gelombang suhu &amp; peluang hujan tiap jam</p>
+        </div>
+        <div class="scroll-actions">
+          <button id="hourPrev" class="icon-btn sm" type="button" aria-label="Geser ke kiri"><svg class="icon"><use href="#i-chevron-left"/></svg></button>
+          <button id="hourNext" class="icon-btn sm" type="button" aria-label="Geser ke kanan"><svg class="icon"><use href="#i-chevron-right"/></svg></button>
+        </div>
+      </div>
+      <div class="hourly" id="hourly" tabindex="0" aria-label="Prakiraan cuaca per jam"></div>
+    </section>
+
+    <!-- Grid Bento Detail Atmosfer Saat Ini (4x2 Presisi) -->
+    <section class="details" aria-labelledby="detailsTitle">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Instrumen Cuaca</span>
+          <h2 id="detailsTitle">Detail Atmosfer Saat Ini</h2>
+          <p>Pengukuran kondisi udara, radiasi, dan angin terkini di lokasi ini</p>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <!-- 1. Angin -->
+        <article class="card glass-card">
+          <div class="card-top">
+            <span class="card-label">Angin &amp; Arah</span>
+            <span class="card-ico"><svg class="icon"><use href="#i-wind"/></svg></span>
+          </div>
+          <div class="wind-row">
+            <p class="card-value"><span id="windValue">—</span><span class="unit">km/j</span></p>
+            <div class="compass-dial" aria-hidden="true">
+              <span class="compass-n">U</span>
+              <span class="wind-arrow" id="windArrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span>
+            </div>
+          </div>
+          <div class="metric-meter"><span class="metric-fill" id="windBar" style="width:0%"></span></div>
+          <p class="card-note" id="windNote">—</p>
+        </article>
+
+        <!-- 2. Kelembapan -->
+        <article class="card glass-card">
+          <div class="card-top">
+            <span class="card-label">Kelembapan</span>
+            <span class="card-ico"><svg class="icon"><use href="#i-drop"/></svg></span>
+          </div>
+          <p class="card-value"><span id="humidityValue">—</span><span class="unit">%</span></p>
+          <div class="metric-meter is-aqua"><span class="metric-fill" id="humidityBar" style="width:0%"></span></div>
+          <p class="card-note" id="humidityNote">Kelembapan relatif</p>
+        </article>
+
+        <!-- 3. Indeks UV -->
+        <article class="card glass-card">
+          <div class="card-top">
+            <span class="card-label">Indeks UV</span>
+            <span class="card-ico"><svg class="icon"><use href="#i-uv"/></svg></span>
+          </div>
+          <p class="card-value"><span id="uvValue">—</span><span class="unit">UV</span></p>
+          <div class="spectrum-track is-uv" aria-hidden="true">
+            <span class="spectrum-pin" id="uvMarker" style="left:0%"></span>
+          </div>
+          <p class="card-note" id="uvNote">—</p>
+        </article>
+
+        <!-- 4. Tekanan Udara -->
+        <article class="card glass-card">
+          <div class="card-top">
+            <span class="card-label">Tekanan Udara</span>
+            <span class="card-ico"><svg class="icon"><use href="#i-gauge"/></svg></span>
+          </div>
+          <p class="card-value"><span id="pressureValue">—</span><span class="unit">hPa</span></p>
+          <div class="spectrum-track is-pressure" aria-hidden="true">
+            <span class="pressure-mid" title="Standar 1013 hPa"></span>
+            <span class="spectrum-pin" id="pressureMarker" style="left:50%"></span>
+          </div>
+          <p class="card-note" id="pressureNote">Tekanan permukaan laut</p>
+        </article>
+
+        <!-- 5. Tutupan Awan -->
+        <article class="card glass-card">
+          <div class="card-top">
+            <span class="card-label">Tutupan Awan</span>
+            <span class="card-ico"><svg class="icon"><use href="#i-clouds"/></svg></span>
+          </div>
+          <p class="card-value"><span id="cloudValue">—</span><span class="unit">%</span></p>
+          <div class="metric-meter is-cloud"><span class="metric-fill" id="cloudBar" style="width:0%"></span></div>
+          <p class="card-note" id="cloudNote">—</p>
+        </article>
+
+        <!-- 6. Curah Hujan -->
+        <article class="card glass-card">
+          <div class="card-top">
+            <span class="card-label">Curah Hujan</span>
+            <span class="card-ico"><svg class="icon"><use href="#i-rain-ui"/></svg></span>
+          </div>
+          <p class="card-value"><span id="rainValue">—</span><span class="unit">mm/jam</span></p>
+          <div class="metric-meter is-rain"><span class="metric-fill" id="rainBar" style="width:0%"></span></div>
+          <p class="card-note" id="rainNote">—</p>
+        </article>
+
+        <!-- 7. Kualitas Udara & Polutan (Span 2 Kolom -> Melengkapi Grid 4x2) -->
+        <article class="card glass-card card-aqi-wide">
+          <div class="card-top">
+            <div class="aqi-head-left">
+              <span class="card-label">Kualitas Udara (European AQI)</span>
+              <span class="aqi-status-pill" id="aqiBadge">Memuat</span>
+            </div>
+            <span class="card-ico"><svg class="icon"><use href="#i-leaf"/></svg></span>
+          </div>
+
+          <div class="aqi-body">
+            <div class="aqi-main">
+              <p class="card-value"><span id="aqiValue">—</span><span class="unit">AQI</span></p>
+              <div class="spectrum-track is-aqi" aria-hidden="true">
+                <span class="spectrum-pin" id="aqiMarker" style="left:0%"></span>
+              </div>
+              <p class="card-note" id="aqiNote">—</p>
+            </div>
+
+            <div class="aqi-pollutants">
+              <div class="pollutant-box">
+                <small>PM2.5</small>
+                <strong id="pm25Value">—</strong>
+                <span>µg/m³</span>
+              </div>
+              <div class="pollutant-box">
+                <small>PM10</small>
+                <strong id="pm10Value">—</strong>
+                <span>µg/m³</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Panel Prakiraan 7 Hari -->
+    <section class="panel glass" aria-labelledby="dailyTitle">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Proyeksi Mingguan</span>
+          <h2 id="dailyTitle">7 Hari ke Depan</h2>
+          <p>Klik baris hari untuk melihat detail matahari, UV, angin, dan total curah hujan</p>
+        </div>
+      </div>
+      <div class="daily" id="daily" role="list"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <p>Data cuaca &amp; kualitas udara: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Nama wilayah: <a href="https://www.bigdatacloud.com/" target="_blank" rel="noopener">BigDataCloud</a></p>
+      <p>Pembaruan otomatis setiap 10 menit · Koordinat diproses langsung di perangkatmu</p>
+    </footer>
+  </main>
+
+  <!-- Loader Layar Penuh -->
+  <div id="loader" class="loader" role="status" aria-live="polite">
+    <div class="loader-card">
+      <div class="loader-art"><svg class="wx"><use href="#i-cloud-sun"/></svg></div>
+      <p class="loader-title">Langit</p>
+      <p class="loader-text" id="loaderText">Mendeteksi lokasi kamu…</p>
+      <div class="loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <noscript>
+    <div class="noscript">Halaman ini membutuhkan JavaScript untuk menampilkan prakiraan cuaca realtime.</div>
+  </noscript>
+
+  <script src="app.js"></script>
+</body>
+</html>
