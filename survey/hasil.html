@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="robots" content="noindex">
+  <title>Terima kasih — Kuesioner LMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script>
+    (function () {
+      var t = 'light';
+      try {
+        t = localStorage.getItem('lms_theme');
+        if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="topbar__row">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15.5H6.5A2.5 2.5 0 0 0 4 21z"/>
+              <path d="M8 8h7M8 12h5"/>
+            </svg>
+          </span>
+          <span class="brand__text">
+            <strong>Kuesioner LMS</strong>
+            <small>Evaluasi pengalaman pengguna</small>
+          </span>
+        </div>
+        <div class="topbar__actions">
+          <button type="button" class="btn-theme" id="btnThemeToggle" aria-label="Ganti tema gelap/terang" title="Ganti tema gelap/terang">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="card">
+      <div class="result">
+        <div class="result__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m5 12.5 4.5 4.5L19 7"/>
+          </svg>
+        </div>
+        <span class="eyebrow">Selesai</span>
+        <h1 id="resultTitle">Terima kasih!</h1>
+        <p class="lead" id="resultLead">Masukan Anda telah kami terima dan sangat berarti bagi peningkatan kualitas pelayanan LMS.</p>
+      </div>
+
+      <div class="notice" id="resultNotice" hidden></div>
+
+      <div class="facts">
+        <div class="fact">
+          <strong>Peningkatan layanan</strong>
+          <span>Masukan Anda digunakan untuk menyempurnakan fitur dan kenyamanan LMS.</span>
+        </div>
+        <div class="fact">
+          <strong>Privasi terjaga</strong>
+          <span>Data yang dimasukkan hanya dipergunakan untuk keperluan evaluasi layanan.</span>
+        </div>
+        <div class="fact">
+          <strong>Terbuka untuk masukan</strong>
+          <span>Anda dapat menyampaikan tanggapan kembali kapan saja diperlukan.</span>
+        </div>
+      </div>
+
+      <div class="result__actions">
+        <a class="btn btn--primary" id="btnAgain" href="./index.html?reset=1">Isi lagi</a>
+        <a class="btn btn--ghost" id="btnHome" href="./index.html">Kembali ke form</a>
+      </div>
+    </main>
+
+    <p class="footnote">
+      Data yang Anda masukkan hanya dipergunakan untuk meningkatkan kualitas pelayanan dan pengembangan LMS.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var status = params.get('status') || 'sent';
+      var title = document.getElementById('resultTitle');
+      var lead = document.getElementById('resultLead');
+      var notice = document.getElementById('resultNotice');
+      var again = document.getElementById('btnAgain');
+      var home = document.getElementById('btnHome');
+
+      if (status === 'queued') {
+        title.textContent = 'Jawaban tersimpan';
+        lead.textContent = 'Koneksi ke server sedang tidak tersedia. Jawaban Anda disimpan di browser ini dan akan dikirim otomatis saat form dibuka kembali dengan internet aktif.';
+        notice.hidden = false;
+        notice.className = 'notice notice--warn';
+        notice.innerHTML = '<strong>Jangan hapus data browser.</strong> Antrean jawaban tersimpan di perangkat ini. ' +
+          'Buka kembali form ini saat sinyal membaik agar jawaban terkirim.';
+        again.textContent = 'Buka form untuk kirim ulang';
+        again.href = './index.html';
+        if (home) {
+          home.textContent = 'Isi respons baru';
+          home.href = './index.html?reset=1';
+        }
+      } else if (status === 'unverified') {
+        title.textContent = 'Terima kasih!';
+        lead.textContent = 'Jawaban Anda telah dikirim, dan salinan cadangannya disimpan sementara di browser ini hingga terkonfirmasi.';
+        notice.hidden = false;
+        notice.className = 'notice notice--warn';
+        notice.innerHTML = '<strong>Catatan teknis:</strong> Browser tidak dapat membaca balasan konfirmasi langsung dari server (misalnya karena pemblokir pelacak atau pengaturan CORS). ' +
+          'Jika Anda pengelola dan baris belum muncul di sheet <code>Respon</code>, pastikan akses Web App Apps Script diset ke <strong>Anyone</strong>.';
+      }
+
+      var btnTheme = document.getElementById('btnThemeToggle');
+      if (btnTheme) {
+        btnTheme.addEventListener('click', function () {
+          var cur = document.documentElement.getAttribute('data-theme') || 'light';
+          var next = cur === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          try { localStorage.setItem('lms_theme', next); } catch (e) {}
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
