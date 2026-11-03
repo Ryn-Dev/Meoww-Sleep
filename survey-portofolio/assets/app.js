@@ -1,5 +1,6 @@
 /* ============================================================
-   Kuesioner LMS — logika form
+   Kuesioner Kepuasan Platform Portofolio IDN — Logika Form
+   Politeknik IDN Bogor
    Tanpa framework, tanpa build step.
    ============================================================ */
 (function () {
@@ -10,9 +11,10 @@
   var VERSION = DATA.version || CFG.VERSION || 'v1';
   var WEB_APP_URL = String(CFG.WEB_APP_URL || '').trim();
 
-  var DRAFT_KEY = 'lms_survey_draft_' + VERSION;
-  var QUEUE_KEY = 'lms_survey_queue_' + VERSION;
-  var DONE_KEY = 'lms_survey_done_' + VERSION;
+  var DRAFT_KEY = 'portofolio_survey_draft_' + VERSION;
+  var QUEUE_KEY = 'portofolio_survey_queue_' + VERSION;
+  var DONE_KEY = 'portofolio_survey_done_' + VERSION;
+  var THEME_KEY = 'portofolio_theme';
 
   var stage = document.getElementById('stage');
   var btnBack = document.getElementById('btnBack');
@@ -43,7 +45,7 @@
       nim: '',
       kode_prodi: '',
       prodi: '',
-      lama_penggunaan: '',
+      pengalaman_portofolio: '',
       frekuensi_akses: '',
       perangkat: '',
       Z1: '',
@@ -121,14 +123,14 @@
 
   function showToast(message) {
     if (!toastEl) return;
-    toastEl.textContent = message;
+    toastEl.innerHTML = '<svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span class="toast__text">' + esc(message) + '</span>';
     toastEl.hidden = false;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.hidden = true; }, 4200);
   }
 
   function newSubmissionId() {
-    return 'r-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+    return 'porto-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
   }
 
   /* ---------- Steps ---------- */
@@ -165,6 +167,7 @@
     student: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>',
     mentor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m8 11 3-3 2 2 3-3"/></svg>',
     leader: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+    external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
     alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
   };
 
@@ -181,28 +184,38 @@
 
     return '' +
       '<div class="hero">' +
-        '<span class="eyebrow">Evaluasi LMS</span>' +
-        '<h1>Bagaimana pengalaman Anda memakai LMS?</h1>' +
-        '<p class="lead">Kuesioner ini menilai kemudahan belajar, efisiensi mengajar, dan kualitas informasi di LMS.</p>' +
+        '<span class="eyebrow">Evaluasi Layanan Portofolio · Politeknik IDN</span>' +
+        '<h1>Bagaimana pengalaman Anda memakai Platform Portofolio IDN?</h1>' +
+        '<p class="lead">Kuesioner ini mengevaluasi kemudahan, keandalan, dan efektivitas platform pameran portofolio karya mahasiswa di lingkungan Politeknik IDN Bogor.</p>' +
+        '<a href="https://portofolio.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="app-banner">' +
+          '<div class="app-banner__main">' +
+            '<div class="app-banner__icon">' + icons.leader + '</div>' +
+            '<div class="app-banner__info">' +
+              '<span class="app-banner__title">Platform Portofolio Karya Mahasiswa IDN</span>' +
+              '<span class="app-banner__url">https://portofolio.politeknikidn.id</span>' +
+            '</div>' +
+          '</div>' +
+          '<span class="app-banner__cta">Buka Portofolio ' + icons.external + '</span>' +
+        '</a>' +
         '<div class="chips">' +
-          '<span class="chip">' + icons.clock + ' ± 6–7 menit</span>' +
-          '<span class="chip">' + icons.list + ' 13–20 pernyataan</span>' +
+          '<span class="chip">' + icons.clock + ' ± 5–7 menit</span>' +
+          '<span class="chip">' + icons.list + ' 13–18 pernyataan</span>' +
           '<span class="chip">' + icons.shield + ' Privasi terjaga</span>' +
         '</div>' +
       '</div>' +
       '<div class="facts">' +
-        '<div class="fact"><strong>Penilaian 1–5</strong><span>Skala setuju, satu pernyataan satu hal</span></div>' +
-        '<div class="fact"><strong>2 pertanyaan terbuka</strong><span>Menjelaskan alasan di balik angka</span></div>' +
-        '<div class="fact"><strong>Langsung tersimpan</strong><span>Draf tersimpan otomatis di browser</span></div>' +
+        '<div class="fact"><strong>Skala Likert 1–5</strong><span>Menilai fitur secara objektif satu per satu</span></div>' +
+        '<div class="fact"><strong>2 pertanyaan terbuka</strong><span>Menyampaikan kendala nyata &amp; ide saran</span></div>' +
+        '<div class="fact"><strong>Tersimpan otomatis</strong><span>Draf jawaban dicadangkan di peramban</span></div>' +
       '</div>' +
       '<div class="notice">' +
-        '<strong>Informasi Penggunaan Data:</strong> Data dan tanggapan yang Anda masukkan hanya dipergunakan untuk evaluasi, pengembangan sistem, serta peningkatan kualitas pelayanan LMS.' +
+        '<strong>Informasi Penggunaan Data:</strong> Data dan tanggapan yang Anda masukkan hanya dipergunakan untuk keperluan evaluasi serta peningkatan mutu layanan platform Portofolio IDN. Hasil disajikan dalam bentuk agregat rata-rata.' +
       '</div>' +
       '<label class="consent">' +
         '<input type="checkbox" name="consent"' + (state.data.consent ? ' checked' : '') + '>' +
-        '<span>Saya sudah membaca keterangan di atas dan bersedia mengisi kuesioner ini.</span>' +
+        '<span>Saya sudah membaca keterangan di atas dan bersedia mengisi kuesioner evaluasi ini.</span>' +
       '</label>' +
-      (done ? '<p class="small muted" style="margin-top:14px">Terima kasih atas partisipasi Anda sebelumnya. Anda tetap dapat mengisi kembali apabila ingin menyampaikan masukan terbaru.</p>' : '');
+      (done ? '<p class="small muted" style="margin-top:14px">Terima kasih atas partisipasi Anda sebelumnya. Anda tetap dapat mengisi kembali apabila ingin menyampaikan masukan terbaru mengenai platform portofolio.</p>' : '');
   }
 
   function renderRole() {
@@ -223,11 +236,11 @@
 
     return '' +
       '<h1>Pilih peran Anda</h1>' +
-      '<p class="lead">Jenis pertanyaan menyesuaikan peran. Pilih yang paling menggambarkan penggunaan LMS Anda.</p>' +
+      '<p class="lead">Jenis pertanyaan disesuaikan dengan peran. Pilih opsi yang paling menggambarkan aktivitas Anda di platform Portofolio IDN.</p>' +
       '<div class="roles">' + cards + '</div>' +
       (selected
         ? '<div class="notice" style="margin-top:18px"><strong>' + esc(selected.label) + '</strong> — ' +
-          selected.count + ' pernyataan, ' + esc(selected.estimate) + '.</div>'
+          selected.count + ' butir pernyataan, estimasi ' + esc(selected.estimate) + '.</div>'
         : '');
   }
 
@@ -243,33 +256,33 @@
     }).join('');
 
     var leadText = isStudent
-      ? 'Silakan lengkapi nama, NIM, dan program studi Anda.'
+      ? 'Silakan lengkapi nama, NIM, dan program studi Anda di Politeknik IDN.'
       : (isLeader
         ? 'Silakan isi nama lengkap Anda.'
-        : 'Silakan lengkapi nama dan program studi Anda.');
+        : 'Silakan lengkapi nama dan program studi Anda di Politeknik IDN.');
 
     return '' +
-      '<h1>Identitas Anda</h1>' +
+      '<h1>Identitas Responden</h1>' +
       '<p class="lead">' + leadText + '</p>' +
       '<div class="notice" style="margin-top:16px">' +
-        'Data yang Anda masukkan hanya dipergunakan untuk keperluan evaluasi dan peningkatan kualitas pelayanan pembelajaran di LMS.' +
+        'Data identitas hanya dipergunakan untuk pengelompokan analisis dan evaluasi mutu layanan portofolio kampus.' +
       '</div>' +
       '<div class="field">' +
         '<label class="field__label" for="f-nama">Nama lengkap<span class="field__req">*</span></label>' +
-        '<input class="input" id="f-nama" name="nama" type="text" autocomplete="name" placeholder="Nama sesuai yang dikenal" value="' + esc(state.data.nama) + '">' +
+        '<input class="input" id="f-nama" name="nama" type="text" autocomplete="name" placeholder="Nama lengkap sesuai akun kampus" value="' + esc(state.data.nama) + '">' +
       '</div>' +
       (isStudent
         ? '<div class="field">' +
-            '<label class="field__label" for="f-nim">NIM<span class="field__req">*</span></label>' +
-            '<input class="input" id="f-nim" name="nim" type="text" inputmode="numeric" autocomplete="off" placeholder="Contoh: 2021001" value="' + esc(state.data.nim) + '">' +
-            '<p class="field__hint">Pastikan NIM ditulis lengkap sesuai identitas mahasiswa Anda.</p>' +
+            '<label class="field__label" for="f-nim">NIM (Nomor Induk Mahasiswa)<span class="field__req">*</span></label>' +
+            '<input class="input" id="f-nim" name="nim" type="text" inputmode="numeric" autocomplete="off" placeholder="Contoh: 202401001" value="' + esc(state.data.nim) + '">' +
+            '<p class="field__hint">Pastikan NIM ditulis lengkap sesuai akun portofolio Anda.</p>' +
           '</div>'
         : '') +
       (needsProdi
         ? '<div class="field">' +
-            '<label class="field__label" for="f-prodi">Program studi<span class="field__req">*</span></label>' +
+            '<label class="field__label" for="f-prodi">Program Studi / Jurusan<span class="field__req">*</span></label>' +
             '<select class="select" id="f-prodi" name="prodi">' +
-              '<option value="">Pilih program studi</option>' + options +
+              '<option value="">Pilih Program Studi Politeknik IDN</option>' + options +
             '</select>' +
           '</div>'
         : '');
@@ -287,18 +300,18 @@
 
   function renderProfile() {
     return '' +
-      '<h1>Kebiasaan memakai LMS</h1>' +
-      '<p class="lead">Tiga pertanyaan singkat untuk memahami konteks jawaban Anda.</p>' +
+      '<h1>Pengalaman &amp; Kebiasaan Akses</h1>' +
+      '<p class="lead">Tiga pertanyaan pengantar untuk memahami konteks penggunaan platform Portofolio IDN Anda.</p>' +
       '<div class="field">' +
-        '<span class="field__label">Sudah berapa lama menggunakan LMS?<span class="field__req">*</span></span>' +
-        choicesHTML('lama_penggunaan', DATA.lama, state.data.lama_penggunaan) +
+        '<span class="field__label">Berapa banyak portofolio yang telah Anda unggah / tinjau?<span class="field__req">*</span></span>' +
+        choicesHTML('pengalaman_portofolio', DATA.pengalaman_portofolio, state.data.pengalaman_portofolio) +
       '</div>' +
       '<div class="field">' +
-        '<span class="field__label">Seberapa sering mengakses LMS?<span class="field__req">*</span></span>' +
+        '<span class="field__label">Berapa rata-rata frekuensi mengakses platform Portofolio IDN?<span class="field__req">*</span></span>' +
         choicesHTML('frekuensi_akses', DATA.frekuensi, state.data.frekuensi_akses) +
       '</div>' +
       '<div class="field">' +
-        '<span class="field__label">Perangkat yang paling sering digunakan<span class="field__req">*</span></span>' +
+        '<span class="field__label">Perangkat utama yang Anda gunakan saat mengakses platform<span class="field__req">*</span></span>' +
         choicesHTML('perangkat', DATA.perangkat, state.data.perangkat) +
       '</div>';
   }
@@ -348,16 +361,16 @@
       '<h1>' + esc(step.section.title) + '</h1>' +
       '<p class="lead">' + esc(step.section.desc) + '</p>' +
       renderScaleLegend() +
-      '<p class="small muted scale-hint">Belum pernah memakai fiturnya? Pilih Netral (3).</p>' +
+      '<p class="small muted scale-hint">Belum pernah mencoba fiturnya? Pilih Netral (3).</p>' +
       renderItems(step.section.items);
   }
 
   function renderOpen(step) {
     var role = step.role;
     return '' +
-      '<span class="eyebrow">Pertanyaan terbuka</span>' +
-      '<h1>Ceritakan pengalaman Anda</h1>' +
-      '<p class="lead">Bagian ini opsional, tetapi sangat membantu menjelaskan alasan di balik angka penilaian. Kosongkan jika tidak ada.</p>' +
+      '<span class="eyebrow">Pertanyaan Terbuka</span>' +
+      '<h1>Ceritakan Pengalaman Anda</h1>' +
+      '<p class="lead">Bagian ini opsional, namun sangat membantu tim pengembang dalam memahami alasan di balik angka penilaian. Kosongkan jika tidak ada.</p>' +
       role.open.map(function (o) {
         return '<div class="field">' +
           '<label class="field__label" for="f-' + esc(o.id) + '">' + esc(o.text) + '</label>' +
@@ -397,8 +410,8 @@
 
     return '' +
       '<span class="eyebrow">Penutup</span>' +
-      '<h1>Sedikit lagi</h1>' +
-      '<p class="lead">Dua pertanyaan terakhir, lalu jawaban Anda langsung dikirim.</p>' +
+      '<h1>Evaluasi Keseluruhan</h1>' +
+      '<p class="lead">Dua pertanyaan terakhir, lalu tanggapan Anda dapat langsung dikirim ke sistem.</p>' +
       '<fieldset class="q" data-q="Z1">' +
         '<legend><span class="q__code">Z1</span><span>' + esc(z1.text) + '</span></legend>' +
         '<div class="scale-legend">' + DATA.satisfaction.map(function (s) {
@@ -410,7 +423,7 @@
         '<legend><span class="q__code">Z2</span><span>' + esc(z2.text) + '</span></legend>' +
         '<p class="field__hint" style="margin-top:6px">' + esc(z2.hint) + '</p>' +
         '<div class="nps">' + nps + '</div>' +
-        '<div class="nps-scale"><span>Tidak mungkin (0)</span><span>Sangat mungkin (10)</span></div>' +
+        '<div class="nps-scale"><span>Sangat tidak mungkin (0)</span><span>Sangat mungkin (10)</span></div>' +
       '</fieldset>' +
       '<div class="field">' +
         '<label class="field__label" for="f-Z3">' + esc(z3.text) + '</label>' +
@@ -446,57 +459,67 @@
     if (!isIntro) {
       var contentSteps = steps.length - 1;
       var current = state.index;
-      progressLabel.textContent = 'Bagian ' + current + ' dari ' + contentSteps;
-      progressBar.style.width = Math.max(0, Math.min(100, ((current - 1) / Math.max(1, contentSteps - 1)) * 100)) + '%';
+      progressLabel.textContent = 'Langkah ' + current + ' dari ' + contentSteps;
+      var pct = Math.round((current / contentSteps) * 100);
+      progressBar.style.width = pct + '%';
     }
 
     btnBack.hidden = state.index === 0;
-    btnBack.textContent = 'Kembali';
-    setNextLabel(state.index === steps.length - 1);
+    setNextLabel(state.index === steps.length - 1, step.type === 'intro');
 
     if (opts.focus !== false) {
-      var heading = stage.querySelector('h1');
-      if (heading) {
-        heading.setAttribute('tabindex', '-1');
-        heading.focus({ preventScroll: true });
-      }
+      stage.focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     }
   }
 
-  function setNextLabel(isLast) {
-    btnNext.innerHTML = isLast ? 'Kirim jawaban' : (state.index === 0 ? 'Mulai' : 'Lanjut');
-    btnNext.disabled = state.busy;
+  function setNextLabel(isLast, isIntro) {
+    if (isIntro) {
+      btnNext.textContent = 'Mulai Mengisi';
+    } else if (isLast) {
+      btnNext.textContent = 'Kirim Tanggapan';
+    } else {
+      btnNext.textContent = 'Lanjut';
+    }
   }
 
   function prefersReducedMotion() {
-    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
 
   /* ---------- Validation ---------- */
-  function fail(message, target) {
-    return { ok: false, message: message, target: target };
-  }
-
   function validate(step) {
     var d = state.data;
+    function fail(msg, selector) {
+      return { ok: false, message: msg, target: selector };
+    }
 
     if (step.type === 'intro') {
-      if (!d.consent) return fail('Centang pernyataan persetujuan sebelum mulai.', 'input[name="consent"]');
+      if (!d.consent) return fail('Centang persetujuan di atas untuk melanjutkan pengisian kuesioner.', 'input[name="consent"]');
       return { ok: true };
     }
 
     if (step.type === 'role') {
-      if (!roleById(d.peran)) return fail('Pilih salah satu peran untuk melanjutkan.', 'input[name="peran"]');
+      if (!d.peran || !roleById(d.peran)) return fail('Pilih peran Anda di platform Portofolio IDN.', 'input[name="peran"]');
       return { ok: true };
     }
 
     if (step.type === 'identity') {
-      if (!String(d.nama || '').trim()) return fail('Nama wajib diisi.', 'input[name="nama"]');
-      if (d.peran === 'mahasiswa' && !String(d.nim || '').trim()) return fail('NIM wajib diisi untuk mahasiswa.', 'input[name="nim"]');
-      if (d.peran !== 'admin') {
+      var role = roleById(d.peran);
+      if (!String(d.nama || '').trim()) return fail('Nama lengkap wajib diisi.', 'input[name="nama"]');
+
+      if (role && role.id === 'mahasiswa') {
+        var cleanNim = String(d.nim || '').trim();
+        if (!cleanNim) return fail('NIM wajib diisi untuk mahasiswa.', 'input[name="nim"]');
+        if (!/^[0-9A-Za-z.\-_/]{3,30}$/.test(cleanNim)) {
+          return fail('Format NIM tidak valid. Gunakan huruf atau angka (3–30 karakter).', 'input[name="nim"]');
+        }
+      }
+
+      if (role && role.id !== 'admin') {
+        if (!d.kode_prodi) return fail('Pilih Program Studi Anda.', 'select[name="prodi"]');
         var foundProdi = prodiByKode(d.kode_prodi);
-        if (!foundProdi) return fail('Pilih program studi.', 'select[name="prodi"]');
+        if (!foundProdi) return fail('Pilih Program Studi Anda.', 'select[name="prodi"]');
         d.prodi = foundProdi.nama;
       } else {
         d.kode_prodi = '';
@@ -506,9 +529,9 @@
     }
 
     if (step.type === 'profile') {
-      if (!d.lama_penggunaan) return fail('Pilih lama penggunaan LMS.', 'input[name="lama_penggunaan"]');
-      if (!d.frekuensi_akses) return fail('Pilih frekuensi akses LMS.', 'input[name="frekuensi_akses"]');
-      if (!d.perangkat) return fail('Pilih perangkat yang paling sering dipakai.', 'input[name="perangkat"]');
+      if (!d.pengalaman_portofolio) return fail('Pilih pengalaman portofolio Anda.', 'input[name="pengalaman_portofolio"]');
+      if (!d.frekuensi_akses) return fail('Pilih frekuensi akses platform Portofolio IDN.', 'input[name="frekuensi_akses"]');
+      if (!d.perangkat) return fail('Pilih perangkat utama yang digunakan.', 'input[name="perangkat"]');
       return { ok: true };
     }
 
@@ -518,7 +541,7 @@
       });
       if (missing.length) {
         return fail(
-          'Masih ada ' + missing.length + ' pernyataan yang belum dijawab. Lengkapi dulu bagian ini.',
+          'Masih ada ' + missing.length + ' pernyataan yang belum dinilai. Silakan lengkapi bagian ini.',
           '[data-q="' + missing[0].id + '"] input'
         );
       }
@@ -526,7 +549,7 @@
     }
 
     if (step.type === 'closing') {
-      if (!isValidInt(d.Z1, 1, 5)) return fail('Pilih tingkat kepuasan keseluruhan (Z1).', '[data-q="Z1"] input');
+      if (!isValidInt(d.Z1, 1, 5)) return fail('Pilih tingkat kepuasan umum (Z1).', '[data-q="Z1"] input');
       if (!isValidInt(d.Z2, 0, 10)) {
         return fail('Pilih skor rekomendasi 0–10 (Z2).', '[data-q="Z2"] input');
       }
@@ -544,7 +567,6 @@
     box.setAttribute('role', 'alert');
     box.innerHTML = icons.alert + '<span>' + esc(message) + '</span>';
 
-    // Tempelkan pesan sedekat mungkin dengan isian yang bermasalah.
     var anchor = null;
     if (target) {
       var input = stage.querySelector(target);
@@ -657,7 +679,7 @@
         submissionId: state.submissionId || '',
         savedAt: Date.now()
       }));
-    } catch (e) { /* storage penuh / diblokir */ }
+    } catch (e) { /* storage penuh */ }
   }
 
   function loadDraft() {
@@ -713,7 +735,7 @@
       nim: role.id === 'mahasiswa' ? String(d.nim || '').trim() : '',
       kode_prodi: role.id === 'admin' ? '' : d.kode_prodi,
       prodi: role.id === 'admin' ? '' : d.prodi,
-      lama_penggunaan: d.lama_penggunaan,
+      pengalaman_portofolio: d.pengalaman_portofolio,
       frekuensi_akses: d.frekuensi_akses,
       perangkat: d.perangkat,
       durasi_detik: Math.max(1, Math.round((Date.now() - state.startedAt) / 1000)),
@@ -737,21 +759,21 @@
 
   function friendlyServerError(code) {
     var map = {
-      token: 'Token form tidak cocok. Periksa TOKEN di assets/config.js dan SECRET di Apps Script.',
-      peran_tidak_valid: 'Peran yang dikirim tidak dikenali.',
-      nama_kosong: 'Nama belum terisi.',
+      token: 'Token formulir tidak cocok. Periksa konfigurasi TOKEN di assets/config.js dan cell B3 sheet Pengaturan di Spreadsheet.',
+      peran_tidak_valid: 'Peran yang dikirimkan tidak dikenali oleh sistem.',
+      nama_kosong: 'Nama lengkap belum terisi.',
       nim_kosong: 'NIM belum terisi.',
-      json_tidak_valid: 'Data yang dikirim tidak terbaca server.',
+      json_tidak_valid: 'Data yang dikirim tidak terbaca oleh server.',
       kosong: 'Data yang dikirim kosong.',
-      sibuk: 'Server sedang sibuk. Coba kirim lagi sebentar lagi.',
-      server_error: 'Server gagal menyimpan jawaban. Coba lagi.',
-      'respons kosong': 'Server tidak mengirim balasan. Coba kirim lagi.',
-      'respons server tidak dikenali': 'Balasan server tidak dikenali. Pastikan URL berakhiran /exec dan akses Web App diset "Anyone".'
+      sibuk: 'Server Google sedang sibuk. Silakan coba kirim kembali dalam beberapa saat.',
+      server_error: 'Server gagal menyimpan jawaban ke spreadsheet. Coba kirim ulang.',
+      'respons kosong': 'Server tidak mengirim balasan. Silakan coba lagi.',
+      'respons server tidak dikenali': 'Balasan server tidak dikenali. Pastikan URL berakhiran /exec dan hak akses Web App diset ke "Anyone".'
     };
     if (/^skor_/.test(code)) {
-      return 'Ada nilai yang tidak valid (' + code.replace('skor_', '') + ').';
+      return 'Ada butir pertanyaan yang nilainya belum valid (' + code.replace('skor_', '') + ').';
     }
-    return map[code] || 'Server menolak jawaban (kode: ' + code + ').';
+    return map[code] || 'Server menolak jawaban (kode error: ' + code + ').';
   }
 
   function postJSON(url, body) {
@@ -768,7 +790,6 @@
         try {
           out = JSON.parse(raw);
         } catch (e) {
-          // Biasanya halaman login Google → deployment belum "Anyone".
           throw serverError('respons server tidak dikenali');
         }
         if (!out || typeof out !== 'object') {
@@ -828,7 +849,7 @@
         if (rest.length) localStorage.setItem(QUEUE_KEY, JSON.stringify(rest));
         else localStorage.removeItem(QUEUE_KEY);
       } catch (e) { /* ignore */ }
-      if (sent) showToast(sent + ' jawaban tertunda berhasil dikirim.');
+      if (sent) showToast(sent + ' jawaban tertunda berhasil dikirim ke server.');
     });
   }
 
@@ -892,8 +913,6 @@
         throw serverError(out && out.error ? out.error : 'server_error');
       })
       .catch(function (err) {
-        // Server menjawab, tetapi menolak/mengembalikan halaman yang salah.
-        // Jangan kirim ulang lewat no-cors — tampilkan pesan dan biarkan draf utuh.
         if (err && err.server) {
           setBusy(false);
           showError('Jawaban belum terkirim. ' + friendlyServerError(err.message), null);
@@ -906,8 +925,6 @@
           return;
         }
 
-        // Gagal jaringan / CORS redirect: coba kirim no-cors + simpan cadangan antrean
-        // (aman dari duplikat karena Code.gs memeriksa id_respon yang sama).
         return postNoCors(urlCheck.url, payload)
           .then(function () {
             enqueue(payload);
@@ -955,7 +972,7 @@
   /* ---------- Boot ---------- */
   function init() {
     if (!DATA.roles || !DATA.roles.length) {
-      stage.innerHTML = '<h1>Data soal tidak ditemukan</h1><p class="lead">Periksa assets/questions.js.</p>';
+      stage.innerHTML = '<h1>Data soal tidak ditemukan</h1><p class="lead">Periksa berkas assets/questions.js.</p>';
       return;
     }
 
@@ -965,7 +982,7 @@
       banner.className = 'notice notice--warn env-banner';
       banner.setAttribute('role', 'status');
       banner.innerHTML = urlCheck.empty
-        ? icons.alert + '<span><strong>Mode uji:</strong> <code>WEB_APP_URL</code> belum diisi di <code>assets/config.js</code>. Anda tetap bisa mencoba seluruh langkah form, tetapi jawaban belum bisa dikirim ke Spreadsheet.</span>'
+        ? icons.alert + '<span><strong>Mode Uji Coba:</strong> <code>WEB_APP_URL</code> belum diisi di <code>assets/config.js</code>. Anda tetap dapat mencoba seluruh alur formulir secara lokal, namun jawaban belum dikirimkan ke Spreadsheet.</span>'
         : icons.alert + '<span><strong>Konfigurasi URL belum tepat:</strong> ' + esc(urlCheck.message) + '</span>';
       stage.parentNode.insertBefore(banner, stage);
     }
@@ -977,7 +994,7 @@
       var qs = params.toString();
       history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : ''));
     } else if (loadDraft()) {
-      showToast('Draf pengisian sebelumnya dipulihkan.');
+      showToast('Draf pengisian sebelumnya berhasil dipulihkan.');
     }
 
     render();
@@ -996,7 +1013,10 @@
         var cur = document.documentElement.getAttribute('data-theme') || 'light';
         var next = cur === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        try { localStorage.setItem('lms_theme', next); } catch (e) {}
+        try {
+          localStorage.setItem(THEME_KEY, next);
+          localStorage.setItem('lms_theme', next);
+        } catch (e) {}
       });
     }
   }
@@ -1007,3 +1027,4 @@
     init();
   }
 })();
+

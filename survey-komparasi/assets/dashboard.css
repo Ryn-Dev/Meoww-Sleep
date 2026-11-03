@@ -1,0 +1,760 @@
+/* ============================================================
+   Executive Comparison Dashboard Stylesheet
+   Politeknik IDN Bogor — Micro-Box 4px & Multi-Platform Layout
+   ============================================================ */
+
+.dash-body {
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.dash-shell {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+/* ---------- Header ---------- */
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+
+.dash-header__brand {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.brand__mark {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.brand__mark svg {
+  width: 24px;
+  height: 24px;
+}
+
+.dash-eyebrow {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.dash-title {
+  font-size: clamp(1.4rem, 3.2vw, 1.85rem);
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin-top: 2px;
+}
+
+.dash-sub {
+  margin-top: 4px;
+  font-size: .83rem;
+  color: var(--muted);
+  max-width: 65ch;
+}
+
+.dash-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-actions-row {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-actions-group .btn-theme,
+.dash-header__actions .btn-theme,
+.dash-actions-row .btn-theme {
+  width: 38px;
+  height: 38px;
+  min-height: 38px;
+}
+
+.dash-actions-row[hidden],
+#dashHeaderActionsLocked[hidden],
+.dash-header__actions[hidden] {
+  display: none !important;
+}
+
+/* Platform Link Badges */
+.app-link-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  min-height: 38px;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: .80rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  text-decoration: none;
+  transition: all .16s ease;
+}
+.app-link-badge:hover {
+  background: var(--surface-subtle);
+  border-color: var(--line-strong);
+}
+.app-link-badge svg {
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+}
+
+/* Multi-Platform Badges in Header */
+.platform-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.p-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: .72rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  transition: all .15s ease;
+}
+.p-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.p-tag i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ---------- Parallel Sync Strip ---------- */
+.sync-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sync-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: .80rem;
+}
+
+.sync-card__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sync-card__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.sync-card__name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sync-card__status {
+  font-size: .74rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---------- Toolbar ---------- */
+.dash-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.role-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.role-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all .14s ease;
+}
+
+.role-tab:hover {
+  background: var(--surface-subtle);
+  border-color: var(--line-strong);
+}
+
+.role-tab.active {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border-color: var(--accent);
+}
+
+/* ---------- Banner & Alert ---------- */
+.dash-banner {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: .82rem;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-banner--info {
+  background: var(--accent-soft);
+  border-color: rgba(37, 99, 235, 0.3);
+  color: var(--ink);
+}
+.dash-banner--warn {
+  background: var(--warning-soft);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--ink);
+}
+
+/* ---------- Executive Leaderboard Grid ---------- */
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.app-card {
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform .15s ease, border-color .15s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+}
+
+.app-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.app-card__badge-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: .70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  letter-spacing: .04em;
+}
+
+.app-card__name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 4px;
+  color: var(--ink);
+}
+
+.app-card__cat {
+  font-size: .76rem;
+  color: var(--muted);
+}
+
+.app-card__scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.score-box__val {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.score-box__val small {
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.score-box__label {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: 4px;
+}
+
+.app-card__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+/* ---------- Grid Layouts ---------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 960px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.panel__sub {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ---------- Radar Benchmark ---------- */
+.radar-wrap {
+  display: grid;
+  place-items: center;
+  padding: 8px 0;
+}
+
+.radar-svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  overflow: visible;
+}
+
+.radar-svg text {
+  font-family: var(--font-body);
+  user-select: none;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: .76rem;
+}
+
+.chart-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chart-legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+/* ---------- Grouped Bar Chart (5 Dimensi EUCS) ---------- */
+.grouped-eucs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eucs-dim-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eucs-dim-group__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.eucs-dim-group__code {
+  display: inline-block;
+  min-width: 24px;
+  text-align: center;
+  padding: 1px 5px;
+  margin-right: 6px;
+  border-radius: var(--radius);
+  font-size: .70rem;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.app-bars-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .app-bars-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-bar-item {
+  background: var(--surface-subtle);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+}
+
+.app-bar-item__top {
+  display: flex;
+  justify-content: space-between;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+
+.app-bar-track {
+  height: 8px;
+  background: var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.app-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width .4s ease;
+}
+
+/* ---------- Stacked NPS Battle ---------- */
+.nps-battle-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .80rem;
+}
+
+.nps-battle-table th {
+  padding: 9px 12px;
+  text-align: left;
+  font-size: .70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.nps-battle-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.stacked-nps-bar {
+  display: flex;
+  height: 10px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--line);
+  min-width: 130px;
+}
+
+.stacked-nps-bar span {
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Cross-Prodi Matrix ---------- */
+.prodi-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .80rem;
+}
+
+.prodi-matrix-table th {
+  padding: 9px 12px;
+  text-align: left;
+  font-size: .70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.prodi-matrix-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.prodi-score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: .78rem;
+}
+
+/* ---------- Cross-App Strengths & Weaknesses ---------- */
+.matrix-4col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.eval-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 16px;
+}
+
+.eval-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .88rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eval-box {
+  margin-bottom: 12px;
+}
+
+.eval-box__label {
+  font-size: .70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 6px;
+}
+.eval-box__label--pos { color: var(--success); }
+.eval-box__label--neg { color: var(--danger); }
+
+.eval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: .76rem;
+}
+
+.eval-item {
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- PIN Gate ---------- */
+.dash-pin {
+  max-width: 440px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.dash-pin__form {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dash-pin__form input {
+  flex: 1;
+}
+
+/* ---------- Modal Glossary ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+.modal-backdrop[hidden] { display: none !important; }
+
+.modal-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-box__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-box__body {
+  padding: 20px;
+  overflow-y: auto;
+  font-size: .84rem;
+  line-height: 1.6;
+}
+
+/* ---------- Print Formatting ---------- */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print, .dash-header__actions, .dash-toolbar, .sync-strip, .btn, .btn-theme {
+    display: none !important;
+  }
+  .dash-shell {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .card, .panel, .app-card, .eval-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+  .grid-2, .leaderboard-grid, .matrix-4col {
+    display: block !important;
+  }
+  .grid-2 > *, .leaderboard-grid > *, .matrix-4col > * {
+    margin-bottom: 14px !important;
+  }
+}
+

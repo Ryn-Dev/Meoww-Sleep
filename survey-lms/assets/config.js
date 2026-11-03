@@ -13,6 +13,9 @@ window.CONFIG = {
   // Naikkan versi ini kalau ada soal yang diubah setelah data masuk
   VERSION: 'v1',
 
+  // Tautan resmi aplikasi LMS yang dievaluasi
+  APP_URL: 'https://lms.politeknikidn.id',
+
   // Daftar prodi (dipakai Mahasiswa dan Mentor; Pimpinan tidak memilih prodi)
   PRODI: [
     { kode: '58302', nama: 'Teknologi Rekayasa Perangkat Lunak' },

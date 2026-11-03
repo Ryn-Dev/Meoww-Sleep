@@ -221,6 +221,7 @@ function doGet(e) {
     service: 'Kuesioner Kepuasan PintarUji (CBT)',
     institution: 'Politeknik IDN Bogor',
     version: 'v1',
+    appUrl: 'https://pintaruji.politeknikidn.id',
     endpoints: { submit: 'POST /exec', dashboard: 'GET /exec?mode=rekap' },
     message: 'Endpoint Web App aktif. Pengiriman jawaban kuesioner menggunakan metode POST.'
   });
@@ -324,7 +325,7 @@ function setupPengaturan() {
     sh = ss.insertSheet(PENGATURAN_NAME);
   }
   ensureColumns_(sh, 3);
-  ensureRows_(sh, 6);
+  ensureRows_(sh, 7);
 
   // Header
   sh.getRange(1, 1, 1, 3).merge()
@@ -363,16 +364,30 @@ function setupPengaturan() {
   sh.getRange(4, 3).setValue('Status proteksi otomatis terbaca oleh script saat dashboard web dibuka.')
     .setFontColor('#64748b').setFontSize(9);
 
+  // Row 5: Target Evaluasi / URL
+  sh.getRange(5, 1).setValue('Target Evaluasi / URL').setFontWeight('bold');
+  sh.getRange(5, 2).setValue('https://pintaruji.politeknikidn.id').setNumberFormat('@');
+  sh.getRange(5, 3).setValue('Tautan resmi sistem CBT PintarUji yang dievaluasi.')
+    .setFontColor('#64748b').setFontSize(9);
+
+  // Row 6: Versi Kuesioner
+  sh.getRange(6, 1).setValue('Versi Kuesioner').setFontWeight('bold');
+  sh.getRange(6, 2).setValue('v1').setNumberFormat('@');
+  sh.getRange(6, 3).setValue('Versi instrumen survei saat ini.')
+    .setFontColor('#64748b').setFontSize(9);
+
   // Styling
   sh.setColumnWidth(1, 230);
-  sh.setColumnWidth(2, 180);
+  sh.setColumnWidth(2, 220);
   sh.setColumnWidth(3, 440);
   sh.setRowHeight(2, 30);
   sh.setRowHeight(3, 30);
   sh.setRowHeight(4, 30);
+  sh.setRowHeight(5, 30);
+  sh.setRowHeight(6, 30);
   sh.setTabColor('#f59e0b');
-  sh.getRange(2, 1, 3, 3).setFontFamily('Inter').setFontSize(10).setVerticalAlignment('middle');
-  sh.getRange(2, 2, 2, 1).setBackground('#fffbeb').setFontColor('#0f172a');
+  sh.getRange(2, 1, 5, 3).setFontFamily('Inter').setFontSize(10).setVerticalAlignment('middle');
+  sh.getRange(2, 2, 5, 1).setBackground('#fffbeb').setFontColor('#0f172a');
 
   return 'Sheet "' + PENGATURAN_NAME + '" siap.';
 }

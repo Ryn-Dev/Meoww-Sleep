@@ -87,14 +87,23 @@
   };
 
   function loadSavedPin() {
-    try { return sessionStorage.getItem(PIN_STORAGE_KEY) || ''; } catch (e) { return ''; }
+    try {
+      return localStorage.getItem(PIN_STORAGE_KEY) ||
+             sessionStorage.getItem(PIN_STORAGE_KEY) ||
+             '';
+    } catch (e) { return ''; }
   }
 
   function savePin(val) {
     state.pin = val;
     try {
-      if (val) sessionStorage.setItem(PIN_STORAGE_KEY, val);
-      else sessionStorage.removeItem(PIN_STORAGE_KEY);
+      if (val) {
+        localStorage.setItem(PIN_STORAGE_KEY, val);
+        sessionStorage.setItem(PIN_STORAGE_KEY, val);
+      } else {
+        localStorage.removeItem(PIN_STORAGE_KEY);
+        sessionStorage.removeItem(PIN_STORAGE_KEY);
+      }
     } catch (e) { /* ignore */ }
   }
 
@@ -288,9 +297,9 @@
 
   /* ---------- SVG Generators ---------- */
   function renderRadarSVG(payload, activeRole) {
-    var cx = 160;
-    var cy = 152;
-    var R = 100;
+    var cx = 175;
+    var cy = 150;
+    var R = 92;
     var levels = [1, 2, 3, 4, 5];
 
     function pt(axisIdx, val) {
@@ -309,19 +318,19 @@
 
     var axes = EUCS_KEYS.map(function (k, idx) {
       var end = pt(idx, 5);
-      var lbl = pt(idx, 6.25);
+      var lbl = pt(idx, 6.2);
       var anchor = idx === 0 ? 'middle' : (idx === 1 || idx === 2 ? 'start' : 'end');
-      var dy = idx === 0 ? -2 : (idx === 2 || idx === 3 ? 8 : 3);
+      var dy = idx === 0 ? -4 : (idx === 2 || idx === 3 ? 7 : 3);
       return '' +
         '<line x1="' + cx + '" y1="' + cy + '" x2="' + end[0] + '" y2="' + end[1] + '" stroke="var(--line, #e2e8f0)" stroke-width="1"/>' +
-        '<text x="' + lbl[0] + '" y="' + (lbl[1] + dy) + '" text-anchor="' + anchor + '" fill="var(--ink, #334155)" font-size="11" font-weight="700">' +
+        '<text x="' + lbl[0] + '" y="' + (lbl[1] + dy) + '" text-anchor="' + anchor + '" fill="var(--ink, #334155)" font-size="10.5" font-weight="600">' +
           esc(EUCS_RADAR_LABELS[k] || (EUCS_NAMES[k] + ' (' + k + ')')) +
         '</text>';
     }).join('');
 
     var scaleTicks = [2, 4].map(function (lv) {
       var p = pt(0, lv);
-      return '<text x="' + (p[0] + 5) + '" y="' + (p[1] + 3) + '" fill="var(--muted, #94a3b8)" font-size="9" font-weight="600">' + lv + '</text>';
+      return '<text x="' + (p[0] + 5) + '" y="' + (p[1] + 3) + '" fill="var(--muted, #94a3b8)" font-size="8.5" font-weight="600">' + lv + '</text>';
     }).join('');
 
     var seriesList = [];
@@ -350,7 +359,7 @@
       });
       var polyStr = coords.map(function (c) { return c.join(','); }).join(' ');
       var dots = s.dashed ? '' : coords.map(function (c) {
-        return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="3.6" fill="' + s.color + '" stroke="#fff" stroke-width="1.5"/>';
+        return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="3.4" fill="' + s.color + '" stroke="#fff" stroke-width="1.5"/>';
       }).join('');
       return '' +
         '<polygon points="' + polyStr + '" fill="' + s.color + '" fill-opacity="' + s.fillOp + '" stroke="' + s.color + '" stroke-width="2.2"' +
@@ -366,7 +375,7 @@
 
     return '' +
       '<div class="radar-wrap">' +
-        '<svg class="radar-svg" viewBox="0 0 320 295" role="img" aria-label="Grafik radar 5 dimensi EUCS">' +
+        '<svg class="radar-svg" viewBox="0 0 350 300" role="img" aria-label="Grafik radar 5 dimensi EUCS">' +
           rings + axes + scaleTicks + polygons +
         '</svg>' +
       '</div>' +
@@ -441,14 +450,60 @@
     }).join('');
   }
 
+  function updateHeaderActionsLayout(isLocked) {
+    var group = document.getElementById('dashActionsGroup');
+    var slotLocked = document.getElementById('dashHeaderActionsLocked');
+    var slotUnlocked = document.getElementById('dashActionsUnlocked');
+    if (!group || !slotLocked || !slotUnlocked) return;
+
+    if (isLocked) {
+      if (group.parentElement !== slotLocked) {
+        slotLocked.appendChild(group);
+      }
+      slotLocked.hidden = false;
+      slotUnlocked.hidden = true;
+      if (btnGlossary) btnGlossary.hidden = true;
+      if (btnDemo) btnDemo.hidden = true;
+      if (btnRefresh) btnRefresh.hidden = true;
+      if (btnPrint) btnPrint.hidden = true;
+      if (btnLock) btnLock.hidden = true;
+    } else {
+      if (group.parentElement !== slotUnlocked) {
+        slotUnlocked.appendChild(group);
+      }
+      slotLocked.hidden = true;
+      slotUnlocked.hidden = false;
+      if (btnGlossary) btnGlossary.hidden = false;
+      if (btnDemo) btnDemo.hidden = false;
+      if (btnRefresh) btnRefresh.hidden = false;
+      if (btnPrint) btnPrint.hidden = false;
+      var canLock = Boolean(state.pin || (state.payload && state.payload.pin_required));
+      if (btnLock) btnLock.hidden = !canLock;
+    }
+  }
+
   function renderDashboard() {
     var payload = state.payload;
     if (!payload || !payload.slices) return;
 
+    if (elPinGate && !elPinGate.hidden) {
+      if (elToolbar) {
+        elToolbar.hidden = true;
+        elToolbar.style.display = 'none';
+      }
+      updateHeaderActionsLayout(true);
+      return;
+    }
+
+    updateHeaderActionsLayout(false);
     elToolbar.hidden = false;
+    elToolbar.style.display = '';
     renderRoleTabs(payload);
     btnDemo.classList.toggle('btn--active', Boolean(state.isDemo));
     btnDemo.textContent = state.isDemo ? 'Matikan Simulasi' : 'Data Simulasi';
+    if (btnLock) {
+      btnLock.hidden = !payload.pin_required && !state.pin;
+    }
 
     var sl = payload.slices[state.role] || payload.slices.all;
     var allSl = payload.slices.all;
@@ -855,7 +910,10 @@
   /* ---------- Fetch Data dari Apps Script ---------- */
   function fetchLive() {
     elPinGate.hidden = true;
+    elPinGate.style.display = 'none';
     elPinError.hidden = true;
+    elToolbar.hidden = true;
+    elToolbar.style.display = 'none';
 
     if (!WEB_APP_URL) {
       state.isDemo = true;
@@ -887,9 +945,13 @@
 
         if (out && out.error === 'pin_diperlukan') {
           elToolbar.hidden = true;
+          elToolbar.style.display = 'none';
           elContent.innerHTML = '';
           elPinGate.hidden = false;
-          if (btnLock) btnLock.hidden = true;
+          elPinGate.style.display = '';
+          updateHeaderActionsLayout(true);
+          renderBanner('', false);
+          elMeta.textContent = 'Akses terproteksi — Masukkan kode PIN untuk melihat ringkasan hasil survei.';
           if (state.pin) {
             elPinError.textContent = 'Kode akses / PIN tidak cocok. Silakan periksa tab Pengaturan di Spreadsheet.';
             elPinError.hidden = false;
@@ -920,7 +982,15 @@
         state.livePayload = out;
         state.isDemo = false;
         state.payload = out;
+        elPinGate.hidden = true;
+        elPinGate.style.display = 'none';
+        elToolbar.hidden = false;
+        elToolbar.style.display = '';
         if (btnLock) btnLock.hidden = !out.pin_required && !state.pin;
+        if (btnDemo) btnDemo.hidden = false;
+        if (btnPrint) btnPrint.hidden = false;
+        if (btnGlossary) btnGlossary.hidden = false;
+        if (btnRefresh) btnRefresh.hidden = false;
         renderBanner('', false);
         renderDashboard();
       })
@@ -936,6 +1006,9 @@
   }
 
   function toggleDemo() {
+    if (elPinGate && !elPinGate.hidden) {
+      return;
+    }
     if (state.isDemo && state.livePayload) {
       state.isDemo = false;
       state.payload = state.livePayload;
@@ -1051,6 +1124,7 @@
     var val = String(elPinInput.value || '').trim();
     if (!val) return;
     savePin(val);
+    if (elPinInput) elPinInput.value = '';
     fetchLive();
   });
 
@@ -1070,6 +1144,23 @@
   if (btnLock) {
     btnLock.addEventListener('click', function () {
       savePin('');
+      state.pin = '';
+      if (elToolbar) {
+        elToolbar.hidden = true;
+        elToolbar.style.display = 'none';
+      }
+      if (elPinGate) {
+        elPinGate.hidden = true;
+        elPinGate.style.display = 'none';
+      }
+      updateHeaderActionsLayout(true);
+      if (elContent) {
+        elContent.innerHTML = '' +
+          '<div class="card dash-loading">' +
+            '<span class="dash-spinner" aria-hidden="true"></span>' +
+            '<p>Mengunci dashboard…</p>' +
+          '</div>';
+      }
       fetchLive();
     });
   }

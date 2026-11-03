@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Kuesioner kepuasan pengguna platform SIMTA Politeknik IDN Bogor: mengevaluasi pengajuan judul, bimbingan tugas akhir, verifikasi berkas, jadwal ujian, SK ber-QR code, dan tata kelola TA.">
+  <title>Kuesioner Kepuasan Layanan SIMTA — Politeknik IDN Bogor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script>
+    (function () {
+      var t = 'light';
+      try {
+        t = localStorage.getItem('simta_theme') || localStorage.getItem('portofolio_theme') || localStorage.getItem('lms_theme');
+        if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#stage">Lewati ke formulir</a>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="topbar__row">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+              <path d="M6 6h10M6 10h10M6 14h6"/>
+            </svg>
+          </span>
+          <span class="brand__text">
+            <strong>SIMTA IDN</strong>
+            <small>Sistem Informasi Manajemen Tugas Akhir</small>
+          </span>
+        </div>
+        <div class="topbar__actions">
+          <a href="https://simta.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="app-link-badge" title="Kunjungi website aplikasi SIMTA (https://simta.politeknikidn.id)">
+            Buka SIMTA
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+          <button type="button" class="btn-theme" id="btnThemeToggle" aria-label="Ganti tema gelap/terang" title="Ganti tema gelap/terang">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+          <span class="badge" id="progressLabel" hidden>Langkah 1</span>
+        </div>
+      </div>
+
+      <div class="progress" id="progressWrap" hidden>
+        <div class="progress__track">
+          <span class="progress__bar" id="progressBar" style="width:0%"></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="card" id="stage" tabindex="-1" aria-live="polite"></main>
+
+    <nav class="nav" id="nav" aria-label="Navigasi formulir">
+      <button type="button" class="btn btn--ghost" id="btnBack" hidden>Kembali</button>
+      <button type="button" class="btn btn--primary" id="btnNext">Mulai Mengisi</button>
+    </nav>
+
+    <p class="footnote">
+      Data yang Anda masukkan hanya dipergunakan untuk mengevaluasi dan meningkatkan mutu pelayanan platform SIMTA Politeknik IDN Bogor.
+    </p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="./assets/config.js"></script>
+  <script src="./assets/questions.js"></script>
+  <script src="./assets/app.js"></script>
+</body>
+</html>
+

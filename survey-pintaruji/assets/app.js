@@ -166,6 +166,7 @@
     student: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>',
     mentor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m8 11 3-3 2 2 3-3"/></svg>',
     leader: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+    external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
     alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
   };
 
@@ -185,6 +186,16 @@
         '<span class="eyebrow">Evaluasi Layanan CBT · Politeknik IDN</span>' +
         '<h1>Bagaimana pengalaman Anda memakai PintarUji?</h1>' +
         '<p class="lead">Kuesioner ini mengevaluasi kemudahan, keandalan, dan efisiensi pelaksanaan ujian berbasis komputer (CBT) di lingkungan Politeknik IDN Bogor.</p>' +
+        '<a href="https://pintaruji.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="app-banner">' +
+          '<div class="app-banner__main">' +
+            '<div class="app-banner__icon">' + icons.leader + '</div>' +
+            '<div class="app-banner__info">' +
+              '<span class="app-banner__title">PintarUji — Platform Ujian Berbasis Komputer (CBT)</span>' +
+              '<span class="app-banner__url">https://pintaruji.politeknikidn.id</span>' +
+            '</div>' +
+          '</div>' +
+          '<span class="app-banner__cta">Buka PintarUji ' + icons.external + '</span>' +
+        '</a>' +
         '<div class="chips">' +
           '<span class="chip">' + icons.clock + ' ± 5–7 menit</span>' +
           '<span class="chip">' + icons.list + ' 13–18 pernyataan</span>' +

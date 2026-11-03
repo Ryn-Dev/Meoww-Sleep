@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Executive Comparison Dashboard — Analisis perbandingan kepuasan civitas akademika pada 4 platform digital Politeknik IDN.">
+  <title>Executive Comparison Dashboard — Layanan Digital Politeknik IDN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+  <link rel="stylesheet" href="./assets/dashboard.css">
+  <script>
+    (function () {
+      var t = 'light';
+      try {
+        t = localStorage.getItem('komparasi_theme') || localStorage.getItem('simta_theme') || localStorage.getItem('portofolio_theme') || localStorage.getItem('lms_theme');
+        if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body class="dash-body">
+  <div class="dash-shell">
+    <header class="dash-header">
+      <div class="dash-header__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+        </span>
+        <div>
+          <span class="dash-eyebrow">Analisis Komparatif Eksekutif · Politeknik IDN</span>
+          <h1 class="dash-title">Executive Comparison Dashboard</h1>
+          <p class="dash-sub" id="dashMetaText">Menyinkronkan data survei agregat dari 4 platform digital kampus…</p>
+          <div class="platform-quick-links no-print">
+            <a href="https://pintaruji.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="p-tag" title="Buka website PintarUji CBT"><i style="background:#10b981"></i> PintarUji</a>
+            <a href="https://portofolio.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="p-tag" title="Buka website Portofolio IDN"><i style="background:#6366f1"></i> Portofolio</a>
+            <a href="https://lms.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="p-tag" title="Buka website LMS IDN"><i style="background:#0284c7"></i> LMS</a>
+            <a href="https://simta.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="p-tag" title="Buka website SIMTA IDN"><i style="background:#8b5cf6"></i> SIMTA</a>
+          </div>
+          <!-- Baris tombol ketika dashboard sudah tampil (di bawah teks utama) -->
+          <div class="dash-actions-row no-print" id="dashActionsUnlocked" hidden></div>
+        </div>
+      </div>
+
+      <!-- Baris tombol di pojok kanan atas (hanya ketika dashboard terkunci) -->
+      <div class="dash-header__actions no-print" id="dashHeaderActionsLocked">
+        <div class="dash-actions-group" id="dashActionsGroup">
+          <button type="button" class="btn-theme" id="btnThemeToggle" aria-label="Ganti tema gelap/terang" title="Ganti tema gelap/terang">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm btn--glossary" id="btnGlossary" title="Baca panduan istilah komparasi" hidden>
+            <span class="help-dot" aria-hidden="true">?</span> Panduan Istilah
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" id="btnDemo" title="Tampilkan perbandingan contoh data simulasi" hidden>
+            Data Simulasi
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" id="btnRefresh" title="Tarik ulang data dari 4 Apps Script" hidden>
+            Muat Ulang
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" id="btnPrint" title="Cetak laporan perbandingan" hidden>
+            Cetak / PDF
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" id="btnLockDash" title="Kunci dashboard kembali" hidden>
+            Kunci
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div id="dashBanner"></div>
+
+    <!-- Parallel Sync Strip (Indikator Sinkronisasi 4 Sistem) -->
+    <section class="sync-strip no-print" id="syncStrip">
+      <div class="sync-card" id="syncPintaruji">
+        <div class="sync-card__info">
+          <span class="sync-card__dot" style="background:#10b981"></span>
+          <span class="sync-card__name">PintarUji CBT</span>
+        </div>
+        <span class="sync-card__status">Menghubungkan…</span>
+      </div>
+      <div class="sync-card" id="syncPortofolio">
+        <div class="sync-card__info">
+          <span class="sync-card__dot" style="background:#6366f1"></span>
+          <span class="sync-card__name">Portofolio IDN</span>
+        </div>
+        <span class="sync-card__status">Menghubungkan…</span>
+      </div>
+      <div class="sync-card" id="syncLms">
+        <div class="sync-card__info">
+          <span class="sync-card__dot" style="background:#0284c7"></span>
+          <span class="sync-card__name">LMS IDN</span>
+        </div>
+        <span class="sync-card__status">Menghubungkan…</span>
+      </div>
+      <div class="sync-card" id="syncSimta">
+        <div class="sync-card__info">
+          <span class="sync-card__dot" style="background:#8b5cf6"></span>
+          <span class="sync-card__name">SIMTA IDN</span>
+        </div>
+        <span class="sync-card__status">Menghubungkan…</span>
+      </div>
+    </section>
+
+    <!-- PIN Gate (hanya muncul bila dashboard diproteksi kode PIN) -->
+    <section class="card dash-pin" id="pinGate" hidden>
+      <span class="eyebrow">Akses Terproteksi</span>
+      <h2>Masukkan Kode Akses Dashboard</h2>
+      <p class="lead">Dashboard komparatif ini diproteksi. Masukkan kode akses Master PIN untuk melihat ringkasan perbandingan.</p>
+      <form id="pinForm" class="dash-pin__form">
+        <input type="password" class="input" id="pinInput" placeholder="Masukkan Master PIN" autocomplete="current-password" required>
+        <button type="submit" class="btn btn--primary">Buka Dashboard</button>
+      </form>
+      <p class="small" style="color:var(--danger);margin-top:10px" id="pinError" hidden></p>
+    </section>
+
+    <!-- Toolbar Filter -->
+    <section class="dash-toolbar no-print" id="dashToolbar" hidden style="display:none">
+      <div class="role-tabs" id="roleTabs" role="tablist" aria-label="Filter peran responden"></div>
+      <div class="small muted" id="toolbarStatusText">Membandingkan seluruh responden aktif</div>
+    </section>
+
+    <!-- Konten Visual Utama -->
+    <main class="dash-content" id="dashContent">
+      <div class="card" style="text-align:center;padding:40px 20px">
+        <div class="dash-spinner" style="width:32px;height:32px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px"></div>
+        <p style="font-weight:600;color:var(--ink-soft)">Menghubungkan ke 4 Web App Apps Script…</p>
+        <p class="small muted" style="margin-top:4px">Mengambil rekap data dari PintarUji, Portofolio, LMS, dan SIMTA secara paralel.</p>
+      </div>
+    </main>
+
+    <!-- Footnote -->
+    <footer class="dash-footer no-print" style="margin-top:36px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div class="small muted">
+        © 2026 Politeknik IDN Bogor · Pusat Penjaminan Mutu &amp; Transformasi Digital Layanan Kampus
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <a href="../survey-pintaruji/dashboard.html" class="small muted" style="text-decoration:none">Dashboard PintarUji</a>
+        <span class="muted">·</span>
+        <a href="../survey-portofolio/dashboard.html" class="small muted" style="text-decoration:none">Dashboard Portofolio</a>
+        <span class="muted">·</span>
+        <a href="../survey-lms/dashboard.html" class="small muted" style="text-decoration:none">Dashboard LMS</a>
+        <span class="muted">·</span>
+        <a href="../survey-simta/dashboard.html" class="small muted" style="text-decoration:none">Dashboard SIMTA</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal Panduan Istilah -->
+  <div class="modal-backdrop" id="glossaryModal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-box__head">
+        <h3 id="modalTitle">Panduan Istilah &amp; Metodologi Komparasi</h3>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnCloseGlossary" aria-label="Tutup modal">✕</button>
+      </div>
+      <div class="modal-box__body">
+        <h4>1. Model Evaluasi EUCS (End-User Computing Satisfaction)</h4>
+        <p class="small" style="margin-bottom:12px">Kerangka kerja ilmiah terstandar untuk mengukur kepuasan pengguna terhadap sistem informasi berbasis 5 pilar dimensi:</p>
+        <ul class="small" style="margin-left:20px;margin-bottom:16px;line-height:1.7">
+          <li><strong>Content (C)</strong>: Kesesuaian, kelengkapan, dan relevansi informasi yang disajikan sistem.</li>
+          <li><strong>Accuracy (A)</strong>: Ketepatan hasil olah data, stabilitas sistem, dan minimnya galat teknis.</li>
+          <li><strong>Format (F)</strong>: Kerapian antarmuka, kejelasan tata letak, dan estetika visual UI/UX.</li>
+          <li><strong>Ease of Use (E)</strong>: Kemudahan pengoperasian, kejelasan navigasi, dan kemudahan bagi pengguna pemula.</li>
+          <li><strong>Timeliness (T)</strong>: Kecepatan respon server, loading halaman, dan ketepatan waktu alur kerja.</li>
+        </ul>
+
+        <h4>2. Indeks Kepuasan Mutu (Skala 100%)</h4>
+        <p class="small" style="margin-bottom:12px">Dikonversi dari skor rata-rata Likert 1–5 dengan rumus:</p>
+        <p style="background:var(--surface-subtle);padding:8px 12px;border-radius:4px;font-family:monospace;font-size:.82rem;margin-bottom:16px">Indeks (%) = (Rata-rata Skor ÷ 5,00) × 100%</p>
+
+        <h4>3. Net Promoter Score (NPS)</h4>
+        <p class="small" style="margin-bottom:12px">Mengukur loyalitas dan kesediaan civitas merekomendasikan platform kepada rekan sejawat. Skala -100 s.d. +100:</p>
+        <ul class="small" style="margin-left:20px;line-height:1.7">
+          <li><strong style="color:#10b981">Promoter (Skor 9–10)</strong>: Pengguna sangat puas dan aktif merekomendasikan.</li>
+          <li><strong style="color:#f59e0b">Passive (Skor 7–8)</strong>: Pengguna cukup puas namun netral terhadap platform.</li>
+          <li><strong style="color:#ef4444">Detractor (Skor 0–6)</strong>: Pengguna kurang puas dan memiliki kendala pengalaman.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+
+  <script src="./assets/config.js"></script>
+  <script src="./assets/dashboard.js"></script>
+</body>
+</html>
+

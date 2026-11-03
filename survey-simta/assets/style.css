@@ -1,6 +1,8 @@
 /* ============================================================
-   Kuesioner LMS — Design System: Space Grotesk + Inter, Micro-Box 4px
-   Warna smooth & tenang, nyaman di mata, fokus pada pengisian.
+   Kuesioner Kepuasan Layanan SIMTA — Politeknik IDN Bogor
+   Sistem Informasi Manajemen Tugas Akhir (https://simta.politeknikidn.id)
+   Design System: Space Grotesk + Inter, Micro-Box 4px
+   Warna smooth & tenang, proporsional, nyaman di mata.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
@@ -12,7 +14,7 @@
   --muted: #64748b;         /* Petunjuk, keterangan tambahan, dan metadata */
   --line: #e2e8f0;          /* Garis batas 1px micro-box yang rapi */
   --line-strong: #cbd5e1;   /* Batas saat disorot / aktif */
-  --bg: #f8fafc;            /* Latar belakang halaman yang tenang (tanpa gradasi mencolok) */
+  --bg: #f8fafc;            /* Latar belakang halaman yang tenang */
   --surface: #ffffff;       /* Kartu utama putih bersih */
   --surface-subtle: #f8fafc;/* Latar kotak elemen di dalam kartu */
 
@@ -22,7 +24,7 @@
   --accent-soft: #eff6ff;
   --accent-border: #bfdbfe;
 
-  /* Semantik Pendukung — Nada lembut, tidak mencolok */
+  /* Semantik Pendukung */
   --ok: #059669;
   --ok-soft: #f0fdf4;
   --ok-border: #bbf7d0;
@@ -40,7 +42,7 @@
   --radius-sm: 4px;
   --radius-lg: 4px;
 
-  /* Bayangan micro yang sangat halus (tidak tebal/berpendar) */
+  /* Bayangan micro yang sangat halus */
   --shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
   --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04);
 
@@ -53,7 +55,6 @@
 /* ---------- Dark Mode Tokens ---------- */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  /* Netral Gelap (Dark Slate/Zinc) — Halus, kontras tinggi tanpa silau */
   --ink: #f8fafc;           /* Teks utama: putih-slate terang & tajam */
   --ink-soft: #cbd5e1;      /* Teks sekunder: abu-abu lembut terbaca jelas */
   --muted: #94a3b8;         /* Keterangan, hint, dan metadata */
@@ -63,7 +64,7 @@
   --surface: #121215;       /* Kartu utama abu-abu gelap terisolasi */
   --surface-subtle: #18181b;/* Kotak dalam / latar sekunder */
 
-  /* Aksen Utama Dark Mode — Biru cerah presisi & bersahabat */
+  /* Aksen Utama Dark Mode */
   --accent: #3b82f6;
   --accent-strong: #60a5fa;
   --accent-soft: rgba(59, 130, 246, 0.16);
@@ -90,6 +91,8 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
@@ -98,7 +101,7 @@ body {
   font-family: var(--font-body);
   color: var(--ink);
   background-color: var(--bg);
-  /* Pola grid arsitektural micro 32px yang sangat samar & bersih */
+  /* Pola grid arsitektural micro 32px yang samar & bersih */
   background-image:
     linear-gradient(to right, rgba(226, 232, 240, 0.45) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(226, 232, 240, 0.45) 1px, transparent 1px);
@@ -169,7 +172,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   flex: 0 0 auto;
 }
 
-/* ---------- Theme Toggle Button (Micro-Box 4px) ---------- */
+/* ---------- Theme Toggle Button ---------- */
 .btn-theme {
   display: inline-flex;
   align-items: center;
@@ -213,8 +216,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   height: 38px;
   border-radius: var(--radius);
   color: #fff;
-  background: var(--ink);
-  border: 1px solid var(--ink);
+  background: var(--accent);
+  border: 1px solid var(--accent);
   box-shadow: var(--shadow-soft);
   flex: 0 0 auto;
 }
@@ -248,6 +251,33 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: var(--surface);
   border: 1px solid var(--line);
   white-space: nowrap;
+}
+
+/* App Link Badge (Direct to https://simta.politeknikidn.id) */
+.app-link-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  text-decoration: none;
+  transition: all .16s ease;
+  white-space: nowrap;
+}
+.app-link-badge:hover {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+.app-link-badge svg {
+  width: 12px;
+  height: 12px;
 }
 
 .progress { margin-top: 12px; }
@@ -321,7 +351,7 @@ h3 {
 .muted { color: var(--muted); }
 .small { font-size: .82rem; }
 
-/* ---------- Intro Section (Tenang & Rapi) ---------- */
+/* ---------- Intro Section ---------- */
 .hero {
   margin: -32px -32px 24px;
   padding: 28px 32px 24px;
@@ -333,6 +363,71 @@ h3 {
 .hero .eyebrow { color: var(--accent); }
 .hero h1 { color: var(--ink); }
 .hero .lead { color: var(--ink-soft); }
+
+/* App Banner inside Hero */
+.app-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  text-decoration: none;
+  transition: all .16s ease;
+}
+.app-banner:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+.app-banner__main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.app-banner__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  flex: 0 0 auto;
+}
+.app-banner__icon svg { width: 22px; height: 22px; }
+.app-banner__info { min-width: 0; }
+.app-banner__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.app-banner__url {
+  display: block;
+  font-size: .78rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-display);
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--accent);
+  flex: 0 0 auto;
+}
 
 .chips {
   display: flex;
@@ -447,12 +542,12 @@ h3 {
 .consent span { font-size: .88rem; color: var(--ink-soft); line-height: 1.5; }
 .consent.is-invalid { border-color: var(--danger-border); background: var(--danger-soft); }
 
-/* ---------- Role Cards ---------- */
+/* ---------- Role Cards (4 Roles) ---------- */
 .roles {
   display: grid;
   gap: 12px;
   margin-top: 22px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 .role { position: relative; display: flex; }
 .role input {
@@ -588,7 +683,7 @@ h3 {
 .field.is-invalid .field__hint { color: var(--danger); }
 .field.is-invalid .choice input:not(:checked) + span { border-color: var(--danger-border); background: var(--danger-soft); }
 
-/* Choice pills (Profile step) */
+/* Choice pills */
 .choices {
   display: grid;
   gap: 8px;
@@ -652,9 +747,7 @@ h3 {
 }
 
 /* ============================================================
-   QUESTION MICRO-BOX (Proporsional & Tidak Mepet)
-   - Jarak antar pertanyaan: 24px margin-bottom antar micro-box
-   - Jarak pertanyaan dengan jawaban: 20px margin-bottom pada legend
+   QUESTION MICRO-BOX (Proporsional & Nyaman)
    ============================================================ */
 .q {
   margin: 0 0 24px !important;
@@ -687,7 +780,7 @@ h3 {
   gap: 12px;
   width: 100%;
   padding: 0;
-  margin-bottom: 20px; /* Jarak lega & proporsional ke tombol jawaban */
+  margin-bottom: 20px;
   font-size: .98rem;
   font-weight: 500;
   line-height: 1.55;
@@ -748,36 +841,30 @@ h3 {
   font-size: .63rem;
   font-weight: 600;
   letter-spacing: .04em;
-  color: var(--muted);
   text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1;
 }
 
 .scale__opt input:checked + .scale__btn {
   border-color: var(--accent);
-  background: var(--accent);
-  color: #ffffff;
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--accent);
 }
-.scale__opt input:checked + .scale__btn .scale__num { color: #ffffff; }
-.scale__opt input:checked + .scale__btn .scale__short { color: rgba(255, 255, 255, 0.88); }
-.scale__opt input:focus-visible + .scale__btn { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.q.is-missing {
+.scale__opt input:checked + .scale__btn .scale__num,
+.scale__opt input:checked + .scale__btn .scale__short {
+  color: var(--accent);
+}
+.scale__opt input:focus-visible + .scale__btn {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.q.is-invalid {
   border-color: var(--danger-border) !important;
   background: var(--danger-soft) !important;
 }
-.q.is-missing .scale__btn,
-.q.is-missing .nps__btn {
-  border-color: var(--danger-border);
-  background: var(--surface);
-}
-.q.is-missing .q__code {
-  background: var(--danger-soft);
-  border-color: var(--danger-border);
-  color: var(--danger);
-}
 
-/* ---------- NPS (Skala 0–10) ---------- */
+/* NPS 0–10 */
 .nps {
   display: grid;
   grid-template-columns: repeat(11, minmax(0, 1fr));
@@ -791,6 +878,7 @@ h3 {
   place-items: center;
   width: 100%;
   min-height: 48px;
+  padding: 8px 2px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
@@ -799,49 +887,69 @@ h3 {
   font-weight: 700;
   color: var(--ink);
   cursor: pointer;
-  transition: all .15s ease;
+  transition: all .16s ease;
 }
-.nps__btn:hover { border-color: var(--line-strong); background: var(--surface-subtle); }
+.nps__btn:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-subtle);
+}
 .nps__opt input:checked + .nps__btn {
   border-color: var(--accent);
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
-.nps__opt input:focus-visible + .nps__btn { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.nps-scale {
+.nps__opt input:focus-visible + .nps__btn {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.nps-legend {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: .74rem;
   color: var(--muted);
-  font-weight: 500;
 }
 
-/* ---------- Alerts ---------- */
+/* Section Divider */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.sec-head h3 { font-size: 1.05rem; }
+
+/* Alert */
 .alert {
   display: flex;
-  gap: 10px;
   align-items: flex-start;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-top: 20px;
   padding: 12px 16px;
   border-radius: var(--radius);
-  border: 1px solid var(--danger-border);
   background: var(--danger-soft);
+  border: 1px solid var(--danger-border);
   color: #991b1b;
   font-size: .86rem;
+  line-height: 1.5;
 }
 .alert svg { width: 18px; height: 18px; flex: 0 0 auto; margin-top: 2px; }
 
-/* ---------- Navigasi Tombol ---------- */
+/* ---------- Buttons & Nav ---------- */
 .nav {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
+.nav__meta { font-size: .8rem; color: var(--muted); }
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -909,16 +1017,45 @@ h3 {
   left: 50%;
   bottom: 22px;
   z-index: 60;
-  max-width: min(92vw, 420px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(92vw, 440px);
   transform: translateX(-50%);
   padding: 12px 18px;
   border-radius: var(--radius);
-  background: var(--ink);
+  background: #0f172a;
   color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   font-family: var(--font-display);
   font-size: .84rem;
-  box-shadow: 0 10px 25px -8px rgba(15, 23, 42, .4);
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow: 0 10px 25px -8px rgba(15, 23, 42, .45);
   animation: toast-in .25s ease;
+  pointer-events: none;
+}
+.toast[hidden] {
+  display: none !important;
+}
+.toast__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #10b981;
+}
+.toast__text {
+  flex: 1;
+}
+
+:root[data-theme="dark"] .toast {
+  background: #18181b;
+  color: #f4f4f5;
+  border: 1px solid #3f3f46;
+  box-shadow: 0 14px 35px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+:root[data-theme="dark"] .toast .toast__icon {
+  color: #34d399;
 }
 @keyframes toast-in {
   from { opacity: 0; transform: translate(-50%, 8px); }
@@ -926,7 +1063,7 @@ h3 {
 }
 
 /* ============================================================
-   HALAMAN HASIL (hasil.html) — Seragam Micro-Box 4px
+   HALAMAN HASIL (hasil.html)
    ============================================================ */
 .result {
   text-align: center;
@@ -983,6 +1120,7 @@ h3 {
   .shell { width: min(100% - 24px, 780px); padding-top: 14px; }
   .card { padding: 20px 16px; }
   .hero { margin: -20px -16px 20px; padding: 20px 16px 18px; }
+  .app-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
   .scale-legend { padding: 8px 4px; gap: 4px; }
   .scale-legend span { font-size: .6rem; }
   .scale { gap: 6px; }
@@ -1016,3 +1154,4 @@ h3 {
     transition-duration: .01ms !important;
   }
 }
+

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="robots" content="noindex">
+  <meta name="description"
+    content="Dashboard visualisasi hasil kuesioner kepuasan pengguna LMS secara agregat dan anonim.">
+  <title>Dashboard Hasil — Kuesioner Kepuasan LMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+  <link rel="stylesheet" href="./assets/dashboard.css">
+  <script>
+    (function () {
+      var t = 'light';
+      try {
+        t = localStorage.getItem('lms_theme');
+        if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      } catch (e) { }
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+
+<body class="dash-body">
+  <div class="dash-shell">
+    <header class="dash-header">
+      <div class="dash-header__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M4 20V10M10 20V4M16 20v-7M20 20H2" />
+          </svg>
+        </span>
+        <div>
+          <span class="dash-eyebrow">Ringkasan Hasil Survei · Anonim</span>
+          <h1 class="dash-title">Dashboard Kepuasan Pengguna LMS</h1>
+          <p class="dash-sub" id="dashMetaText">Memuat ringkasan data dari Google Spreadsheet…</p>
+          <!-- Baris tombol ketika dashboard sudah tampil (di bawah teks utama) -->
+          <div class="dash-actions-row no-print" id="dashActionsUnlocked" hidden></div>
+        </div>
+      </div>
+
+      <!-- Baris tombol di pojok kanan atas (hanya ketika dashboard terkunci) -->
+      <div class="dash-header__actions no-print" id="dashHeaderActionsLocked">
+        <div class="dash-actions-group" id="dashActionsGroup">
+        <a href="https://lms.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="app-link-badge"
+          title="Buka website aplikasi LMS (https://lms.politeknikidn.id)">
+          Buka LMS
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+        </a>
+        <button type="button" class="btn-theme" id="btnThemeToggle" aria-label="Ganti tema gelap/terang"
+          title="Ganti tema gelap/terang">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm btn--glossary" id="btnGlossary" data-glossary="all"
+          title="Baca catatan penjelasan istilah di dashboard" hidden>
+          <span class="help-dot" aria-hidden="true">?</span> Panduan Istilah
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnDemo" title="Tampilkan contoh data simulasi" hidden>
+          Data Simulasi
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnRefresh" hidden>
+          Muat Ulang
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnPrint" hidden>
+          Cetak / PDF
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnLockDash" title="Kunci dashboard kembali" hidden>
+          Kunci
+        </button>
+        <a class="btn btn--primary btn--sm" href="./index.html">
+          Buka Formulir
+        </a>
+        </div>
+      </div>
+    </header>
+
+    <div id="dashBanner"></div>
+
+    <!-- PIN Gate (hanya muncul bila dashboard diproteksi kode PIN) -->
+    <section class="card dash-pin" id="pinGate" hidden>
+      <span class="eyebrow">Akses Terproteksi</span>
+      <h2>Masukkan Kode Akses Dashboard</h2>
+      <p class="lead" id="pinGateDesc">Halaman dashboard ini diproteksi. Masukkan kode akses / PIN yang diatur pada
+        Google Spreadsheet tab <strong>Pengaturan</strong> cell B2.</p>
+      <form id="pinForm" class="dash-pin__form">
+        <input type="password" class="input" id="pinInput" placeholder="Masukkan kode akses PIN"
+          autocomplete="current-password" required>
+        <button type="submit" class="btn btn--primary">Buka Dashboard</button>
+      </form>
+      <p class="small" style="color:var(--danger);margin-top:10px" id="pinError" hidden></p>
+    </section>
+
+    <!-- Toolbar Filter -->
+    <section class="dash-toolbar no-print" id="dashToolbar" hidden style="display:none">
+      <div class="role-tabs" id="roleTabs" role="tablist" aria-label="Filter peran responden"></div>
+
+      <form class="date-filter" id="dateFilterForm">
+        <label class="date-filter__field">
+          <span>Dari</span>
+          <input type="date" class="input input--sm" id="filterFrom">
+        </label>
+        <label class="date-filter__field">
+          <span>Sampai</span>
+          <input type="date" class="input input--sm" id="filterTo">
+        </label>
+        <button type="submit" class="btn btn--ghost btn--sm">Filter</button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnResetDate" hidden>Reset</button>
+      </form>
+    </section>
+
+    <!-- Konten Utama Dashboard -->
+    <main id="dashContent" class="dash-main" aria-live="polite">
+      <div class="card dash-loading">
+        <span class="dash-spinner" aria-hidden="true"></span>
+        <p>Mengambil data agregat dari Google Spreadsheet…</p>
+      </div>
+    </main>
+
+    <footer class="footnote dash-footer">
+      Ringkasan ini menggabungkan nilai rata-rata seluruh responden secara anonim untuk evaluasi kualitas layanan LMS.
+      Kategori skor 1–5: ≥4,20 Sangat puas · 3,40–4,19 Puas · 2,60–3,39 Cukup · 1,80–2,59 Tidak puas · &lt;1,80 Sangat
+      tidak puas.
+      <button type="button" class="link-btn no-print" data-glossary="all">Lihat panduan istilah lengkap</button> ·
+      <a href="../survey-komparasi/index.html" class="link-btn no-print" style="text-decoration:none">📊 Dashboard Komparasi 4 Platform →</a>
+    </footer>
+  </div>
+
+  <!-- Modal Catatan & Penjelasan Istilah -->
+  <div class="modal-backdrop no-print" id="glossaryModal" role="dialog" aria-modal="true"
+    aria-labelledby="glossaryTitle" hidden>
+    <div class="modal-box" role="document">
+      <div class="modal-box__head">
+        <div>
+          <span class="dash-eyebrow">Catatan &amp; Panduan Baca</span>
+          <h2 class="modal-box__title" id="glossaryTitle">Penjelasan Istilah di Dashboard</h2>
+          <p class="modal-box__sub">Panduan ringkas dalam bahasa sehari-hari untuk memahami grafik dan angka evaluasi
+            LMS.</p>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseGlossary"
+          aria-label="Tutup panduan istilah">&times;</button>
+      </div>
+
+      <div class="glossary-tabs" id="glossaryTabs" role="tablist" aria-label="Pilih topik istilah">
+        <button type="button" class="glossary-tab is-active" role="tab" aria-selected="true" data-gfilter="all">Semua
+          Istilah</button>
+        <button type="button" class="glossary-tab" role="tab" aria-selected="false" data-gfilter="eucs">EUCS (5
+          Dimensi)</button>
+        <button type="button" class="glossary-tab" role="tab" aria-selected="false" data-gfilter="likert">Skor 1–5 &amp;
+          Z1</button>
+        <button type="button" class="glossary-tab" role="tab" aria-selected="false" data-gfilter="indeks">Indeks
+          (%)</button>
+        <button type="button" class="glossary-tab" role="tab" aria-selected="false" data-gfilter="nps">NPS
+          (Rekomendasi)</button>
+        <button type="button" class="glossary-tab" role="tab" aria-selected="false" data-gfilter="kode">Kode &amp;
+          Istilah Lain</button>
+      </div>
+
+      <div class="modal-box__body" id="glossaryBody">
+        <!-- 1. EUCS -->
+        <section class="glossary-card" data-gtopic="eucs">
+          <div class="glossary-card__head">
+            <span class="pill pill--mhs">Dimensi Kualitas Sistem</span>
+            <h3>Apa itu EUCS (<em>End-User Computing Satisfaction</em>)?</h3>
+          </div>
+          <p>
+            <strong>EUCS</strong> artinya <strong>Kepuasan Pengguna Akhir terhadap Aplikasi/Sistem</strong>.
+            Metode ini digunakan agar kita tidak hanya tahu <em>"pengguna puas atau tidak"</em>, tetapi tahu persis
+            <strong>bagian mana yang sudah bagus</strong> dan <strong>bagian mana yang perlu diperbaiki</strong>.
+            Penilaian dibagi menjadi <strong>5 aspek sederhana</strong>:
+          </p>
+          <div class="glossary-dims">
+            <div class="glossary-dim">
+              <span class="eucs-row__code">C</span>
+              <div>
+                <strong>Isi Informasi (<em>Content</em>)</strong>
+                <p>Apakah isi informasi di LMS (jadwal, materi kuliah, petunjuk tugas, laporan ibadah, status SKL,
+                  hingga grafik laporan) sudah lengkap, jelas, dan sesuai kebutuhan?</p>
+              </div>
+            </div>
+            <div class="glossary-dim">
+              <span class="eucs-row__code">A</span>
+              <div>
+                <strong>Keakuratan Data (<em>Accuracy</em>)</strong>
+                <p>Apakah data yang ditampilkan sistem sudah benar/tepat (seperti rekap absensi, nilai, keamanan hak
+                  akses) dan sistem jarang mengalami gangguan (<em>error</em>)?</p>
+              </div>
+            </div>
+            <div class="glossary-dim">
+              <span class="eucs-row__code">F</span>
+              <div>
+                <strong>Tampilan &amp; Tata Letak (<em>Format</em>)</strong>
+                <p>Apakah desain halaman LMS rapi, mudah dibaca, nyaman dibuka lewat layar HP, serta laporannya mudah
+                  dicetak atau diunduh?</p>
+              </div>
+            </div>
+            <div class="glossary-dim">
+              <span class="eucs-row__code">E</span>
+              <div>
+                <strong>Kemudahan Penggunaan (<em>Ease of Use</em>)</strong>
+                <p>Apakah LMS gampang dipakai sehari-hari tanpa membingungkan (mudah login, mencari menu, kumpul tugas,
+                  upload materi/SKL, absensi, dan memberi nilai)?</p>
+              </div>
+            </div>
+            <div class="glossary-dim">
+              <span class="eucs-row__code">T</span>
+              <div>
+                <strong>Kecepatan &amp; Ketepatan Waktu (<em>Timeliness</em>)</strong>
+                <p>Apakah halaman LMS cepat terbuka (tidak lambat), materi tersedia tepat waktu sesuai jadwal, dan data
+                  yang tampil selalu terbaru (<em>up to date</em>)?</p>
+              </div>
+            </div>
+          </div>
+          <div class="glossary-tip">
+            <strong>Cara membaca Peta Radar (Segi Lima):</strong> Semakin lebar dan merata jaring warna mendekati garis
+            terluar (angka <strong>5</strong>), berarti kelima aspek LMS sama-sama dinilai baik. Jika ada sudut yang
+            menjorok masuk ke dalam, aspek itulah yang paling butuh diperbaiki.
+          </div>
+        </section>
+
+        <!-- 2. Skala Likert 1-5 & Z1 -->
+        <section class="glossary-card" data-gtopic="likert">
+          <div class="glossary-card__head">
+            <span class="pill pill--good">Penilaian Utama</span>
+            <h3>Skala Likert 1–5 &amp; Kepuasan Umum (Z1)</h3>
+          </div>
+          <p>
+            <strong>Skala Likert 1–5</strong> adalah skala angka yang dipilih responden saat menjawab setuju/tidaknya
+            mereka terhadap setiap pernyataan di kuesioner:
+          </p>
+          <ul class="glossary-list">
+            <li><strong>1</strong> = Sangat Tidak Setuju (STS) / Sangat Tidak Puas (STP)</li>
+            <li><strong>2</strong> = Tidak Setuju (TS) / Tidak Puas (TP)</li>
+            <li><strong>3</strong> = Netral (N) / Cukup (C) — <em>juga dipilih bila responden belum pernah mencoba
+                fiturnya</em></li>
+            <li><strong>4</strong> = Setuju (S) / Puas (P)</li>
+            <li><strong>5</strong> = Sangat Setuju (SS) / Sangat Puas (SP)</li>
+          </ul>
+          <p style="margin-top:10px">
+            <strong>Kepuasan Umum (Z1)</strong> adalah pertanyaan penutup: <em>"Secara keseluruhan, seberapa puas Anda
+              dengan LMS ini?"</em> yang merangkum kesan responden dalam satu nilai rata-rata (1,00 sampai 5,00):
+          </p>
+          <div class="glossary-table-wrap">
+            <table class="glossary-table">
+              <thead>
+                <tr>
+                  <th>Rentang Rata-rata</th>
+                  <th>Kategori</th>
+                  <th>Arti Praktis</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>4,20 – 5,00</strong></td>
+                  <td><span class="pill pill--best">Sangat puas</span></td>
+                  <td>Layanan sudah sangat baik, pertahankan kualitasnya.</td>
+                </tr>
+                <tr>
+                  <td><strong>3,40 – 4,19</strong></td>
+                  <td><span class="pill pill--good">Puas</span></td>
+                  <td>Sudah berjalan baik, masih bisa disempurnakan lagi.</td>
+                </tr>
+                <tr>
+                  <td><strong>2,60 – 3,39</strong></td>
+                  <td><span class="pill pill--mid">Cukup</span></td>
+                  <td>Mulai ada keluhan atau langkah yang terasa kurang nyaman.</td>
+                </tr>
+                <tr>
+                  <td><strong>1,80 – 2,59</strong></td>
+                  <td><span class="pill pill--low">Tidak puas</span></td>
+                  <td>Banyak kendala, perlu masuk prioritas perbaikan.</td>
+                </tr>
+                <tr>
+                  <td><strong>&lt; 1,80</strong></td>
+                  <td><span class="pill pill--low">Sangat tidak puas</span></td>
+                  <td>Butuh perbaikan mendesak.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 3. Indeks Kepuasan (%) -->
+        <section class="glossary-card" data-gtopic="indeks">
+          <div class="glossary-card__head">
+            <span class="pill pill--best">Persentase</span>
+            <h3>Indeks Kepuasan (%) &amp; Batang Sebaran 1–5</h3>
+          </div>
+          <p>
+            <strong>Indeks Kepuasan (%)</strong> adalah nilai rata-rata skor 1–5 yang diubah ke skala <strong>0% sampai
+              100%</strong> supaya lebih mudah dibayangkan seperti nilai rapor.
+          </p>
+          <div class="glossary-tip">
+            <strong>Rumus sederhana:</strong> <code>Rata-rata Skor ÷ 5 × 100%</code><br>
+            Contoh: Jika rata-rata skor adalah <strong>4,25</strong> dari 5,00, maka Indeks Kepuasannya =
+            <code>4,25 ÷ 5 × 100%</code> = <strong>85,0%</strong>.
+          </div>
+          <p style="margin-top:10px">
+            <strong>Batang Sebaran 1–5:</strong> Garis warna-warni kecil yang memperlihatkan perbandingan pemilih skor
+            rendah (<strong>1–3</strong>: merah, oranye, kuning) dengan pemilih skor positif (<strong>4–5</strong>: biru
+            muda dan ungu). Keterangan seperti <code>85% (4–5)</code> artinya <strong>85% responden memberikan penilaian
+              positif</strong> (skor 4 atau 5).
+          </p>
+        </section>
+
+        <!-- 4. Net Promoter Score (NPS) -->
+        <section class="glossary-card" data-gtopic="nps">
+          <div class="glossary-card__head">
+            <span class="pill pill--adm">Loyalitas &amp; Rekomendasi</span>
+            <h3>Net Promoter Score (NPS / Z2), Promoter, Passive, &amp; Detractor</h3>
+          </div>
+          <p>
+            <strong>NPS (<em>Net Promoter Score</em>)</strong> mengukur seberapa besar kemauan pengguna untuk
+            <strong>merekomendasikan LMS</strong> kepada orang lain, dari pertanyaan penutup <strong>Z2</strong>
+            berskala <strong>0 sampai 10</strong>. Responden otomatis dikelompokkan menjadi tiga:
+          </p>
+          <ul class="glossary-list">
+            <li><strong style="color:#059669">Promoter (Skor 9–10 · Hijau):</strong> Pengguna yang sangat puas,
+              terbantu, dan antusias mendukung penggunaan LMS.</li>
+            <li><strong style="color:#d97706">Passive (Skor 7–8 · Kuning):</strong> Pengguna yang merasa LMS sudah cukup
+              baik, tetapi belum terlalu antusias.</li>
+            <li><strong style="color:#e11d48">Detractor (Skor 0–6 · Merah):</strong> Pengguna yang kurang puas atau
+              masih sering mengalami hambatan.</li>
+          </ul>
+          <div class="glossary-tip">
+            <strong>Cara menghitung NPS:</strong> <code>% Promoter − % Detractor</code> (nilainya dari
+            <strong>-100</strong> sampai <strong>+100</strong>, bukan persen biasa).<br>
+            Contoh: Jika Promoter ada <strong>60%</strong> dan Detractor ada <strong>10%</strong>, maka skor NPS =
+            <code>60 − 10</code> = <strong>+50</strong>.
+          </div>
+          <ul class="glossary-list" style="margin-top:10px">
+            <li><strong>+50 sampai +100 (<span class="pill pill--best">Sangat baik</span>):</strong> Mayoritas besar
+              pengguna merasa sangat terbantu.</li>
+            <li><strong>0 sampai +49 (<span class="pill pill--good">Baik</span>):</strong> Pengguna yang sangat puas
+              sudah lebih banyak daripada yang mengalami kendala.</li>
+            <li><strong>Di bawah 0 / minus (<span class="pill pill--low">Perlu perbaikan</span>):</strong> Pengguna yang
+              mengalami kendala masih lebih banyak daripada yang sangat puas.</li>
+          </ul>
+        </section>
+
+        <!-- 5. Kode Soal, N, Agregat, Simulasi -->
+        <section class="glossary-card" data-gtopic="kode">
+          <div class="glossary-card__head">
+            <span class="pill pill--neutral">Istilah Tabel &amp; Data</span>
+            <h3>Kode Pernyataan (M / D / P / Z), Huruf N, &amp; Data Agregat</h3>
+          </div>
+          <ul class="glossary-list">
+            <li><strong>Kode <code>M1 – M20</code>:</strong> 20 butir pernyataan kuesioner khusus peran
+              <strong>Mahasiswa</strong>.
+            </li>
+            <li><strong>Kode <code>D1 – D14</code>:</strong> 14 butir pernyataan kuesioner khusus peran <strong>Mentor /
+                Pengajar</strong>.</li>
+            <li><strong>Kode <code>P1 – P13</code>:</strong> 13 butir pernyataan kuesioner khusus peran
+              <strong>Pimpinan</strong>.
+            </li>
+            <li><strong>Kode <code>Z1, Z2, Z3</code>:</strong> Pertanyaan <strong>Penutup</strong> untuk semua peran
+              (<code>Z1</code> = Kepuasan umum 1–5, <code>Z2</code> = Skor rekomendasi 0–10, <code>Z3</code> = Kritik
+              &amp; saran tertulis).</li>
+            <li><strong>Huruf <code>N</code> (misal <code>N = 48</code>):</strong> Jumlah responden yang menjawab
+              pernyataan tersebut.</li>
+            <li><strong>Data Agregat &amp; Anonim:</strong> Artinya angka di dashboard ini adalah <strong>gabungan nilai
+                rata-rata seluruh pengisi</strong> dan tidak menampilkan nama maupun NIM per orang, sehingga aman
+              dipakai sebagai laporan evaluasi bersama.</li>
+            <li><strong>Data Simulasi:</strong> Tombol untuk menampilkan contoh angka ilustrasi (data buatan) guna
+              melihat pratinjau grafik apabila data asli di Spreadsheet masih kosong.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="modal-box__foot">
+        <span class="small muted">Tip: Klik ikon <strong>?</strong> di kartu mana saja untuk langsung membuka penjelasan
+          bagian tersebut.</span>
+        <button type="button" class="btn btn--primary btn--sm" id="btnDoneGlossary">Mengerti, Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/config.js"></script>
+  <script src="./assets/questions.js"></script>
+  <script src="./assets/dashboard.js"></script>
+</body>
+
+</html>

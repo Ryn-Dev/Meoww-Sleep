@@ -15,6 +15,9 @@ window.CONFIG = {
   // Versi kuesioner. Naikkan ke 'v2' jika ada perubahan butir pertanyaan di kemudian hari.
   VERSION: 'v1',
 
+  // Tautan resmi platform PintarUji CBT yang dievaluasi
+  APP_URL: 'https://pintaruji.politeknikidn.id',
+
   // Daftar Program Studi Resmi Politeknik IDN (digunakan oleh Mahasiswa & Dosen)
   PRODI: [
     { kode: '58302', nama: 'Teknik Rekayasa Perangkat Lunak (TRPL)' },

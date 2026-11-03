@@ -32,33 +32,45 @@
             <path d="M4 20V10M10 20V4M16 20v-7M20 20H2"/>
           </svg>
         </span>
-        <div>
+        <div class="dash-header__content">
           <span class="dash-eyebrow">Ringkasan Hasil Survei CBT · Anonim</span>
           <h1 class="dash-title">Dashboard Kepuasan Pengguna PintarUji</h1>
           <p class="dash-sub" id="dashMetaText">Memuat ringkasan data dari Google Spreadsheet…</p>
+          <!-- Baris tombol ketika dashboard sudah tampil (di bawah teks utama) -->
+          <div class="dash-actions-row no-print" id="dashActionsUnlocked" hidden></div>
         </div>
       </div>
 
-      <div class="dash-header__actions no-print">
+      <!-- Baris tombol di pojok kanan atas (hanya ketika dashboard terkunci) -->
+      <div class="dash-header__actions no-print" id="dashHeaderActionsLocked">
+        <div class="dash-actions-group" id="dashActionsGroup">
+        <a href="https://pintaruji.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="app-link-badge" title="Buka website aplikasi PintarUji (https://pintaruji.politeknikidn.id)">
+          Buka PintarUji
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
         <button type="button" class="btn-theme" id="btnThemeToggle" aria-label="Ganti tema gelap/terang" title="Ganti tema gelap/terang">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="4"/>
             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
           </svg>
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
-        <button type="button" class="btn btn--ghost btn--sm btn--glossary" id="btnGlossary" data-glossary="all" title="Baca catatan penjelasan istilah di dashboard">
+        <button type="button" class="btn btn--ghost btn--sm btn--glossary" id="btnGlossary" data-glossary="all" title="Baca catatan penjelasan istilah di dashboard" hidden>
           <span class="help-dot" aria-hidden="true">?</span> Panduan Istilah
         </button>
-        <button type="button" class="btn btn--ghost btn--sm" id="btnDemo" title="Tampilkan contoh data simulasi">
+        <button type="button" class="btn btn--ghost btn--sm" id="btnDemo" title="Tampilkan contoh data simulasi" hidden>
           Data Simulasi
         </button>
-        <button type="button" class="btn btn--ghost btn--sm" id="btnRefresh">
+        <button type="button" class="btn btn--ghost btn--sm" id="btnRefresh" hidden>
           Muat Ulang
         </button>
-        <button type="button" class="btn btn--ghost btn--sm" id="btnPrint">
+        <button type="button" class="btn btn--ghost btn--sm" id="btnPrint" hidden>
           Cetak / PDF
         </button>
         <button type="button" class="btn btn--ghost btn--sm" id="btnLockDash" title="Kunci dashboard kembali" hidden>
@@ -66,7 +78,8 @@
         </button>
         <a class="btn btn--primary btn--sm" href="./index.html">
           Buka Formulir
-        </a>
+          </a>
+        </div>
       </div>
     </header>
 
@@ -113,7 +126,8 @@
     <footer class="footnote dash-footer">
       Ringkasan ini menggabungkan nilai rata-rata seluruh responden secara anonim untuk evaluasi mutu sistem ujian CBT Politeknik IDN.
       Kategori skor 1–5: ≥4,20 Sangat puas · 3,40–4,19 Puas · 2,60–3,39 Cukup · 1,80–2,59 Tidak puas · &lt;1,80 Sangat tidak puas.
-      <button type="button" class="link-btn no-print" data-glossary="all">Lihat panduan istilah lengkap</button>
+      <button type="button" class="link-btn no-print" data-glossary="all">Lihat panduan istilah lengkap</button> ·
+      <a href="../survey-komparasi/index.html" class="link-btn no-print" style="text-decoration:none">📊 Dashboard Komparasi 4 Platform →</a>
     </footer>
   </div>
 

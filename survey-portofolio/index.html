@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f172a">
   <meta name="robots" content="noindex">
-  <meta name="description" content="Kuesioner kepuasan pengguna LMS: menilai kemudahan belajar, efisiensi mengajar, dan kualitas informasi.">
-  <title>Kuesioner Kepuasan LMS</title>
+  <meta name="description" content="Kuesioner kepuasan pengguna platform Portofolio IDN Politeknik IDN: mengevaluasi kemudahan showcase karya, optimasi webp, peninjauan dosen, dan tata kelola admin.">
+  <title>Kuesioner Kepuasan Platform Portofolio — Politeknik IDN</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     (function () {
       var t = 'light';
       try {
-        t = localStorage.getItem('lms_theme');
+        t = localStorage.getItem('portofolio_theme') || localStorage.getItem('lms_theme');
         if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
       } catch (e) {}
       document.documentElement.setAttribute('data-theme', t);
@@ -31,26 +31,34 @@
         <div class="brand">
           <span class="brand__mark" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15.5H6.5A2.5 2.5 0 0 0 4 21z"/>
-              <path d="M8 8h7M8 12h5"/>
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
             </svg>
           </span>
           <span class="brand__text">
-            <strong>Kuesioner LMS</strong>
-            <small>Evaluasi pengalaman pengguna</small>
+            <strong>Portofolio IDN</strong>
+            <small>Evaluasi Layanan Mahasiswa &amp; Kampus</small>
           </span>
         </div>
         <div class="topbar__actions">
+          <a href="https://portofolio.politeknikidn.id" target="_blank" rel="noopener noreferrer" class="app-link-badge" title="Kunjungi website aplikasi Portofolio IDN (https://portofolio.politeknikidn.id)">
+            Buka Portofolio
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
           <button type="button" class="btn-theme" id="btnThemeToggle" aria-label="Ganti tema gelap/terang" title="Ganti tema gelap/terang">
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/>
               <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
             </svg>
             <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
           </button>
-          <span class="badge" id="progressLabel" hidden>Bagian 1</span>
+          <span class="badge" id="progressLabel" hidden>Langkah 1</span>
         </div>
       </div>
 
@@ -65,11 +73,11 @@
 
     <nav class="nav" id="nav" aria-label="Navigasi formulir">
       <button type="button" class="btn btn--ghost" id="btnBack" hidden>Kembali</button>
-      <button type="button" class="btn btn--primary" id="btnNext">Mulai</button>
+      <button type="button" class="btn btn--primary" id="btnNext">Mulai Mengisi</button>
     </nav>
 
     <p class="footnote">
-      Data dan masukan yang Anda berikan hanya dipergunakan untuk evaluasi serta peningkatan kualitas pelayanan LMS.
+      Data dan masukan yang Anda berikan semata-mata dipergunakan untuk evaluasi serta peningkatan mutu layanan platform Portofolio IDN Politeknik IDN.
     </p>
   </div>
 
@@ -80,3 +88,4 @@
   <script src="./assets/app.js"></script>
 </body>
 </html>
+
